@@ -11,12 +11,11 @@ class Highlight(str):
     pass
 
 
-@dataclass
+@dataclass(frozen=True)
 class HighlightedText(str):
     html: str
 
-    @cached_property
-    def text(self) -> str:
+    def __str__(self) -> str:
         return "".join(self.sequence)
 
     @cached_property
