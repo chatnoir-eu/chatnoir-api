@@ -148,7 +148,7 @@ ResultType = TypeVar("ResultType", bound=_Result)
 
 
 class Results(
-    Sized[ResultType],
+    Sized,
     Iterable[ResultType],
     Generic[ResultType],
     ResultsMeta,
