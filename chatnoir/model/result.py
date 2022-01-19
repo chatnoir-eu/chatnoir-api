@@ -3,7 +3,7 @@ from typing import Iterable, Sized, TypeVar, Generic, Optional, Any, Dict
 from uuid import UUID
 
 from chatnoir.model.highlight import HighlightedText
-from chatnoir.model.index import Index
+from chatnoir.model import Index
 
 
 class Result(ABC):

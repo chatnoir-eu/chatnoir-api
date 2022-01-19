@@ -5,7 +5,6 @@ from chatnoir import logger
 from chatnoir.model.result import Results, ResultsMeta, Result, SearchResult
 
 LazyResultType = TypeVar("LazyResultType", bound=Result)
-LazyResultsType = TypeVar("LazyResultsType", bound=Results)
 
 
 class LazyResults(

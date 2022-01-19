@@ -7,7 +7,7 @@ from uuid import UUID
 from dataclasses_json import config, DataClassJsonMixin
 
 from chatnoir.model.highlight import HighlightedText
-from chatnoir.model.index import Index
+from chatnoir.model import Index, Slop
 from chatnoir.model.result import (
     ResultsMeta, SearchResult, PhraseSearchResult, MinimalPhraseSearchResult
 )
@@ -33,7 +33,7 @@ class SearchRequest(Request, DataClassJsonMixin):
 
 @dataclass(frozen=True)
 class PhraseSearchRequestBase(Request, DataClassJsonMixin, ABC):
-    slop: Optional[int]
+    slop: Optional[Slop]
     minimal: bool = field(default=NotImplemented, init=False)
 
 
@@ -135,5 +135,5 @@ class MinimalPhraseSearchResponse(Response, DataClassJsonMixin):
 
 
 @dataclass(frozen=True)
-class PhraseSearchSearchResponse(Response, DataClassJsonMixin):
+class PhraseSearchResponse(Response, DataClassJsonMixin):
     results: List[PhraseSearchResponseResult]

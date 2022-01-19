@@ -1,4 +1,4 @@
-from chatnoir.model.index import Index
+from chatnoir.model import Index
 
 DEFAULT_INDICES = {
     Index.ClueWeb09,
