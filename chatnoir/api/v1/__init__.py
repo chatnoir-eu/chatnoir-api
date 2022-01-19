@@ -1,15 +1,15 @@
-from typing import List, Tuple, TypeVar, Type
+from typing import List, Tuple, TypeVar, Type, overload, Literal, Union
 from typing import Set
 
 from dataclasses_json import DataClassJsonMixin
-from requests import Response as RResponse, post
+from requests import Response as HttpResponse, post
 
 from chatnoir.api.util import LazyResults
 from chatnoir.api.v1.constants import API_URL
 from chatnoir.api.v1.model import (
     SearchResponse, SearchRequest, ResponseMeta, SearchResponseResult, Request,
-    Response, MinimalPhraseSearchResponse, MinimalPhraseSearchRequest,
-    PhraseSearchRequest, PhraseSearchResponse
+    Response, MinimalPhraseSearchResponse, PhraseSearchRequest,
+    PhraseSearchResponse
 )
 from chatnoir.constants import DEFAULT_INDICES
 from chatnoir.model import Index, Slop
@@ -33,7 +33,7 @@ def _request_page(
         "Accept": "application/json",
         "Content-Type": "text/plain",
     }
-    raw_response: RResponse = post(
+    raw_response: HttpResponse = post(
         f"{API_URL}/{endpoint}",
         headers=headers,
         data=request_json.encode("utf-8")
@@ -50,7 +50,7 @@ def search(
         query: str,
         index: Set[Index] = DEFAULT_INDICES,
         explain: bool = False,
-        page_size: int = 100,
+        page_size: int = 10,
 ) -> SearchResults:
     class LazySearchResults(SearchResults, LazyResults[SearchResult]):
         def page(
@@ -93,34 +93,111 @@ def search_page(
     return response.meta, response.results
 
 
+@overload
 def search_phrases(
         api_key: str,
         query: str,
         slop: Slop = 0,
         index: Set[Index] = DEFAULT_INDICES,
+        minimal: Literal[False] = False,
         explain: bool = False,
-        page_size: int = 100,
+        page_size: int = 10,
 ) -> PhraseSearchResults:
-    class LazyPhraseSearchResults(
-        PhraseSearchResults,
-        LazyResults[PhraseSearchResult]
-    ):
-        def page(
-                self,
-                start: int,
-                size: int
-        ) -> Tuple[ResultsMeta, List[PhraseSearchResult]]:
-            return search_phrases_page(
-                api_key,
-                query,
-                start,
-                size,
-                slop,
-                index,
-                explain
-            )
+    pass
+
+
+@overload
+def search_phrases(
+        api_key: str,
+        query: str,
+        slop: Slop = 0,
+        index: Set[Index] = DEFAULT_INDICES,
+        minimal: Literal[True] = False,
+        explain: bool = False,
+        page_size: int = 10,
+) -> MinimalPhraseSearchResults:
+    pass
+
+
+def search_phrases(
+        api_key: str,
+        query: str,
+        slop: Slop = 0,
+        index: Set[Index] = DEFAULT_INDICES,
+        minimal: bool = False,
+        explain: bool = False,
+        page_size: int = 10,
+) -> Union[PhraseSearchResults, MinimalPhraseSearchResults]:
+    if minimal:
+        class LazyPhraseSearchResults(
+            PhraseSearchResults,
+            LazyResults[PhraseSearchResult]
+        ):
+            def page(
+                    self,
+                    start: int,
+                    size: int
+            ) -> Tuple[ResultsMeta, List[PhraseSearchResult]]:
+                return search_phrases_page(
+                    api_key,
+                    query,
+                    start,
+                    size,
+                    slop,
+                    index,
+                    False,
+                    explain,
+                )
+    else:
+        class LazyPhraseSearchResults(
+            MinimalPhraseSearchResults,
+            LazyResults[MinimalPhraseSearchResult]
+        ):
+            def page(
+                    self,
+                    start: int,
+                    size: int
+            ) -> Tuple[ResultsMeta, List[MinimalPhraseSearchResult]]:
+                return search_phrases_page(
+                    api_key,
+                    query,
+                    start,
+                    size,
+                    slop,
+                    index,
+                    False,
+                    explain,
+                )
 
     return LazyPhraseSearchResults(page_size)
+
+
+@overload
+def search_phrases_page(
+        api_key: str,
+        query: str,
+        start: int,
+        size: int,
+        slop: Slop = 0,
+        index: Set[Index] = DEFAULT_INDICES,
+        minimal: Literal[False] = False,
+        explain: bool = False,
+) -> Tuple[ResultsMeta, List[PhraseSearchResult]]:
+    pass
+
+
+@overload
+def search_phrases_page(
+        api_key: str,
+        query: str,
+        start: int,
+        size: int,
+        slop: Slop = 0,
+        index: Set[Index] = DEFAULT_INDICES,
+        minimal: Literal[True] = False,
+        explain: bool = False,
+) -> Tuple[ResultsMeta, List[MinimalPhraseSearchResult]]:
+    pass
 
 
 def search_phrases_page(
@@ -130,8 +207,12 @@ def search_phrases_page(
         size: int,
         slop: Slop = 0,
         index: Set[Index] = DEFAULT_INDICES,
+        minimal: bool = False,
         explain: bool = False,
-) -> Tuple[ResultsMeta, List[PhraseSearchResult]]:
+) -> Union[
+    Tuple[ResultsMeta, List[PhraseSearchResult]],
+    Tuple[ResultsMeta, List[MinimalPhraseSearchResult]]
+]:
     response = _request_page(
         PhraseSearchRequest(
             apikey=api_key,
@@ -140,64 +221,10 @@ def search_phrases_page(
             size=size,
             index=index,
             explain=explain,
+            minimal=minimal,
             slop=slop,
         ),
         PhraseSearchResponse,
-        "_phrases"
-    )
-    return response.meta, response.results
-
-
-def search_phrases_minimal(
-        api_key: str,
-        query: str,
-        slop: Slop = 0,
-        index: Set[Index] = DEFAULT_INDICES,
-        explain: bool = False,
-        page_size: int = 100,
-) -> MinimalPhraseSearchResults:
-    class LazyMinimalPhraseSearchResults(
-        MinimalPhraseSearchResults,
-        LazyResults[MinimalPhraseSearchResult]
-    ):
-        def page(
-                self,
-                start: int,
-                size: int
-        ) -> Tuple[ResultsMeta, List[MinimalPhraseSearchResult]]:
-            return search_phrases_minimal_page(
-                api_key,
-                query,
-                start,
-                size,
-                slop,
-                index,
-                explain
-            )
-
-    return LazyMinimalPhraseSearchResults(page_size)
-
-
-def search_phrases_minimal_page(
-        api_key: str,
-        query: str,
-        start: int,
-        size: int,
-        slop: Slop = 0,
-        index: Set[Index] = DEFAULT_INDICES,
-        explain: bool = False,
-) -> Tuple[ResultsMeta, List[MinimalPhraseSearchResult]]:
-    response = _request_page(
-        MinimalPhraseSearchRequest(
-            apikey=api_key,
-            query=query,
-            start=start,
-            size=size,
-            index=index,
-            explain=explain,
-            slop=slop,
-        ),
-        MinimalPhraseSearchResponse,
         "_phrases"
     )
     return response.meta, response.results

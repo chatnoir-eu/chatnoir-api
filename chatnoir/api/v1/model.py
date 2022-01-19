@@ -1,13 +1,13 @@
 from abc import ABC
 from dataclasses import dataclass, field
-from typing import List, Final, Dict
+from typing import List, Dict
 from typing import Optional, Set
 from uuid import UUID
 
 from dataclasses_json import config, DataClassJsonMixin
 
-from chatnoir.model.highlight import HighlightedText
 from chatnoir.model import Index, Slop
+from chatnoir.model.highlight import HighlightedText
 from chatnoir.model.result import (
     ResultsMeta, SearchResult, PhraseSearchResult, MinimalPhraseSearchResult
 )
@@ -32,22 +32,9 @@ class SearchRequest(Request, DataClassJsonMixin):
 
 
 @dataclass(frozen=True)
-class PhraseSearchRequestBase(Request, DataClassJsonMixin, ABC):
+class PhraseSearchRequest(Request, DataClassJsonMixin, ABC):
     slop: Optional[Slop]
-    minimal: bool = field(default=NotImplemented, init=False)
-
-
-@dataclass(frozen=True)
-class MinimalPhraseSearchRequest(
-    PhraseSearchRequestBase,
-    DataClassJsonMixin
-):
-    minimal: Final[bool] = field(default=True, init=False)
-
-
-@dataclass(frozen=True)
-class PhraseSearchRequest(PhraseSearchRequestBase, DataClassJsonMixin):
-    minimal: Final[bool] = field(default=False, init=False)
+    minimal: bool = False
 
 
 @dataclass(frozen=True)
