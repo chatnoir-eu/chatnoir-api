@@ -38,6 +38,11 @@ def _request_page(
         headers=headers,
         data=request_json.encode("utf-8")
     )
+    if raw_response.status_code == 401:
+        raise RuntimeError(
+            "ChatNoir API key invalid or missing. "
+            "Please refer to the documentation at https://chatnoir.eu/doc/api/"
+        )
 
     response_json = raw_response.text
     response = response_type.from_json(response_json)
