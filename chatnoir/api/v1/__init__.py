@@ -7,14 +7,13 @@ from requests import Response as HttpResponse, post
 from chatnoir.api.util import LazyResults
 from chatnoir.api.v1.constants import API_URL
 from chatnoir.api.v1.model import (
-    SearchResponse, SearchRequest, ResponseMeta, SearchResponseResult, Request,
-    Response, MinimalPhraseSearchResponse, PhraseSearchRequest,
-    PhraseSearchResponse
+    SearchResponse, SearchRequest, Request, Response, PhraseSearchRequest,
+    PhraseSearchResponse, MinimalPhraseSearchResponse
 )
 from chatnoir.constants import DEFAULT_INDICES
 from chatnoir.model import Index, Slop
 from chatnoir.model.result import (
-    SearchResults, SearchResult, ResultsMeta, PhraseSearchResults,
+    ResultsMeta, SearchResults, SearchResult, PhraseSearchResults,
     PhraseSearchResult, MinimalPhraseSearchResults, MinimalPhraseSearchResult
 )
 
@@ -229,7 +228,7 @@ def search_phrases_page(
             minimal=minimal,
             slop=slop,
         ),
-        PhraseSearchResponse,
+        MinimalPhraseSearchResponse if minimal else PhraseSearchResponse,
         "_phrases"
     )
     return response.meta, response.results

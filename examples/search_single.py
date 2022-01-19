@@ -1,5 +1,3 @@
-from itertools import islice
-
 from chatnoir.api.v1 import search, search_phrases
 
 api_key: str = input("API key: ")
