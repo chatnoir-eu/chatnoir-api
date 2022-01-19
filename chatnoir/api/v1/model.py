@@ -1,136 +1,139 @@
-from abc import abstractmethod, ABC
-from dataclasses import dataclass
-from typing import List, Any
+from abc import ABC
+from dataclasses import dataclass, field
+from typing import List, Final, Dict
 from typing import Optional, Set
+from uuid import UUID
 
-from dataclasses_json import dataclass_json
+from dataclasses_json import config, DataClassJsonMixin
+
+from chatnoir.model.highlight import HighlightedText
+from chatnoir.model.index import Index
+from chatnoir.model.result import (
+    ResultsMeta, SearchResult, PhraseSearchResult, MinimalPhraseSearchResult
+)
 
 
-@dataclass_json
-@dataclass
-class _Request:
-    api_key: str
+@dataclass(frozen=True)
+class Request(DataClassJsonMixin):
+    apikey: str
     query: str
-    index: Set[str]
-    page_from: Optional[int]
-    page_size: Optional[int]
+    index: Set[Index] = field(metadata=config(
+        encoder=lambda indices: {index.value for index in indices},
+        decoder=lambda indices: {Index(index) for index in indices}
+    ))
+    start: Optional[int] = field(metadata=config(field_name="from"))
+    size: Optional[int]
     explain: bool
 
 
-@dataclass_json
-@dataclass
-class _SearchRequest(_Request):
+@dataclass(frozen=True)
+class SearchRequest(Request, DataClassJsonMixin):
     pass
 
 
-@dataclass_json
-@dataclass
-class _PhraseSearchRequestBase(_Request, ABC):
+@dataclass(frozen=True)
+class PhraseSearchRequestBase(Request, DataClassJsonMixin, ABC):
     slop: Optional[int]
-
-    @property
-    @abstractmethod
-    def minimal(self) -> bool:
-        pass
+    minimal: bool = field(default=NotImplemented, init=False)
 
 
-@dataclass_json
-@dataclass
-class _MinimalPhraseSearchRequest(_PhraseSearchRequestBase):
-    minimal: True
+@dataclass(frozen=True)
+class MinimalPhraseSearchRequest(
+    PhraseSearchRequestBase,
+    DataClassJsonMixin
+):
+    minimal: Final[bool] = field(default=True, init=False)
 
 
-@dataclass_json
-@dataclass
-class _PhraseSearchRequest(_PhraseSearchRequestBase):
-    minimal: False
+@dataclass(frozen=True)
+class PhraseSearchRequest(PhraseSearchRequestBase, DataClassJsonMixin):
+    minimal: Final[bool] = field(default=False, init=False)
 
 
-@dataclass_json
-@dataclass
-class _ResponseMeta:
+@dataclass(frozen=True)
+class ResponseMeta(ResultsMeta, DataClassJsonMixin):
+    indices: Set[Index] = field(metadata=config(
+        encoder=lambda indices: {index.value for index in indices},
+        decoder=lambda indices: {Index(index) for index in indices}
+    ))
     query_time: int
     total_results: int
-    indices: Set[str]
 
 
-@dataclass_json
-@dataclass
-class _SearchResponseMeta(_ResponseMeta):
-    pass
-
-
-@dataclass_json
-@dataclass
-class _PhraseSearchResponseMeta(_ResponseMeta):
-    pass
-
-
-@dataclass_json
-@dataclass
-class _MinimalPhraseSearchResponseMeta(_ResponseMeta):
-    pass
-
-
-@dataclass_json
-@dataclass
-class _ResponseResult:
+@dataclass(frozen=True)
+class ResponseResult(DataClassJsonMixin):
     score: float
-    uuid: str
+    uuid: UUID
     target_uri: str
-    snippet: str
+    snippet: HighlightedText = field(metadata=config(
+        encoder=str,
+        decoder=HighlightedText
+    ))
 
 
-@dataclass_json
-@dataclass
-class _SearchResponseResult(_ResponseResult):
-    index: str
+@dataclass(frozen=True)
+class SearchResponseResult(ResponseResult, SearchResult, DataClassJsonMixin):
+    index: Index = field(metadata=config(
+        encoder=str,
+        decoder=Index
+    ))
+    title: HighlightedText = field(metadata=config(
+        encoder=str,
+        decoder=HighlightedText,
+    ))
     trec_id: Optional[str]
     target_hostname: str
     page_rank: Optional[float]
     spam_rank: Optional[float]
-    title: str
-    explanation: Any
+    explanation: Optional[Dict]
 
 
-@dataclass_json
-@dataclass
-class _MinimalPhraseSearchResponseResult(_ResponseResult):
+@dataclass(frozen=True)
+class MinimalPhraseSearchResponseResult(
+    ResponseResult,
+    MinimalPhraseSearchResult,
+    DataClassJsonMixin
+):
     pass
 
 
-@dataclass_json
-@dataclass
-class _PhraseSearchResponseResult(_MinimalPhraseSearchResponseResult):
-    index: str
+@dataclass(frozen=True)
+class PhraseSearchResponseResult(
+    MinimalPhraseSearchResponseResult,
+    PhraseSearchResult,
+    DataClassJsonMixin
+):
+    index: Index = field(metadata=config(
+        encoder=str,
+        decoder=Index
+    ))
+    title: HighlightedText = field(metadata=config(
+        encoder=str,
+        decoder=HighlightedText
+    ))
     trec_id: Optional[str]
     target_hostname: str
     page_rank: Optional[float]
     spam_rank: Optional[float]
-    title: str
-    explanation: Any
+    explanation: Optional[Dict]
 
 
-@dataclass_json
-@dataclass
-class _Response:
-    meta: _ResponseMeta
-    results: List[_ResponseResult]
+@dataclass(frozen=True)
+class Response(DataClassJsonMixin):
+    meta: ResponseMeta
+    results: List[ResponseResult]
 
 
-@dataclass_json
-@dataclass
-class _SearchResponse(_Response):
-    results: List[_SearchResponseResult]
+@dataclass(frozen=True)
+class SearchResponse(Response, DataClassJsonMixin):
+    results: List[SearchResponseResult]
 
 
-@dataclass_json
-@dataclass
-class _MinimalPhraseSearchResponse(_Response):
-    results: List[_MinimalPhraseSearchResponseResult]
+@dataclass(frozen=True)
+class MinimalPhraseSearchResponse(Response, DataClassJsonMixin):
+    results: List[MinimalPhraseSearchResponseResult]
 
 
-@dataclass_json
-@dataclass
-class _PhraseSearchSearchResponse(_Response):
-    results: List[_PhraseSearchResponseResult]
+@dataclass(frozen=True)
+class PhraseSearchSearchResponse(Response, DataClassJsonMixin):
+    results: List[PhraseSearchResponseResult]
