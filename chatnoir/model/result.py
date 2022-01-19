@@ -129,6 +129,21 @@ class PhraseSearchResult(MinimalPhraseSearchResult):
         pass
 
 
+class ResultsMeta(ABC):
+    query_time: int
+    total_results: int
+
+    @property
+    @abstractmethod
+    def query_time(self) -> int:
+        pass
+
+    @property
+    @abstractmethod
+    def total_results(self) -> int:
+        pass
+
+
 ResultType = TypeVar("ResultType", bound=_Result)
 
 
@@ -136,9 +151,11 @@ class Results(
     Sized[ResultType],
     Iterable[ResultType],
     Generic[ResultType],
+    ResultsMeta,
     ABC
 ):
-    pass
+    def __len__(self) -> int:
+        return self.total_results
 
 
 class SearchResults(Results[SearchResult], ABC):
