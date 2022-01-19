@@ -20,9 +20,14 @@ pip install chatnoir-api
 ## Usage
 
 ```python
-from chatnoir.api import TODO
+from chatnoir.api.v1 import search
 
-TODO
+api_key: str = "<API_KEY>"
+
+results = search(api_key, "python library")
+top_result = next(iter(results))
+
+print(top_result)
 ```
 
 ## Citation
@@ -50,6 +55,7 @@ You can use the following BibTeX information for citation:
 ## Development
 
 To build and develop this package you need to install the `build` package:
+
 ```shell
 pip install build
 ```
@@ -57,6 +63,7 @@ pip install build
 ### Installation
 
 Install package dependencies:
+
 ```shell
 pip install -e .
 ```
@@ -64,11 +71,13 @@ pip install -e .
 ### Testing
 
 Install test dependencies:
+
 ```shell
 pip install -e .[test]
 ```
 
 Verify your changes against the test suite to verify.
+
 ```shell
 flake8 chatnoir examples
 pylint -E chatnoir examples
@@ -80,6 +89,7 @@ Please also add tests for the axioms or integrations you've added.
 ### Build wheel
 
 A wheel for this package can be built by:
+
 ```shell
 python -m build
 ```
