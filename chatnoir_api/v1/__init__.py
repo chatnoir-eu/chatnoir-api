@@ -108,7 +108,7 @@ def _request_page(
 def search(
         api_key: str,
         query: str,
-        index: Set[Index] = DEFAULT_INDICES,
+        index: Union[Index, Set[Index]] = DEFAULT_INDICES,
         explain: bool = False,
         page_size: int = 10,
 ) -> SearchResults:
@@ -133,11 +133,15 @@ def search(
 def search_page(
         api_key: str,
         query: str,
-        start: int,
-        size: int,
-        index: Set[Index] = DEFAULT_INDICES,
+        start: int = 0,
+        size: int = 10,
+        index: Union[Index, Set[Index]] = DEFAULT_INDICES,
         explain: bool = False,
 ) -> Tuple[ResultsMeta, List[SearchResult]]:
+    if isinstance(index, Index):
+        index = {index}
+    index: Set[Index]
+
     response = _request_page(
         SearchRequest(
             apikey=api_key,
@@ -158,7 +162,7 @@ def search_phrases(
         api_key: str,
         query: str,
         slop: Slop = 0,
-        index: Set[Index] = DEFAULT_INDICES,
+        index: Union[Index, Set[Index]] = DEFAULT_INDICES,
         minimal: Literal[False] = False,
         explain: bool = False,
         page_size: int = 10,
@@ -171,7 +175,7 @@ def search_phrases(
         api_key: str,
         query: str,
         slop: Slop = 0,
-        index: Set[Index] = DEFAULT_INDICES,
+        index: Union[Index, Set[Index]] = DEFAULT_INDICES,
         minimal: Literal[True] = False,
         explain: bool = False,
         page_size: int = 10,
@@ -179,11 +183,24 @@ def search_phrases(
     pass
 
 
+@overload
 def search_phrases(
         api_key: str,
         query: str,
         slop: Slop = 0,
-        index: Set[Index] = DEFAULT_INDICES,
+        index: Union[Index, Set[Index]] = DEFAULT_INDICES,
+        minimal: bool = False,
+        explain: bool = False,
+        page_size: int = 10,
+) -> Union[PhraseSearchResults, MinimalPhraseSearchResults]:
+    pass
+
+
+def search_phrases(
+        api_key: str,
+        query: str,
+        slop: Slop = 0,
+        index: Union[Index, Set[Index]] = DEFAULT_INDICES,
         minimal: bool = False,
         explain: bool = False,
         page_size: int = 10,
@@ -236,10 +253,10 @@ def search_phrases(
 def search_phrases_page(
         api_key: str,
         query: str,
-        start: int,
-        size: int,
+        start: int = 0,
+        size: int = 10,
         slop: Slop = 0,
-        index: Set[Index] = DEFAULT_INDICES,
+        index: Union[Index, Set[Index]] = DEFAULT_INDICES,
         minimal: Literal[False] = False,
         explain: bool = False,
 ) -> Tuple[ResultsMeta, List[PhraseSearchResult]]:
@@ -250,29 +267,50 @@ def search_phrases_page(
 def search_phrases_page(
         api_key: str,
         query: str,
-        start: int,
-        size: int,
+        start: int = 0,
+        size: int = 10,
         slop: Slop = 0,
-        index: Set[Index] = DEFAULT_INDICES,
+        index: Union[Index, Set[Index]] = DEFAULT_INDICES,
         minimal: Literal[True] = False,
         explain: bool = False,
 ) -> Tuple[ResultsMeta, List[MinimalPhraseSearchResult]]:
     pass
 
 
+@overload
 def search_phrases_page(
         api_key: str,
         query: str,
-        start: int,
-        size: int,
+        start: int = 0,
+        size: int = 10,
         slop: Slop = 0,
-        index: Set[Index] = DEFAULT_INDICES,
+        index: Union[Index, Set[Index]] = DEFAULT_INDICES,
         minimal: bool = False,
         explain: bool = False,
-) -> Union[
-    Tuple[ResultsMeta, List[PhraseSearchResult]],
-    Tuple[ResultsMeta, List[MinimalPhraseSearchResult]]
+) -> Tuple[
+    ResultsMeta,
+    List[Union[PhraseSearchResult, MinimalPhraseSearchResult]]
 ]:
+    pass
+
+
+def search_phrases_page(
+        api_key: str,
+        query: str,
+        start: int = 0,
+        size: int = 10,
+        slop: Slop = 0,
+        index: Union[Index, Set[Index]] = DEFAULT_INDICES,
+        minimal: bool = False,
+        explain: bool = False,
+) -> Tuple[
+    ResultsMeta,
+    List[Union[PhraseSearchResult, MinimalPhraseSearchResult]]
+]:
+    if isinstance(index, Index):
+        index = {index}
+    index: Set[Index]
+
     response = _request_page(
         PhraseSearchRequest(
             apikey=api_key,
