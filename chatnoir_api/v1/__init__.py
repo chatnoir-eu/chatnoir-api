@@ -6,9 +6,12 @@ from dataclasses_json import DataClassJsonMixin
 from requests import Response as HttpResponse, post
 
 from chatnoir_api import logger
-from chatnoir_api.constants import DEFAULT_INDICES
+from chatnoir_api.constants import API_V1_URL
 from chatnoir_api.util import LazyResults
-from chatnoir_api.v1.constants import API_URL
+from chatnoir_api.v1.defaults import (
+    DEFAULT_START, DEFAULT_SIZE, DEFAULT_SLOP, DEFAULT_INDEX, DEFAULT_MINIMAL,
+    DEFAULT_EXPLAIN, DEFAULT_RETRIES, DEFAULT_BACKOFF_SECONDS
+)
 from chatnoir_api.v1.model import (
     SearchResponse, SearchRequest, Request, Response, PhraseSearchRequest,
     PhraseSearchResponse, MinimalPhraseSearchResponse
@@ -28,8 +31,8 @@ def _request_page(
         request: _JsonRequest,
         response_type: Type[_JsonResponse],
         endpoint: str,
-        retries: int = 5,
-        backoff_seconds: float = 1,
+        retries: int = DEFAULT_RETRIES,
+        backoff_seconds: float = DEFAULT_BACKOFF_SECONDS,
 ) -> _JsonResponse:
     request_json = request.to_json()
 
@@ -38,7 +41,7 @@ def _request_page(
         "Content-Type": "text/plain",
     }
     raw_response: HttpResponse = post(
-        f"{API_URL}/{endpoint}",
+        f"{API_V1_URL}/{endpoint}",
         headers=headers,
         data=request_json.encode("utf-8")
     )
@@ -108,11 +111,11 @@ def _request_page(
 def search(
         api_key: str,
         query: str,
-        index: Union[Index, Set[Index]] = DEFAULT_INDICES,
-        explain: bool = False,
-        page_size: int = 10,
-        retries: int = 5,
-        backoff_seconds: float = 1,
+        index: Union[Index, Set[Index]] = DEFAULT_INDEX,
+        explain: bool = DEFAULT_EXPLAIN,
+        page_size: int = DEFAULT_SIZE,
+        retries: int = DEFAULT_RETRIES,
+        backoff_seconds: float = DEFAULT_BACKOFF_SECONDS,
 ) -> SearchResults:
     class LazySearchResults(SearchResults, LazyResults[SearchResult]):
         def page(
@@ -137,12 +140,12 @@ def search(
 def search_page(
         api_key: str,
         query: str,
-        start: int = 0,
-        size: int = 10,
-        index: Union[Index, Set[Index]] = DEFAULT_INDICES,
-        explain: bool = False,
-        retries: int = 5,
-        backoff_seconds: float = 1,
+        start: int = DEFAULT_START,
+        size: int = DEFAULT_SIZE,
+        index: Union[Index, Set[Index]] = DEFAULT_INDEX,
+        explain: bool = DEFAULT_EXPLAIN,
+        retries: int = DEFAULT_RETRIES,
+        backoff_seconds: float = DEFAULT_BACKOFF_SECONDS,
 ) -> Tuple[ResultsMeta, List[SearchResult]]:
     if isinstance(index, Index):
         index = {index}
@@ -169,13 +172,13 @@ def search_page(
 def search_phrases(
         api_key: str,
         query: str,
-        slop: Slop = 0,
-        index: Union[Index, Set[Index]] = DEFAULT_INDICES,
-        minimal: Literal[False] = False,
-        explain: bool = False,
-        page_size: int = 10,
-        retries: int = 5,
-        backoff_seconds: float = 1,
+        slop: Slop = DEFAULT_SLOP,
+        index: Union[Index, Set[Index]] = DEFAULT_INDEX,
+        minimal: Literal[False] = DEFAULT_MINIMAL,
+        explain: bool = DEFAULT_EXPLAIN,
+        page_size: int = DEFAULT_SIZE,
+        retries: int = DEFAULT_RETRIES,
+        backoff_seconds: float = DEFAULT_BACKOFF_SECONDS,
 ) -> PhraseSearchResults:
     pass
 
@@ -184,13 +187,13 @@ def search_phrases(
 def search_phrases(
         api_key: str,
         query: str,
-        slop: Slop = 0,
-        index: Union[Index, Set[Index]] = DEFAULT_INDICES,
-        minimal: Literal[True] = False,
-        explain: bool = False,
-        page_size: int = 10,
-        retries: int = 5,
-        backoff_seconds: float = 1,
+        slop: Slop = DEFAULT_SLOP,
+        index: Union[Index, Set[Index]] = DEFAULT_INDEX,
+        minimal: Literal[True] = DEFAULT_MINIMAL,
+        explain: bool = DEFAULT_EXPLAIN,
+        page_size: int = DEFAULT_SIZE,
+        retries: int = DEFAULT_RETRIES,
+        backoff_seconds: float = DEFAULT_BACKOFF_SECONDS,
 ) -> MinimalPhraseSearchResults:
     pass
 
@@ -199,13 +202,13 @@ def search_phrases(
 def search_phrases(
         api_key: str,
         query: str,
-        slop: Slop = 0,
-        index: Union[Index, Set[Index]] = DEFAULT_INDICES,
-        minimal: bool = False,
-        explain: bool = False,
-        page_size: int = 10,
-        retries: int = 5,
-        backoff_seconds: float = 1,
+        slop: Slop = DEFAULT_SLOP,
+        index: Union[Index, Set[Index]] = DEFAULT_INDEX,
+        minimal: bool = DEFAULT_MINIMAL,
+        explain: bool = DEFAULT_EXPLAIN,
+        page_size: int = DEFAULT_SIZE,
+        retries: int = DEFAULT_RETRIES,
+        backoff_seconds: float = DEFAULT_BACKOFF_SECONDS,
 ) -> Union[PhraseSearchResults, MinimalPhraseSearchResults]:
     pass
 
@@ -213,13 +216,13 @@ def search_phrases(
 def search_phrases(
         api_key: str,
         query: str,
-        slop: Slop = 0,
-        index: Union[Index, Set[Index]] = DEFAULT_INDICES,
-        minimal: bool = False,
-        explain: bool = False,
-        page_size: int = 10,
-        retries: int = 5,
-        backoff_seconds: float = 1,
+        slop: Slop = DEFAULT_SLOP,
+        index: Union[Index, Set[Index]] = DEFAULT_INDEX,
+        minimal: bool = DEFAULT_MINIMAL,
+        explain: bool = DEFAULT_EXPLAIN,
+        page_size: int = DEFAULT_SIZE,
+        retries: int = DEFAULT_RETRIES,
+        backoff_seconds: float = DEFAULT_BACKOFF_SECONDS,
 ) -> Union[PhraseSearchResults, MinimalPhraseSearchResults]:
     results_type: Type[Union[MinimalPhraseSearchResults, PhraseSearchResults]]
     result_type: Type[Union[MinimalPhraseSearchResult, PhraseSearchResult]]
@@ -259,14 +262,14 @@ def search_phrases(
 def search_phrases_page(
         api_key: str,
         query: str,
-        start: int = 0,
-        size: int = 10,
-        slop: Slop = 0,
-        index: Union[Index, Set[Index]] = DEFAULT_INDICES,
-        minimal: Literal[False] = False,
-        explain: bool = False,
-        retries: int = 5,
-        backoff_seconds: float = 1,
+        start: int = DEFAULT_START,
+        size: int = DEFAULT_SIZE,
+        slop: Slop = DEFAULT_SLOP,
+        index: Union[Index, Set[Index]] = DEFAULT_INDEX,
+        minimal: Literal[False] = DEFAULT_MINIMAL,
+        explain: bool = DEFAULT_EXPLAIN,
+        retries: int = DEFAULT_RETRIES,
+        backoff_seconds: float = DEFAULT_BACKOFF_SECONDS,
 ) -> Tuple[ResultsMeta, List[PhraseSearchResult]]:
     pass
 
@@ -275,14 +278,14 @@ def search_phrases_page(
 def search_phrases_page(
         api_key: str,
         query: str,
-        start: int = 0,
-        size: int = 10,
-        slop: Slop = 0,
-        index: Union[Index, Set[Index]] = DEFAULT_INDICES,
-        minimal: Literal[True] = False,
-        explain: bool = False,
-        retries: int = 5,
-        backoff_seconds: float = 1,
+        start: int = DEFAULT_START,
+        size: int = DEFAULT_SIZE,
+        slop: Slop = DEFAULT_SLOP,
+        index: Union[Index, Set[Index]] = DEFAULT_INDEX,
+        minimal: Literal[True] = DEFAULT_MINIMAL,
+        explain: bool = DEFAULT_EXPLAIN,
+        retries: int = DEFAULT_RETRIES,
+        backoff_seconds: float = DEFAULT_BACKOFF_SECONDS,
 ) -> Tuple[ResultsMeta, List[MinimalPhraseSearchResult]]:
     pass
 
@@ -291,14 +294,14 @@ def search_phrases_page(
 def search_phrases_page(
         api_key: str,
         query: str,
-        start: int = 0,
-        size: int = 10,
-        slop: Slop = 0,
-        index: Union[Index, Set[Index]] = DEFAULT_INDICES,
-        minimal: bool = False,
-        explain: bool = False,
-        retries: int = 5,
-        backoff_seconds: float = 1,
+        start: int = DEFAULT_START,
+        size: int = DEFAULT_SIZE,
+        slop: Slop = DEFAULT_SLOP,
+        index: Union[Index, Set[Index]] = DEFAULT_INDEX,
+        minimal: bool = DEFAULT_MINIMAL,
+        explain: bool = DEFAULT_EXPLAIN,
+        retries: int = DEFAULT_RETRIES,
+        backoff_seconds: float = DEFAULT_BACKOFF_SECONDS,
 ) -> Tuple[
     ResultsMeta,
     List[Union[PhraseSearchResult, MinimalPhraseSearchResult]]
@@ -309,14 +312,14 @@ def search_phrases_page(
 def search_phrases_page(
         api_key: str,
         query: str,
-        start: int = 0,
-        size: int = 10,
-        slop: Slop = 0,
-        index: Union[Index, Set[Index]] = DEFAULT_INDICES,
-        minimal: bool = False,
-        explain: bool = False,
-        retries: int = 5,
-        backoff_seconds: float = 1,
+        start: int = DEFAULT_START,
+        size: int = DEFAULT_SIZE,
+        slop: Slop = DEFAULT_SLOP,
+        index: Union[Index, Set[Index]] = DEFAULT_INDEX,
+        minimal: bool = DEFAULT_MINIMAL,
+        explain: bool = DEFAULT_EXPLAIN,
+        retries: int = DEFAULT_RETRIES,
+        backoff_seconds: float = DEFAULT_BACKOFF_SECONDS,
 ) -> Tuple[
     ResultsMeta,
     List[Union[PhraseSearchResult, MinimalPhraseSearchResult]]
