@@ -20,7 +20,7 @@ pip install chatnoir-api
 ## Usage
 
 ```python
-from chatnoir.api.v1 import search
+from chatnoir_api.v1 import search
 
 api_key: str = "<API_KEY>"
 
@@ -79,9 +79,9 @@ pip install -e .[test]
 Verify your changes against the test suite to verify.
 
 ```shell
-flake8 chatnoir examples
-pylint -E chatnoir examples
-pytest chatnoir examples
+flake8 chatnoir_api examples
+pylint -E chatnoir_api examples
+pytest chatnoir_api examples
 ```
 
 Please also add tests for the axioms or integrations you've added.

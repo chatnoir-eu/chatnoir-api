@@ -62,7 +62,7 @@ jobs:
           pip install -e .
           pip install -e .[test]
       - name: "🔍 Check Python code format"
-        run: flake8 chatnoir examples
+        run: flake8 chatnoir_api examples
   lint:
     name: "🔍 Python Lint"
     needs:
@@ -92,7 +92,7 @@ jobs:
           pip install -e .
           pip install -e .[test]
       - name: "🔍 Lint Python code"
-        run: pylint -E chatnoir examples
+        run: pylint -E chatnoir_api examples
   unit-tests:
     name: "🧪 Python unit tests"
     needs:
@@ -122,7 +122,7 @@ jobs:
           pip install -e .
           pip install -e .[test]
       - name: "🧪 Test Python code"
-        run: pytest chatnoir examples --cov --cov-report=term --cov-report=xml
+        run: pytest chatnoir_api examples --cov --cov-report=term --cov-report=xml
       - name: "📤 Upload test coverage"
         uses: actions/upload-artifact@v2
         with:
