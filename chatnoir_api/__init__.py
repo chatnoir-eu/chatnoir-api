@@ -1,12 +1,12 @@
-__version__ = "0.1.3"
+__version__ = "0.1.4"
 
 from logging import getLogger
 from uuid import UUID
 
 from requests import get, Response
 
-from chatnoir.api.constants import BASE_URL
-from chatnoir.api.model import Index
+from chatnoir_api.constants import BASE_URL
+from chatnoir_api.model import Index
 
 logger = getLogger("chatnoir-api")
 

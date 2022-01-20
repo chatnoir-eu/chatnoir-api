@@ -1,4 +1,4 @@
-from chatnoir.api.model import Index
+from chatnoir_api.model import Index
 
 BASE_URL = "https://chatnoir.eu"
 API_BASE_URL = f"{BASE_URL}/api"

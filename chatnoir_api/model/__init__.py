@@ -1,6 +1,6 @@
 from enum import Enum
 
-from chatnoir.api.types import Literal
+from chatnoir_api.types import Literal
 
 
 class Index(Enum):

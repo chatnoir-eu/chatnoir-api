@@ -2,9 +2,9 @@ from abc import ABC
 from typing import Sized, TypeVar, Generic, Optional, Dict, Iterable
 from uuid import UUID
 
-from chatnoir.api import html_contents
-from chatnoir.api.model import Index
-from chatnoir.api.model.highlight import HighlightedText
+from chatnoir_api import html_contents
+from chatnoir_api.model import Index
+from chatnoir_api.model.highlight import HighlightedText
 
 
 class Result(ABC):

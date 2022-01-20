@@ -6,9 +6,9 @@ from uuid import UUID
 
 from dataclasses_json import config, DataClassJsonMixin
 
-from chatnoir.api.model import Index, Slop
-from chatnoir.api.model.highlight import HighlightedText
-from chatnoir.api.model.result import (
+from chatnoir_api.model import Index, Slop
+from chatnoir_api.model.highlight import HighlightedText
+from chatnoir_api.model.result import (
     ResultsMeta, SearchResult, PhraseSearchResult, MinimalPhraseSearchResult
 )
 

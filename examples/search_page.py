@@ -1,4 +1,4 @@
-from chatnoir.api.v1 import search_page, search_phrases_page
+from chatnoir_api.v1 import search_page, search_phrases_page
 
 api_key: str = input("API key: ")
 
