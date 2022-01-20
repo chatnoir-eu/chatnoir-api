@@ -29,7 +29,7 @@ def _request_page(
         response_type: Type[_JsonResponse],
         endpoint: str,
         retries: int = 5,
-        backoff_seconds: float = 1 + uniform(-0.5, 0.5),
+        backoff_seconds: float = 1,
 ) -> _JsonResponse:
     request_json = request.to_json()
 
@@ -111,6 +111,8 @@ def search(
         index: Union[Index, Set[Index]] = DEFAULT_INDICES,
         explain: bool = False,
         page_size: int = 10,
+        retries: int = 5,
+        backoff_seconds: float = 1,
 ) -> SearchResults:
     class LazySearchResults(SearchResults, LazyResults[SearchResult]):
         def page(
@@ -119,12 +121,14 @@ def search(
                 size: int
         ) -> Tuple[ResultsMeta, List[SearchResult]]:
             return search_page(
-                api_key,
-                query,
-                start,
-                size,
-                index,
-                explain
+                api_key=api_key,
+                query=query,
+                start=start,
+                size=size,
+                index=index,
+                explain=explain,
+                retries=retries,
+                backoff_seconds=backoff_seconds,
             )
 
     return LazySearchResults(page_size)
@@ -137,13 +141,15 @@ def search_page(
         size: int = 10,
         index: Union[Index, Set[Index]] = DEFAULT_INDICES,
         explain: bool = False,
+        retries: int = 5,
+        backoff_seconds: float = 1,
 ) -> Tuple[ResultsMeta, List[SearchResult]]:
     if isinstance(index, Index):
         index = {index}
     index: Set[Index]
 
     response = _request_page(
-        SearchRequest(
+        request=SearchRequest(
             apikey=api_key,
             query=query,
             start=start,
@@ -151,8 +157,10 @@ def search_page(
             index=index,
             explain=explain,
         ),
-        SearchResponse,
-        "_search"
+        response_type=SearchResponse,
+        endpoint="_search",
+        retries=retries,
+        backoff_seconds=backoff_seconds,
     )
     return response.meta, response.results
 
@@ -166,6 +174,8 @@ def search_phrases(
         minimal: Literal[False] = False,
         explain: bool = False,
         page_size: int = 10,
+        retries: int = 5,
+        backoff_seconds: float = 1,
 ) -> PhraseSearchResults:
     pass
 
@@ -179,6 +189,8 @@ def search_phrases(
         minimal: Literal[True] = False,
         explain: bool = False,
         page_size: int = 10,
+        retries: int = 5,
+        backoff_seconds: float = 1,
 ) -> MinimalPhraseSearchResults:
     pass
 
@@ -192,6 +204,8 @@ def search_phrases(
         minimal: bool = False,
         explain: bool = False,
         page_size: int = 10,
+        retries: int = 5,
+        backoff_seconds: float = 1,
 ) -> Union[PhraseSearchResults, MinimalPhraseSearchResults]:
     pass
 
@@ -204,47 +218,39 @@ def search_phrases(
         minimal: bool = False,
         explain: bool = False,
         page_size: int = 10,
+        retries: int = 5,
+        backoff_seconds: float = 1,
 ) -> Union[PhraseSearchResults, MinimalPhraseSearchResults]:
+    results_type: Type[Union[MinimalPhraseSearchResults, PhraseSearchResults]]
+    result_type: Type[Union[MinimalPhraseSearchResult, PhraseSearchResult]]
     if minimal:
-        class LazyPhraseSearchResults(
-            PhraseSearchResults,
-            LazyResults[PhraseSearchResult]
-        ):
-            def page(
-                    self,
-                    start: int,
-                    size: int
-            ) -> Tuple[ResultsMeta, List[PhraseSearchResult]]:
-                return search_phrases_page(
-                    api_key,
-                    query,
-                    start,
-                    size,
-                    slop,
-                    index,
-                    False,
-                    explain,
-                )
+        results_type = MinimalPhraseSearchResults
+        result_type = MinimalPhraseSearchResult
     else:
-        class LazyPhraseSearchResults(
-            MinimalPhraseSearchResults,
-            LazyResults[MinimalPhraseSearchResult]
-        ):
-            def page(
-                    self,
-                    start: int,
-                    size: int
-            ) -> Tuple[ResultsMeta, List[MinimalPhraseSearchResult]]:
-                return search_phrases_page(
-                    api_key,
-                    query,
-                    start,
-                    size,
-                    slop,
-                    index,
-                    False,
-                    explain,
-                )
+        results_type = PhraseSearchResults
+        result_type = PhraseSearchResult
+
+    class LazyPhraseSearchResults(
+        results_type,
+        LazyResults[result_type]
+    ):
+        def page(
+                self,
+                start: int,
+                size: int
+        ) -> Tuple[ResultsMeta, List[result_type]]:
+            return search_phrases_page(
+                api_key=api_key,
+                query=query,
+                start=start,
+                size=size,
+                slop=slop,
+                index=index,
+                minimal=minimal,
+                explain=explain,
+                retries=retries,
+                backoff_seconds=backoff_seconds,
+            )
 
     return LazyPhraseSearchResults(page_size)
 
@@ -259,6 +265,8 @@ def search_phrases_page(
         index: Union[Index, Set[Index]] = DEFAULT_INDICES,
         minimal: Literal[False] = False,
         explain: bool = False,
+        retries: int = 5,
+        backoff_seconds: float = 1,
 ) -> Tuple[ResultsMeta, List[PhraseSearchResult]]:
     pass
 
@@ -273,6 +281,8 @@ def search_phrases_page(
         index: Union[Index, Set[Index]] = DEFAULT_INDICES,
         minimal: Literal[True] = False,
         explain: bool = False,
+        retries: int = 5,
+        backoff_seconds: float = 1,
 ) -> Tuple[ResultsMeta, List[MinimalPhraseSearchResult]]:
     pass
 
@@ -287,6 +297,8 @@ def search_phrases_page(
         index: Union[Index, Set[Index]] = DEFAULT_INDICES,
         minimal: bool = False,
         explain: bool = False,
+        retries: int = 5,
+        backoff_seconds: float = 1,
 ) -> Tuple[
     ResultsMeta,
     List[Union[PhraseSearchResult, MinimalPhraseSearchResult]]
@@ -303,6 +315,8 @@ def search_phrases_page(
         index: Union[Index, Set[Index]] = DEFAULT_INDICES,
         minimal: bool = False,
         explain: bool = False,
+        retries: int = 5,
+        backoff_seconds: float = 1,
 ) -> Tuple[
     ResultsMeta,
     List[Union[PhraseSearchResult, MinimalPhraseSearchResult]]
@@ -311,8 +325,15 @@ def search_phrases_page(
         index = {index}
     index: Set[Index]
 
+    response_type: Type[
+        Union[MinimalPhraseSearchResponse, PhraseSearchResponse]
+    ]
+    if minimal:
+        response_type = MinimalPhraseSearchResponse
+    else:
+        response_type = PhraseSearchResponse
     response = _request_page(
-        PhraseSearchRequest(
+        request=PhraseSearchRequest(
             apikey=api_key,
             query=query,
             start=start,
@@ -322,7 +343,9 @@ def search_phrases_page(
             minimal=minimal,
             slop=slop,
         ),
-        MinimalPhraseSearchResponse if minimal else PhraseSearchResponse,
-        "_phrases"
+        response_type=response_type,
+        endpoint="_phrases",
+        retries=retries,
+        backoff_seconds=backoff_seconds,
     )
     return response.meta, response.results
