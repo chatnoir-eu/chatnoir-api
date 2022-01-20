@@ -1,4 +1,4 @@
-from chatnoir.api.constants import API_URL_BASE
+from chatnoir.api.constants import API_BASE_URL
 
-API_URL = f"{API_URL_BASE}/v1"
+API_URL = f"{API_BASE_URL}/v1"
 PAGE_SIZE = 100

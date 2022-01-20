@@ -2,6 +2,7 @@ from abc import ABC
 from typing import Sized, TypeVar, Generic, Optional, Dict, Iterable
 from uuid import UUID
 
+from chatnoir.api import html_contents
 from chatnoir.model import Index
 from chatnoir.model.highlight import HighlightedText
 
@@ -23,6 +24,9 @@ class SearchResult(Result):
     title: HighlightedText = NotImplemented
     explanation: Optional[Dict] = NotImplemented
 
+    def html_contents(self, plain: bool = False) -> str:
+        return html_contents(self.uuid, self.index, plain)
+
 
 class MinimalPhraseSearchResult(Result, ABC):
     pass
@@ -37,6 +41,9 @@ class PhraseSearchResult(MinimalPhraseSearchResult):
     spam_rank: Optional[float] = NotImplemented
     title: HighlightedText = NotImplemented
     explanation: Optional[Dict] = NotImplemented
+
+    def html_contents(self, plain: bool = False) -> str:
+        return html_contents(self.uuid, self.index, plain)
 
 
 class ResultsMeta(ABC):
