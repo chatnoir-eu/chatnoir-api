@@ -1,5 +1,5 @@
 from abc import ABC
-from typing import Sized, TypeVar, Generic, Optional, Dict, Iterable
+from typing import Sized, TypeVar, Generic, Optional, Iterable
 from uuid import UUID
 
 from chatnoir_api import html_contents
@@ -22,7 +22,7 @@ class SearchResult(Result):
     page_rank: Optional[float] = NotImplemented
     spam_rank: Optional[float] = NotImplemented
     title: HighlightedText = NotImplemented
-    explanation: Optional[Dict] = NotImplemented
+    explanation: Optional[dict] = NotImplemented
 
     def html_contents(self, plain: bool = False) -> str:
         return html_contents(self.uuid, self.index, plain)
@@ -40,7 +40,7 @@ class PhraseSearchResult(MinimalPhraseSearchResult):
     page_rank: Optional[float] = NotImplemented
     spam_rank: Optional[float] = NotImplemented
     title: HighlightedText = NotImplemented
-    explanation: Optional[Dict] = NotImplemented
+    explanation: Optional[dict] = NotImplemented
 
     def html_contents(self, plain: bool = False) -> str:
         return html_contents(self.uuid, self.index, plain)

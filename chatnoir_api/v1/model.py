@@ -1,6 +1,6 @@
 from abc import ABC
 from dataclasses import dataclass, field
-from typing import List, Dict
+from typing import List
 from typing import Optional, Set
 from uuid import UUID
 
@@ -72,7 +72,7 @@ class SearchResponseResult(ResponseResult, SearchResult, DataClassJsonMixin):
     target_hostname: str
     page_rank: Optional[float]
     spam_rank: Optional[float]
-    explanation: Optional[Dict]
+    explanation: Optional[dict]
 
 
 @dataclass(frozen=True)
@@ -102,7 +102,7 @@ class PhraseSearchResponseResult(
     target_hostname: str
     page_rank: Optional[float]
     spam_rank: Optional[float]
-    explanation: Optional[Dict]
+    explanation: Optional[dict]
 
 
 @dataclass(frozen=True)
