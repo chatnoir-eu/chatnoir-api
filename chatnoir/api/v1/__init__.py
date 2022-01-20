@@ -3,19 +3,19 @@ from typing import List, Tuple, TypeVar, Type, overload, Union, Set
 from dataclasses_json import DataClassJsonMixin
 from requests import Response as HttpResponse, post
 
+from chatnoir.api.constants import DEFAULT_INDICES
 from chatnoir.api.util import LazyResults
 from chatnoir.api.v1.constants import API_URL
 from chatnoir.api.v1.model import (
     SearchResponse, SearchRequest, Request, Response, PhraseSearchRequest,
     PhraseSearchResponse, MinimalPhraseSearchResponse
 )
-from chatnoir.constants import DEFAULT_INDICES
-from chatnoir.model import Index, Slop
-from chatnoir.model.result import (
+from chatnoir.api.model import Index, Slop
+from chatnoir.api.model.result import (
     ResultsMeta, SearchResults, SearchResult, PhraseSearchResults,
     PhraseSearchResult, MinimalPhraseSearchResults, MinimalPhraseSearchResult
 )
-from chatnoir.util import Literal
+from chatnoir.api.types import Literal
 
 _JsonRequest = TypeVar("_JsonRequest", Request, DataClassJsonMixin)
 _JsonResponse = TypeVar("_JsonResponse", Response, DataClassJsonMixin)

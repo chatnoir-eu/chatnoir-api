@@ -3,8 +3,8 @@ from typing import Sized, TypeVar, Generic, Optional, Dict, Iterable
 from uuid import UUID
 
 from chatnoir.api import html_contents
-from chatnoir.model import Index
-from chatnoir.model.highlight import HighlightedText
+from chatnoir.api.model import Index
+from chatnoir.api.model.highlight import HighlightedText
 
 
 class Result(ABC):

@@ -1,6 +1,6 @@
 from pytest import fixture
 
-from chatnoir.model.highlight import HighlightedText
+from chatnoir.api.model.highlight import HighlightedText
 
 
 @fixture

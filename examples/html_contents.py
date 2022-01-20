@@ -1,7 +1,7 @@
 from uuid import UUID
 
 from chatnoir.api import html_contents
-from chatnoir.model import Index
+from chatnoir.api.model import Index
 
 contents = html_contents(
     UUID("e635baa8-7341-596a-b3cf-b33c05954361"),
