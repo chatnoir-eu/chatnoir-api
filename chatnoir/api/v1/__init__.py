@@ -1,5 +1,9 @@
-from typing import List, Tuple, TypeVar, Type, overload, Literal, Union
-from typing import Set
+from typing import List, Tuple, TypeVar, Type, overload, Union, Set
+
+try:
+    from typing import Literal
+except ImportError:
+    from typing_extensions import Literal
 
 from dataclasses_json import DataClassJsonMixin
 from requests import Response as HttpResponse, post
