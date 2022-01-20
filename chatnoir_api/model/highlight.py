@@ -10,7 +10,7 @@ class Highlight(str):
     pass
 
 
-@dataclass(frozen=True)
+@dataclass(frozen=True, unsafe_hash=True)
 class HighlightedText(str):
     html: str
 
