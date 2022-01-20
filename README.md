@@ -1,4 +1,4 @@
-from chatnoir_api.model.result import SearchResults[![PyPi](https://img.shields.io/pypi/v/chatnoir-api?style=flat-square)](https://pypi.org/project/chatnoir-api/)
+[![PyPi](https://img.shields.io/pypi/v/chatnoir-api?style=flat-square)](https://pypi.org/project/chatnoir-api/)
 [![CI](https://img.shields.io/github/workflow/status/heinrichreimer/chatnoir-api/CI?style=flat-square)](https://github.com/heinrichreimer/chatnoir-api/actions?query=workflow%3A"CI")
 [![Code coverage](https://img.shields.io/codecov/c/github/heinrichreimer/chatnoir-api?style=flat-square)](https://codecov.io/github/heinrichreimer/chatnoir-api/)
 [![Python](https://img.shields.io/pypi/pyversions/chatnoir-api?style=flat-square)](https://pypi.org/project/chatnoir-api/)
