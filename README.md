@@ -1,4 +1,4 @@
-[![PyPi](https://img.shields.io/pypi/v/chatnoir-api?style=flat-square)](https://pypi.org/project/chatnoir-api/)
+from chatnoir_api.model.result import SearchResults[![PyPi](https://img.shields.io/pypi/v/chatnoir-api?style=flat-square)](https://pypi.org/project/chatnoir-api/)
 [![CI](https://img.shields.io/github/workflow/status/heinrichreimer/chatnoir-api/CI?style=flat-square)](https://github.com/heinrichreimer/chatnoir-api/actions?query=workflow%3A"CI")
 [![Code coverage](https://img.shields.io/codecov/c/github/heinrichreimer/chatnoir-api?style=flat-square)](https://codecov.io/github/heinrichreimer/chatnoir-api/)
 [![Python](https://img.shields.io/pypi/pyversions/chatnoir-api?style=flat-square)](https://pypi.org/project/chatnoir-api/)
@@ -20,12 +20,13 @@ pip install chatnoir-api
 ## Usage
 
 ```python
+from chatnoir_api.model.result import SearchResults, SearchResult
 from chatnoir_api.v1 import search
 
 api_key: str = "<API_KEY>"
 
-results = search(api_key, "python library")
-top_result = next(iter(results))
+results: SearchResults = search(api_key, "python library")
+top_result: SearchResult = next(iter(results))
 
 print(top_result)
 ```
@@ -81,14 +82,14 @@ Verify your changes against the test suite to verify.
 ```shell
 flake8 chatnoir_api examples
 pylint -E chatnoir_api examples
-pytest chatnoir_api examples
+CHATNOIR_API_KEY="<API_KEY>" pytest chatnoir_api examples
 ```
 
-Please also add tests for the axioms or integrations you've added.
+Please also add tests for your newly developed code.
 
-### Build wheel
+### Build wheels
 
-A wheel for this package can be built by:
+Wheels for this package can be built by:
 
 ```shell
 python -m build
