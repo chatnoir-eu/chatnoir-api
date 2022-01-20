@@ -1,8 +1,11 @@
+from random import uniform
+from time import sleep
 from typing import List, Tuple, TypeVar, Type, overload, Union, Set
 
 from dataclasses_json import DataClassJsonMixin
 from requests import Response as HttpResponse, post
 
+from chatnoir_api import logger
 from chatnoir_api.constants import DEFAULT_INDICES
 from chatnoir_api.util import LazyResults
 from chatnoir_api.v1.constants import API_URL
@@ -25,6 +28,8 @@ def _request_page(
         request: _JsonRequest,
         response_type: Type[_JsonResponse],
         endpoint: str,
+        retries: int = 5,
+        backoff_seconds: float = 1 + uniform(-0.5, 0.5),
 ) -> _JsonResponse:
     request_json = request.to_json()
 
@@ -37,10 +42,61 @@ def _request_page(
         headers=headers,
         data=request_json.encode("utf-8")
     )
+    if raw_response.status_code // 100 == 5:
+        if retries == 0:
+            raise RuntimeError(
+                "ChatNoir API internal server error. "
+                "Please get in contact with the admins "
+                "at https://chatnoir.eu/doc/"
+            )
+        else:
+            logger.warning(
+                f"ChatNoir API internal server error. "
+                f"Retrying in {round(backoff_seconds)} seconds."
+            )
+            sleep(backoff_seconds)
+            return _request_page(
+                request,
+                response_type,
+                endpoint,
+                retries - 1,
+                round(backoff_seconds) * 2 + uniform(-0.5, 0.5)
+            )
     if raw_response.status_code == 401:
         raise RuntimeError(
             "ChatNoir API key invalid or missing. "
             "Please refer to the documentation at https://chatnoir.eu/doc/api/"
+        )
+    elif raw_response.status_code == 403:
+        raise RuntimeError(
+            "ChatNoir API blocked this IP address. "
+            "Please get in contact with the admins at https://chatnoir.eu/doc/"
+        )
+    elif raw_response.status_code == 429:
+        if retries == 0:
+            raise RuntimeError(
+                "ChatNoir API quota exceeded. Please throttle requests and "
+                "refer to the documentation at https://chatnoir.eu/doc/api/"
+            )
+        else:
+            logger.warning(
+                f"ChatNoir API quota exceeded. "
+                f"Retrying in {round(backoff_seconds)} seconds."
+            )
+        sleep(backoff_seconds)
+        return _request_page(
+            request,
+            response_type,
+            endpoint,
+            retries - 1,
+            round(backoff_seconds) * 2 + uniform(-0.5, 0.5)
+        )
+    elif not raw_response.ok:
+        raise RuntimeError(
+            f"ChatNoir API request failed "
+            f"with code {raw_response.status_code}."
+            f"Please refer to the documentation at https://chatnoir.eu/doc/ "
+            f"or get in contact with the admins."
         )
 
     response_json = raw_response.text
