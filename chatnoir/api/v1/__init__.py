@@ -1,10 +1,5 @@
 from typing import List, Tuple, TypeVar, Type, overload, Union, Set
 
-try:
-    from typing import Literal
-except ImportError:
-    from typing_extensions import Literal
-
 from dataclasses_json import DataClassJsonMixin
 from requests import Response as HttpResponse, post
 
@@ -20,6 +15,7 @@ from chatnoir.model.result import (
     ResultsMeta, SearchResults, SearchResult, PhraseSearchResults,
     PhraseSearchResult, MinimalPhraseSearchResults, MinimalPhraseSearchResult
 )
+from chatnoir.util import Literal
 
 _JsonRequest = TypeVar("_JsonRequest", Request, DataClassJsonMixin)
 _JsonResponse = TypeVar("_JsonResponse", Response, DataClassJsonMixin)

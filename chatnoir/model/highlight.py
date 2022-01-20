@@ -1,9 +1,9 @@
 from dataclasses import dataclass
-from functools import cached_property
 from html.parser import HTMLParser
 from typing import List, Union, Optional
 
 from chatnoir import logger
+from chatnoir.util import cached_property
 
 
 class Highlight(str):

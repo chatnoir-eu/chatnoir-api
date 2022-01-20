@@ -1,9 +1,6 @@
 from enum import Enum
 
-try:
-    from typing import Literal
-except ImportError:
-    from typing_extensions import Literal
+from chatnoir.util import Literal
 
 
 class Index(Enum):
