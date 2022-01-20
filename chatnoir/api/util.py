@@ -2,7 +2,9 @@ from abc import ABC, abstractmethod
 from typing import Iterator, Generic, TypeVar, Optional, Tuple, List
 
 from chatnoir.api import logger
-from chatnoir.api.model.result import Results, ResultsMeta, Result, SearchResult
+from chatnoir.api.model.result import (
+    Results, ResultsMeta, Result, SearchResult
+)
 
 LazyResultType = TypeVar("LazyResultType", bound=Result)
 
