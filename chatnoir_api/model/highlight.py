@@ -14,8 +14,12 @@ class Highlight(str):
 class HighlightedText(str):
     html: str
 
-    def __str__(self) -> str:
+    @property
+    def text(self):
         return "".join(self.sequence)
+
+    def __str__(self) -> str:
+        return self.text
 
     @cached_property
     def sequence(self) -> List[Union[str, Highlight]]:
@@ -43,33 +47,30 @@ class _HighlightParser(HTMLParser):
 
     def handle_starttag(self, tag: str, attrs):
         if tag != "em":
-            print(1)
             raise SyntaxError("Can only parse <em> tags.")
         if attrs:
-            print(2)
             raise SyntaxError("Cannot parse attributes.")
         if self._current_is_highlight:
             raise SyntaxError("Nested <em> tags are not supported.")
         if self._current_data is not None:
             self._current_sequence.append(self._current_data)
-            self._current_data = None
-            self._current_is_highlight = True
         else:
-            logger.warning("Empty non-hightlight string.")
+            logger.debug("Empty non-hightlight string.")
+        self._current_data = None
+        self._current_is_highlight = True
 
     # Overridable -- handle end tag
     def handle_endtag(self, tag: str):
         if tag != "em":
-            print(3)
             raise SyntaxError("Can only parse <em> tags.")
         if not self._current_is_highlight:
             raise SyntaxError("Nested <em> tags are not supported.")
         if self._current_data is not None:
             self._current_sequence.append(Highlight(self._current_data))
-            self._current_data = None
-            self._current_is_highlight = False
         else:
-            logger.warning("Empty highlight string.")
+            logger.debug("Empty highlight string.")
+        self._current_data = None
+        self._current_is_highlight = False
 
     def handle_charref(self, name: str):
         raise AssertionError(
@@ -88,9 +89,7 @@ class _HighlightParser(HTMLParser):
         raise SyntaxError("Comments are not supported.")
 
     def handle_decl(self, decl: str):
-        print(8)
         raise SyntaxError("Doctype declarations are not supported.")
 
     def handle_pi(self, data: str):
-        print(9)
         raise SyntaxError("Processing instructions are not supported.")
