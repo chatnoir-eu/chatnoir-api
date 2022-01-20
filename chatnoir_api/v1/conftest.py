@@ -1,11 +1,8 @@
 from os import environ
-from typing import List, Iterator
 
 from pytest import fixture
 
 from chatnoir_api import Index
-from chatnoir_api.model.result import SearchResult, ResultsMeta, SearchResults
-from chatnoir_api.v1 import search_page, search
 
 
 @fixture(scope="module")
