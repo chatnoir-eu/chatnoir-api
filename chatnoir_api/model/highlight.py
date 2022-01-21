@@ -31,12 +31,15 @@ class HighlightedText(str):
 
 
 class _HighlightParser(HTMLParser):
-    _current_sequence: List[Union[str, Highlight]] = []
-    _current_data: Optional[str] = None
-    _current_is_highlight = False
+    _current_sequence: List[Union[str, Highlight]]
+    _current_data: Optional[str]
+    _current_is_highlight: bool
 
     def __init__(self):
         super().__init__(convert_charrefs=True)
+        self._current_sequence = []
+        self._current_data = None
+        self._current_is_highlight = False
 
     @property
     def sequence(self) -> List[Union[str, Highlight]]:
