@@ -1,7 +1,7 @@
 from typing import List
 
 from chatnoir_api import Index
-from chatnoir_api.model.result import SearchResult, ResultsMeta, SearchResults
+from chatnoir_api.model.result import SearchResult, ResultsMeta, Results
 from chatnoir_api.v1 import search_page, search
 
 
@@ -71,7 +71,7 @@ def test_iterable(api_key: str, query: str):
         page_size=1,
     )
     assert results is not None
-    assert isinstance(results, SearchResults)
+    assert isinstance(results, Results)
 
     assert results.query_time is not None
     assert isinstance(results.query_time, int)

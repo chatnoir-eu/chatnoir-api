@@ -7,7 +7,7 @@ from requests import Response as HttpResponse, post
 
 from chatnoir_api import logger
 from chatnoir_api.constants import API_V1_URL
-from chatnoir_api.util import LazyResults
+from chatnoir_api.lazy import LazyResultSequence
 from chatnoir_api.v1.defaults import (
     DEFAULT_START, DEFAULT_SIZE, DEFAULT_SLOP, DEFAULT_INDEX, DEFAULT_MINIMAL,
     DEFAULT_EXPLAIN, DEFAULT_RETRIES, DEFAULT_BACKOFF_SECONDS
@@ -18,8 +18,8 @@ from chatnoir_api.v1.model import (
 )
 from chatnoir_api.model import Index, Slop
 from chatnoir_api.model.result import (
-    ResultsMeta, SearchResults, SearchResult, PhraseSearchResults,
-    PhraseSearchResult, MinimalPhraseSearchResults, MinimalPhraseSearchResult
+    ResultsMeta, SearchResult, PhraseSearchResult, MinimalPhraseSearchResult,
+    Results
 )
 from chatnoir_api.types import Literal
 
@@ -116,25 +116,26 @@ def search(
         page_size: int = DEFAULT_SIZE,
         retries: int = DEFAULT_RETRIES,
         backoff_seconds: float = DEFAULT_BACKOFF_SECONDS,
-) -> SearchResults:
-    class LazySearchResults(SearchResults, LazyResults[SearchResult]):
-        def page(
-                self,
-                start: int,
-                size: int
-        ) -> Tuple[ResultsMeta, List[SearchResult]]:
-            return search_page(
-                api_key=api_key,
-                query=query,
-                start=start,
-                size=size,
-                index=index,
-                explain=explain,
-                retries=retries,
-                backoff_seconds=backoff_seconds,
-            )
+) -> Results[SearchResult]:
+    def load_page(
+            start: int,
+            size: int
+    ) -> Tuple[ResultsMeta, List[SearchResult]]:
+        return search_page(
+            api_key=api_key,
+            query=query,
+            start=start,
+            size=size,
+            index=index,
+            explain=explain,
+            retries=retries,
+            backoff_seconds=backoff_seconds,
+        )
 
-    return LazySearchResults(page_size)
+    return LazyResultSequence(
+        page_size,
+        load_page,
+    )
 
 
 def search_page(
@@ -179,7 +180,7 @@ def search_phrases(
         page_size: int = DEFAULT_SIZE,
         retries: int = DEFAULT_RETRIES,
         backoff_seconds: float = DEFAULT_BACKOFF_SECONDS,
-) -> PhraseSearchResults:
+) -> Results[PhraseSearchResult]:
     pass
 
 
@@ -194,7 +195,7 @@ def search_phrases(
         page_size: int = DEFAULT_SIZE,
         retries: int = DEFAULT_RETRIES,
         backoff_seconds: float = DEFAULT_BACKOFF_SECONDS,
-) -> MinimalPhraseSearchResults:
+) -> Results[MinimalPhraseSearchResult]:
     pass
 
 
@@ -209,7 +210,7 @@ def search_phrases(
         page_size: int = DEFAULT_SIZE,
         retries: int = DEFAULT_RETRIES,
         backoff_seconds: float = DEFAULT_BACKOFF_SECONDS,
-) -> Union[PhraseSearchResults, MinimalPhraseSearchResults]:
+) -> Results[Union[PhraseSearchResult, MinimalPhraseSearchResult]]:
     pass
 
 
@@ -223,39 +224,31 @@ def search_phrases(
         page_size: int = DEFAULT_SIZE,
         retries: int = DEFAULT_RETRIES,
         backoff_seconds: float = DEFAULT_BACKOFF_SECONDS,
-) -> Union[PhraseSearchResults, MinimalPhraseSearchResults]:
-    results_type: Type[Union[MinimalPhraseSearchResults, PhraseSearchResults]]
-    result_type: Type[Union[MinimalPhraseSearchResult, PhraseSearchResult]]
-    if minimal:
-        results_type = MinimalPhraseSearchResults
-        result_type = MinimalPhraseSearchResult
-    else:
-        results_type = PhraseSearchResults
-        result_type = PhraseSearchResult
+) -> Results[Union[PhraseSearchResult, MinimalPhraseSearchResult]]:
+    def load_page(
+            start: int,
+            size: int
+    ) -> Tuple[
+        ResultsMeta,
+        List[Union[MinimalPhraseSearchResult, PhraseSearchResult]]
+    ]:
+        return search_phrases_page(
+            api_key=api_key,
+            query=query,
+            start=start,
+            size=size,
+            slop=slop,
+            index=index,
+            minimal=minimal,
+            explain=explain,
+            retries=retries,
+            backoff_seconds=backoff_seconds,
+        )
 
-    class LazyPhraseSearchResults(
-        results_type,
-        LazyResults[result_type]
-    ):
-        def page(
-                self,
-                start: int,
-                size: int
-        ) -> Tuple[ResultsMeta, List[result_type]]:
-            return search_phrases_page(
-                api_key=api_key,
-                query=query,
-                start=start,
-                size=size,
-                slop=slop,
-                index=index,
-                minimal=minimal,
-                explain=explain,
-                retries=retries,
-                backoff_seconds=backoff_seconds,
-            )
-
-    return LazyPhraseSearchResults(page_size)
+    return LazyResultSequence(
+        page_size,
+        load_page,
+    )
 
 
 @overload

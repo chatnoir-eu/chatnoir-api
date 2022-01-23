@@ -4,8 +4,7 @@ from pytest import fixture
 
 from chatnoir_api import Index
 from chatnoir_api.model.result import (
-    PhraseSearchResult, ResultsMeta, PhraseSearchResults,
-    MinimalPhraseSearchResult, MinimalPhraseSearchResults
+    PhraseSearchResult, ResultsMeta, MinimalPhraseSearchResult, Results
 )
 from chatnoir_api.v1 import search_phrases_page, search_phrases
 
@@ -89,10 +88,7 @@ def test_iterable(api_key: str, query: str, minimal: bool):
         minimal=minimal,
     )
     assert results is not None
-    if minimal:
-        assert isinstance(results, MinimalPhraseSearchResults)
-    else:
-        assert isinstance(results, PhraseSearchResults)
+    assert isinstance(results, Results)
 
     assert results.query_time is not None
     assert isinstance(results.query_time, int)

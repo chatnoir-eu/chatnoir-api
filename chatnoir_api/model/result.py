@@ -1,5 +1,5 @@
 from abc import ABC
-from typing import Sized, TypeVar, Generic, Optional, Iterable
+from typing import TypeVar, Generic, Optional, Sequence
 from uuid import UUID
 
 from chatnoir_api import html_contents
@@ -55,35 +55,9 @@ ResultType = TypeVar("ResultType", bound=Result)
 
 
 class Results(
-    Sized,
-    Iterable[ResultType],
-    Generic[ResultType],
+    Sequence[ResultType],
     ResultsMeta,
+    Generic[ResultType],
     ABC
 ):
-    def __len__(self) -> int:
-        # pylint: disable=E0303
-        total_results = self.total_results
-        if total_results is None:
-            raise RuntimeError("No total results count was given.")
-        elif not isinstance(total_results, int):
-            raise RuntimeError("Invalid total results count was given.")
-        elif total_results < 0:
-            raise RuntimeError(
-                "Negative total results count is not supported."
-            )
-        else:
-            # noqa: E0303
-            return total_results
-
-
-class SearchResults(Results[SearchResult], ABC):
-    pass
-
-
-class MinimalPhraseSearchResults(Results[MinimalPhraseSearchResult], ABC):
-    pass
-
-
-class PhraseSearchResults(Results[PhraseSearchResult], ABC):
     pass

@@ -20,15 +20,16 @@ pip install chatnoir-api
 ## Usage
 
 ```python
-from chatnoir_api.model.result import SearchResults, SearchResult
 from chatnoir_api.v1 import search
 
 api_key: str = "<API_KEY>"
+results = search(api_key, "python library")
 
-results: SearchResults = search(api_key, "python library")
-top_result: SearchResult = next(iter(results))
+top10_results = results[:10]
+print(top10_results)
 
-print(top_result)
+result_1234 = results[1234]
+print(result_1234)
 ```
 
 ## Citation
