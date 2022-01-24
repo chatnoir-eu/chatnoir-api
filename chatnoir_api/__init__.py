@@ -1,7 +1,8 @@
 __version__ = "0.1.11"
 
 from logging import getLogger
-from uuid import UUID
+from typing import Union
+from uuid import UUID, uuid5, NAMESPACE_URL
 
 from requests import get, Response
 
@@ -12,10 +13,16 @@ logger = getLogger("chatnoir-api")
 
 
 def html_contents(
-        uuid: UUID,
+        uuid_or_document_id: Union[UUID, str],
         index: Index,
         plain: bool = False,
 ) -> str:
+    uuid: UUID
+    if isinstance(uuid_or_document_id, str):
+        uuid = uuid5(NAMESPACE_URL, f"{index.prefix}:{uuid_or_document_id}")
+    else:
+        uuid = uuid_or_document_id
+
     response: Response = get(
         f"{BASE_URL}/cache",
         params={
