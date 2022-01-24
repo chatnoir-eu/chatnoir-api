@@ -1,7 +1,6 @@
 from typing import List
 
-from chatnoir_api import Index
-from chatnoir_api.model.result import SearchResult, ResultsMeta, Results
+from chatnoir_api import Index, SearchResult, ResultsMeta, Results
 from chatnoir_api.v1 import search_page, search
 
 

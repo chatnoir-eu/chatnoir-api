@@ -4,7 +4,6 @@ from chatnoir_api import html, model
 from chatnoir_api.model import highlight, result
 
 # Re-export child modules.
-html_contents = html.html_contents
 Index = model.Index
 Slop = model.Slop
 Highlight = highlight.Highlight
@@ -15,3 +14,4 @@ ResultsMeta = result.ResultsMeta
 SearchResult = result.SearchResult
 PhraseSearchResult = result.PhraseSearchResult
 MinimalPhraseSearchResult = result.MinimalPhraseSearchResult
+html_contents = html.html_contents

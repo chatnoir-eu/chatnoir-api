@@ -2,9 +2,8 @@ from typing import List
 
 from pytest import fixture
 
-from chatnoir_api import Index
-from chatnoir_api.model.result import (
-    PhraseSearchResult, ResultsMeta, MinimalPhraseSearchResult, Results
+from chatnoir_api import (
+    Index, PhraseSearchResult, ResultsMeta, MinimalPhraseSearchResult, Results
 )
 from chatnoir_api.v1 import search_phrases_page, search_phrases
 
