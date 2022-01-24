@@ -1,4 +1,5 @@
-from itertools import chain
+from itertools import chain, repeat
+from math import ceil
 from typing import (
     Iterator, Generic, TypeVar, Optional, Tuple, List, Callable, Sequence, Any,
     overload, Union
@@ -101,12 +102,90 @@ class LazyResultPage(
         return len(self._results)
 
 
+class LazyResultPageList(
+    Sequence[LazyResultPage[LazyResultType]],
+    Generic[LazyResultType]
+):
+    _page_size: int
+    _load_page: Callable[[int, int], Tuple[ResultsMeta, List[LazyResultType]]]
+
+    _pages: List[Optional[LazyResultPage[LazyResultType]]]
+
+    def __init__(
+            self,
+            page_size: int,
+            total_results: int,
+            load_page: Callable[
+                [int, int],
+                Tuple[ResultsMeta, List[LazyResultType]]
+            ],
+    ):
+        self._page_size = page_size
+        self._load_page = load_page
+
+        self._pages = list(repeat(
+            None,
+            ceil(total_results / page_size)
+        ))
+
+    @overload
+    def __getitem__(self, i: int) -> LazyResultPage[LazyResultType]:
+        pass
+
+    @overload
+    def __getitem__(
+            self,
+            s: slice
+    ) -> Sequence[LazyResultPage[LazyResultType]]:
+        pass
+
+    def __getitem__(
+            self, i: Union[int, slice]
+    ) -> Union[
+        LazyResultPage[LazyResultType],
+        Sequence[LazyResultPage[LazyResultType]]
+    ]:
+        if isinstance(i, int):
+            if self._pages[i] is None:
+                start = i * self._page_size
+                self._pages[i] = LazyResultPage(
+                    start,
+                    self._page_size,
+                    self._load_page
+                )
+            return self._pages[i]
+        elif isinstance(i, slice):
+            start = i.start
+            if start is None:
+                start = 0
+            if start < 0:
+                start = len(self) + start
+
+            stop = i.stop
+            if stop is None:
+                stop = len(self)
+            if stop < 0:
+                stop = len(self) + stop
+
+            step = i.step
+            if step is None:
+                step = 1
+
+            indices = range(start, stop, step)
+            return [self[i] for i in indices]
+        else:
+            raise TypeError("Invalid index type.")
+
+    def __len__(self) -> int:
+        return len(self._pages)
+
+
 class LazyResultSequence(
     Results[LazyResultType],
     Generic[LazyResultType],
 ):
     _page_size: int
-    _pages: List[LazyResultPage]
+    _pages: Sequence[LazyResultPage]
 
     def __init__(
             self,
@@ -118,22 +197,17 @@ class LazyResultSequence(
     ):
         self._page_size = page_size
         # Load first page to get total results count.
-        self._pages = [
-            LazyResultPage(
-                start=0,
-                size=page_size,
-                load_page=load_page,
-            )
-        ]
-        total_results = self._pages[0].total_results
+        first_page = LazyResultPage(
+            start=0,
+            size=page_size,
+            load_page=load_page,
+        )
+        total_results = first_page.total_results
         # Initialize remaining pages.
-        self._pages.extend(
-            LazyResultPage(
-                start=start,
-                size=page_size,
-                load_page=load_page,
-            )
-            for start in range(page_size, total_results, page_size)
+        self._pages = LazyResultPageList(
+            self._page_size,
+            total_results,
+            load_page
         )
 
     @property
