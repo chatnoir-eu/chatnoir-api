@@ -1,4 +1,4 @@
-__version__ = "0.1.11"
+__version__ = "0.1.12"
 
 from chatnoir_api import html, model
 from chatnoir_api.model import highlight, result
