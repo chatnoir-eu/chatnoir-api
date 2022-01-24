@@ -2,7 +2,7 @@ from dataclasses import dataclass
 from html.parser import HTMLParser
 from typing import List, Union, Optional
 
-from chatnoir_api import logger
+from chatnoir_api.logging import logger
 from chatnoir_api.types import cached_property
 
 

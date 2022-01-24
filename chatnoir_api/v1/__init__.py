@@ -5,7 +5,7 @@ from typing import List, Tuple, TypeVar, Type, overload, Union, Set
 from dataclasses_json import DataClassJsonMixin
 from requests import Response as HttpResponse, post
 
-from chatnoir_api import logger
+from chatnoir_api.logging import logger
 from chatnoir_api.constants import API_V1_URL
 from chatnoir_api.lazy import LazyResultSequence
 from chatnoir_api.v1.defaults import (
