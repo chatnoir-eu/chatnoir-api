@@ -1,11 +1,11 @@
 [![PyPi](https://img.shields.io/pypi/v/chatnoir-api?style=flat-square)](https://pypi.org/project/chatnoir-api/)
-[![CI](https://img.shields.io/github/workflow/status/heinrichreimer/chatnoir-api/CI?style=flat-square)](https://github.com/heinrichreimer/chatnoir-api/actions?query=workflow%3A"CI")
-[![Code coverage](https://img.shields.io/codecov/c/github/heinrichreimer/chatnoir-api?style=flat-square)](https://codecov.io/github/heinrichreimer/chatnoir-api/)
+[![CI](https://img.shields.io/github/workflow/status/chatnoir-eu/chatnoir-api/CI?style=flat-square)](https://github.com/chatnoir-eu/chatnoir-api/actions?query=workflow%3A"CI")
+[![Code coverage](https://img.shields.io/codecov/c/github/chatnoir-eu/chatnoir-api?style=flat-square)](https://codecov.io/github/chatnoir-eu/chatnoir-api/)
 [![Python](https://img.shields.io/pypi/pyversions/chatnoir-api?style=flat-square)](https://pypi.org/project/chatnoir-api/)
-[![Issues](https://img.shields.io/github/issues/heinrichreimer/chatnoir-api?style=flat-square)](https://github.com/heinrichreimer/chatnoir-api/issues)
-[![Commit activity](https://img.shields.io/github/commit-activity/m/heinrichreimer/chatnoir-api?style=flat-square)](https://github.com/heinrichreimer/chatnoir-api/commits)
+[![Issues](https://img.shields.io/github/issues/chatnoir-eu/chatnoir-api?style=flat-square)](https://github.com/chatnoir-eu/chatnoir-api/issues)
+[![Commit activity](https://img.shields.io/github/commit-activity/m/chatnoir-eu/chatnoir-api?style=flat-square)](https://github.com/chatnoir-eu/chatnoir-api/commits)
 [![Downloads](https://img.shields.io/pypi/dm/chatnoir-api?style=flat-square)](https://pypi.org/project/chatnoir-api/)
-[![License](https://img.shields.io/github/license/heinrichreimer/chatnoir-api?style=flat-square)](LICENSE)
+[![License](https://img.shields.io/github/license/chatnoir-eu/chatnoir-api?style=flat-square)](LICENSE)
 
 # 🔍 chatnoir-api
 
