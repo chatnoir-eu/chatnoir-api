@@ -18,8 +18,10 @@ pip install chatnoir-api
 ```
 
 ## Usage
-
-### Search
+To search with the ChatNoir API you need to request an [API key](https://chatnoir.eu/apikey/).
+Then you can use our Python client to search for documents.
+The `results` object is an iterable wrapper of the search results which handles pagination for you.
+List-style indexing is supported to access individual results or sub-lists of results:
 
 ```python
 from chatnoir_api.v1 import search
@@ -34,7 +36,34 @@ result_1234 = results[1234]
 print(result_1234)
 ```
 
-### Retrieve Document by ID
+### Retrieve Document Content
+Often the title and ID of a document is not enough to effectively re-rank a list of search results.
+To retrieve the full content or plain text for a given document you can use the `html_contents` helper function.
+The `html_contents` function expects a ChatNoir-internal UUID, shorthand UUID, or a TREC ID 
+and the index from which to retrieve the document.
+
+#### Retrieve by TREC ID
+You can retrieve a document by its TREC ID like this:
+
+```python
+from chatnoir_api import html_contents, Index
+
+contents = html_contents(
+    "clueweb09-en0051-90-00849",
+    Index.ClueWeb09,
+)
+print(contents)
+
+plain_contents = html_contents(
+    "clueweb09-en0051-90-00849",
+    Index.ClueWeb09,
+    plain=True,
+)
+print(plain_contents)
+```
+
+#### Retrieve by ChatNoir-internal UUID
+You can also retrieve a document by its ChatNoir-internal UUID like this:
 
 ```python
 from uuid import UUID
@@ -53,17 +82,26 @@ plain_contents = html_contents(
     plain=True,
 )
 print(plain_contents)
+```
+
+#### Retrieve by ChatNoir-internal short UUID
+For newer ChatNoir versions, you can also retrieve a document by its ChatNoir-internal _short_ UUID like this:
+
+```python
+from chatnoir_api import html_contents, Index, ShortUUID
 
 contents = html_contents(
-    "clueweb09-en0051-90-00849",
-    Index.ClueWeb09,
+    ShortUUID("6svePe3PXteDeGPk1XqTLA"),
+    Index.ClueWeb22,
+    base_url="https://chatnoir.web.webis.de/"
 )
 print(contents)
 
 plain_contents = html_contents(
-    "clueweb09-en0051-90-00849",
-    Index.ClueWeb09,
+    ShortUUID("6svePe3PXteDeGPk1XqTLA"),
+    Index.ClueWeb22,
     plain=True,
+    base_url="https://chatnoir.web.webis.de/"
 )
 print(plain_contents)
 ```
