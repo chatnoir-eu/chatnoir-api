@@ -6,7 +6,6 @@ DEFAULT_SLOP = 0
 DEFAULT_INDEX = {
     Index.ClueWeb09,
     Index.ClueWeb12,
-    Index.CommonCrawl1511,
 }
 DEFAULT_MINIMAL = False
 DEFAULT_EXPLAIN = False
