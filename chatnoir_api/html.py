@@ -29,4 +29,5 @@ def html_contents(
             "plain": plain,
         }
     )
+    response.raise_for_status()
     return response.text
