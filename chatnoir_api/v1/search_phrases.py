@@ -1,5 +1,6 @@
 from typing import List, Tuple, Type, overload, Union, Set
 
+from chatnoir_api.constants import BASE_URL
 from chatnoir_api.lazy import LazyResultSequence
 from chatnoir_api.model import Index, Slop
 from chatnoir_api.model.result import (
@@ -27,6 +28,7 @@ def search_phrases(
         page_size: int = DEFAULT_SIZE,
         retries: int = DEFAULT_RETRIES,
         backoff_seconds: float = DEFAULT_BACKOFF_SECONDS,
+        base_url: str = BASE_URL,
 ) -> Results[PhraseSearchResult]:
     pass
 
@@ -42,6 +44,7 @@ def search_phrases(
         page_size: int = DEFAULT_SIZE,
         retries: int = DEFAULT_RETRIES,
         backoff_seconds: float = DEFAULT_BACKOFF_SECONDS,
+        base_url: str = BASE_URL,
 ) -> Results[MinimalPhraseSearchResult]:
     pass
 
@@ -57,6 +60,7 @@ def search_phrases(
         page_size: int = DEFAULT_SIZE,
         retries: int = DEFAULT_RETRIES,
         backoff_seconds: float = DEFAULT_BACKOFF_SECONDS,
+        base_url: str = BASE_URL,
 ) -> Results[Union[PhraseSearchResult, MinimalPhraseSearchResult]]:
     pass
 
@@ -71,6 +75,7 @@ def search_phrases(
         page_size: int = DEFAULT_SIZE,
         retries: int = DEFAULT_RETRIES,
         backoff_seconds: float = DEFAULT_BACKOFF_SECONDS,
+        base_url: str = BASE_URL,
 ) -> Results[Union[PhraseSearchResult, MinimalPhraseSearchResult]]:
     def load_page(
             start: int,
@@ -90,6 +95,7 @@ def search_phrases(
             explain=explain,
             retries=retries,
             backoff_seconds=backoff_seconds,
+            base_url=base_url,
         )
 
     return LazyResultSequence(
@@ -110,6 +116,7 @@ def search_phrases_page(
         explain: bool = DEFAULT_EXPLAIN,
         retries: int = DEFAULT_RETRIES,
         backoff_seconds: float = DEFAULT_BACKOFF_SECONDS,
+        base_url: str = BASE_URL,
 ) -> Tuple[ResultsMeta, List[PhraseSearchResult]]:
     pass
 
@@ -126,6 +133,7 @@ def search_phrases_page(
         explain: bool = DEFAULT_EXPLAIN,
         retries: int = DEFAULT_RETRIES,
         backoff_seconds: float = DEFAULT_BACKOFF_SECONDS,
+        base_url: str = BASE_URL,
 ) -> Tuple[ResultsMeta, List[MinimalPhraseSearchResult]]:
     pass
 
@@ -142,6 +150,7 @@ def search_phrases_page(
         explain: bool = DEFAULT_EXPLAIN,
         retries: int = DEFAULT_RETRIES,
         backoff_seconds: float = DEFAULT_BACKOFF_SECONDS,
+        base_url: str = BASE_URL,
 ) -> Tuple[
     ResultsMeta,
     List[Union[PhraseSearchResult, MinimalPhraseSearchResult]]
@@ -160,6 +169,7 @@ def search_phrases_page(
         explain: bool = DEFAULT_EXPLAIN,
         retries: int = DEFAULT_RETRIES,
         backoff_seconds: float = DEFAULT_BACKOFF_SECONDS,
+        base_url: str = BASE_URL,
 ) -> Tuple[
     ResultsMeta,
     List[Union[PhraseSearchResult, MinimalPhraseSearchResult]]
@@ -190,5 +200,6 @@ def search_phrases_page(
         endpoint="_phrases",
         retries=retries,
         backoff_seconds=backoff_seconds,
+        base_url=base_url,
     )
     return response.meta, response.results

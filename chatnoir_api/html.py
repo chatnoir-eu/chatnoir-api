@@ -11,6 +11,7 @@ def html_contents(
         uuid_or_document_id: Union[UUID, str],
         index: Index,
         plain: bool = False,
+        base_url: str = BASE_URL,
 ) -> str:
     uuid: UUID
     if isinstance(uuid_or_document_id, str):
@@ -19,7 +20,7 @@ def html_contents(
         uuid = uuid_or_document_id
 
     response: Response = get(
-        f"{BASE_URL}/cache",
+        f"{base_url}/cache",
         params={
             "uuid": str(uuid),
             "index": index.value,

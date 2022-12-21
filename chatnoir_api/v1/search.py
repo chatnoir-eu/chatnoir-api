@@ -1,5 +1,6 @@
 from typing import List, Tuple, Union, Set
 
+from chatnoir_api.constants import BASE_URL
 from chatnoir_api.lazy import LazyResultSequence
 from chatnoir_api.model import Index
 from chatnoir_api.model.result import ResultsMeta, SearchResult, Results
@@ -19,6 +20,7 @@ def search(
         page_size: int = DEFAULT_SIZE,
         retries: int = DEFAULT_RETRIES,
         backoff_seconds: float = DEFAULT_BACKOFF_SECONDS,
+        base_url: str = BASE_URL,
 ) -> Results[SearchResult]:
     def load_page(
             start: int,
@@ -33,6 +35,7 @@ def search(
             explain=explain,
             retries=retries,
             backoff_seconds=backoff_seconds,
+            base_url=base_url,
         )
 
     return LazyResultSequence(
@@ -50,6 +53,7 @@ def search_page(
         explain: bool = DEFAULT_EXPLAIN,
         retries: int = DEFAULT_RETRIES,
         backoff_seconds: float = DEFAULT_BACKOFF_SECONDS,
+        base_url: str = BASE_URL,
 ) -> Tuple[ResultsMeta, List[SearchResult]]:
     if isinstance(index, Index):
         index = {index}
@@ -68,5 +72,6 @@ def search_page(
         endpoint="_search",
         retries=retries,
         backoff_seconds=backoff_seconds,
+        base_url=base_url,
     )
     return response.meta, response.results

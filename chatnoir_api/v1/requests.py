@@ -5,10 +5,9 @@ from typing import TypeVar, Type
 from dataclasses_json import DataClassJsonMixin
 from requests import Response as HttpResponse, post
 
-from chatnoir_api.constants import API_V1_URL
+from chatnoir_api.constants import BASE_URL
 from chatnoir_api.logging import logger
 from chatnoir_api.v1.defaults import DEFAULT_RETRIES, DEFAULT_BACKOFF_SECONDS
-
 from chatnoir_api.v1.model import Request, Response
 
 _JsonRequest = TypeVar("_JsonRequest", Request, DataClassJsonMixin)
@@ -21,6 +20,7 @@ def request_page(
         endpoint: str,
         retries: int = DEFAULT_RETRIES,
         backoff_seconds: float = DEFAULT_BACKOFF_SECONDS,
+        base_url: str = BASE_URL,
 ) -> _JsonResponse:
     request_json = request.to_json()
 
@@ -29,7 +29,7 @@ def request_page(
         "Content-Type": "text/plain",
     }
     raw_response: HttpResponse = post(
-        f"{API_V1_URL}/{endpoint}",
+        f"{base_url}/api/v1/{endpoint}",
         headers=headers,
         data=request_json.encode("utf-8")
     )
@@ -51,7 +51,8 @@ def request_page(
                 response_type,
                 endpoint,
                 retries - 1,
-                round(backoff_seconds) * 2 + uniform(-0.5, 0.5)
+                round(backoff_seconds) * 2 + uniform(-0.5, 0.5),
+                base_url,
             )
     if raw_response.status_code == 401:
         raise RuntimeError(
@@ -80,7 +81,8 @@ def request_page(
             response_type,
             endpoint,
             retries - 1,
-            round(backoff_seconds) * 2 + uniform(-0.5, 0.5)
+            round(backoff_seconds) * 2 + uniform(-0.5, 0.5),
+            base_url,
         )
     elif not raw_response.ok:
         raise RuntimeError(
