@@ -48,25 +48,27 @@ def test_html_contents_plain_uuid():
     assert isinstance(contents, str)
     assert "<title>hello world</title>" in contents
 
-
-def test_html_contents_document_id():
+def test_html_contents_short_uuid():
     contents = html_contents(
-        "clueweb09-en0051-90-00849",
-        Index.ClueWeb09,
+        ShortUUID("f6J0lMPmVfWs19jJNQkHKA"),
+        Index.ClueWeb22,
+        base_url="https://chatnoir.web.webis.de/"
     )
 
     assert contents is not None
     assert isinstance(contents, str)
-    assert "<title>Test, test, test</title>" in contents
+    assert "<title data-dcnode-id=\"1108\">" \
+           "Hello World | Codecademy</title>" in contents
 
 
-def test_html_contents_plain_document_id():
+def test_html_contents_plain_short_uuid():
     contents = html_contents(
-        "clueweb09-en0051-90-00849",
-        Index.ClueWeb09,
-        plain=True
+        ShortUUID("f6J0lMPmVfWs19jJNQkHKA"),
+        Index.ClueWeb22,
+        plain=True,
+        base_url="https://chatnoir.web.webis.de/"
     )
 
     assert contents is not None
     assert isinstance(contents, str)
-    assert "<title>Test, test, test</title>" in contents
+    assert "Hello World" in contents
