@@ -90,7 +90,7 @@ def request_page(
             f"ChatNoir API request failed "
             f"with code {raw_response.status_code}."
             f"Please refer to the documentation at https://chatnoir.eu/doc/ "
-            f"or get in contact with the admins."
+            f"or get in contact with the admins.\n{raw_response.text}"
         )
 
     response_json = raw_response.text
