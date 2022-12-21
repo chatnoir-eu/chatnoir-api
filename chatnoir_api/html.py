@@ -1,4 +1,5 @@
 from typing import Union
+from urllib.parse import urljoin
 from uuid import UUID, uuid5, NAMESPACE_URL
 
 from requests import get, Response
@@ -20,7 +21,7 @@ def html_contents(
         uuid = uuid_or_document_id
 
     response: Response = get(
-        f"{base_url}/cache",
+        urljoin(base_url, "cache"),
         params={
             "uuid": str(uuid),
             "index": index.value,

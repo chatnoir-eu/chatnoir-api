@@ -1,1 +1,1 @@
-BASE_URL = "https://chatnoir.eu"
+BASE_URL = "https://chatnoir.eu/"

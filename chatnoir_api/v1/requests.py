@@ -1,6 +1,7 @@
 from random import uniform
 from time import sleep
 from typing import TypeVar, Type
+from urllib.parse import urljoin
 
 from dataclasses_json import DataClassJsonMixin
 from requests import Response as HttpResponse, post
@@ -29,7 +30,7 @@ def request_page(
         "Content-Type": "text/plain",
     }
     raw_response: HttpResponse = post(
-        f"{base_url}/api/v1/{endpoint}",
+        urljoin(base_url, f"api/v1/{endpoint}"),
         headers=headers,
         data=request_json.encode("utf-8")
     )
