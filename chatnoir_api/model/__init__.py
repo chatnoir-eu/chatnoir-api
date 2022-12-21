@@ -6,6 +6,7 @@ from chatnoir_api.types import Literal
 class Index(Enum):
     ClueWeb09 = "cw09"
     ClueWeb12 = "cw12"
+    ClueWeb22 = "cw22"
     CommonCrawl1511 = "cc1511"
     CommonCrawl1704 = "cc1704"
 
@@ -15,6 +16,8 @@ class Index(Enum):
             return "clueweb09"
         elif self is Index.ClueWeb12:
             return "clueweb12"
+        elif self is Index.ClueWeb22:
+            return "clueweb22"
         elif self is Index.CommonCrawl1511:
             return "commoncrawl"
         elif self is Index.CommonCrawl1704:
