@@ -1,6 +1,29 @@
 from uuid import UUID
 
-from chatnoir_api import html_contents, Index
+from chatnoir_api import html_contents, Index, ShortUUID
+
+
+def test_html_contents_trec_id():
+    contents = html_contents(
+        "clueweb09-en0051-90-00849",
+        Index.ClueWeb09,
+    )
+
+    assert contents is not None
+    assert isinstance(contents, str)
+    assert "<title>Test, test, test</title>" in contents
+
+
+def test_html_contents_plain_trec_id():
+    contents = html_contents(
+        "clueweb09-en0051-90-00849",
+        Index.ClueWeb09,
+        plain=True
+    )
+
+    assert contents is not None
+    assert isinstance(contents, str)
+    assert "<title>Test, test, test</title>" in contents
 
 
 def test_html_contents_uuid():
