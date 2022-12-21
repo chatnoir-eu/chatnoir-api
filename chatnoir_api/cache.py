@@ -8,7 +8,7 @@ from chatnoir_api.constants import BASE_URL
 from chatnoir_api.model import Index
 
 
-def html_contents(
+def cache_contents(
         uuid_or_document_id: Union[UUID, str],
         index: Index,
         plain: bool = False,

@@ -46,15 +46,15 @@ and the index from which to retrieve the document.
 You can retrieve a document by its TREC ID like this:
 
 ```python
-from chatnoir_api import html_contents, Index
+from chatnoir_api import cache_contents, Index
 
-contents = html_contents(
+contents = cache_contents(
     "clueweb09-en0051-90-00849",
     Index.ClueWeb09,
 )
 print(contents)
 
-plain_contents = html_contents(
+plain_contents = cache_contents(
     "clueweb09-en0051-90-00849",
     Index.ClueWeb09,
     plain=True,
@@ -68,15 +68,15 @@ You can also retrieve a document by its ChatNoir-internal UUID like this:
 ```python
 from uuid import UUID
 
-from chatnoir_api import html_contents, Index
+from chatnoir_api import cache_contents, Index
 
-contents = html_contents(
+contents = cache_contents(
     UUID("e635baa8-7341-596a-b3cf-b33c05954361"),
     Index.CommonCrawl1511,
 )
 print(contents)
 
-plain_contents = html_contents(
+plain_contents = cache_contents(
     UUID("e635baa8-7341-596a-b3cf-b33c05954361"),
     Index.CommonCrawl1511,
     plain=True,
@@ -88,16 +88,16 @@ print(plain_contents)
 For newer ChatNoir versions, you can also retrieve a document by its ChatNoir-internal _short_ UUID like this:
 
 ```python
-from chatnoir_api import html_contents, Index, ShortUUID
+from chatnoir_api import cache_contents, Index, ShortUUID
 
-contents = html_contents(
+contents = cache_contents(
     ShortUUID("6svePe3PXteDeGPk1XqTLA"),
     Index.ClueWeb22,
     base_url="https://chatnoir.web.webis.de/"
 )
 print(contents)
 
-plain_contents = html_contents(
+plain_contents = cache_contents(
     ShortUUID("6svePe3PXteDeGPk1XqTLA"),
     Index.ClueWeb22,
     plain=True,

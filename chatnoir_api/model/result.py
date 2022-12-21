@@ -2,7 +2,7 @@ from abc import ABC
 from typing import TypeVar, Generic, Optional, Sequence
 from uuid import UUID
 
-from chatnoir_api.html import html_contents
+from chatnoir_api.cache import cache_contents
 from chatnoir_api.model import Index
 from chatnoir_api.model.highlight import HighlightedText
 
@@ -24,8 +24,8 @@ class SearchResult(Result):
     title: HighlightedText = NotImplemented
     explanation: Optional[dict] = NotImplemented
 
-    def html_contents(self, plain: bool = False) -> str:
-        return html_contents(self.uuid, self.index, plain)
+    def cache_contents(self, plain: bool = False) -> str:
+        return cache_contents(self.uuid, self.index, plain)
 
 
 class MinimalPhraseSearchResult(Result, ABC):
@@ -42,8 +42,8 @@ class PhraseSearchResult(MinimalPhraseSearchResult):
     title: HighlightedText = NotImplemented
     explanation: Optional[dict] = NotImplemented
 
-    def html_contents(self, plain: bool = False) -> str:
-        return html_contents(self.uuid, self.index, plain)
+    def cache_contents(self, plain: bool = False) -> str:
+        return cache_contents(self.uuid, self.index, plain)
 
 
 class ResultsMeta(ABC):
