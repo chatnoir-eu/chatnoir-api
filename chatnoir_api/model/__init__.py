@@ -1,4 +1,6 @@
+from base64 import urlsafe_b64decode
 from enum import Enum
+from uuid import UUID
 
 from chatnoir_api.types import Literal
 
@@ -27,3 +29,8 @@ class Index(Enum):
 
 
 Slop = Literal[0, 1, 2]
+
+
+class ShortUUID(UUID):
+    def __init__(self, short_uuid: str):
+        super().__init__(bytes=urlsafe_b64decode(f"{short_uuid}=="))
