@@ -13,11 +13,12 @@ def minimal(request) -> bool:
     return request.param
 
 
-def test_page(api_key: str, query: str, minimal: bool):
+def test_page(api_key: str, query: str, minimal: bool, base_url: str):
     meta, results = search_phrases_page(
         api_key=api_key,
         query=query,
         minimal=minimal,
+        base_url=base_url,
     )
     assert meta is not None
     assert isinstance(meta, ResultsMeta)
@@ -42,23 +43,26 @@ def test_page(api_key: str, query: str, minimal: bool):
         assert isinstance(results[0], PhraseSearchResult)
 
 
-def test_page_size(api_key: str, query: str, page_size: int, minimal: bool):
+def test_page_size(api_key: str, query: str, page_size: int, minimal: bool,
+                   base_url: str):
     _, results = search_phrases_page(
         api_key=api_key,
         query=query,
         size=page_size,
         minimal=minimal,
+        base_url=base_url,
     )
     assert len(results) == page_size
 
 
-def test_explain(api_key: str, query: str, explain: bool):
+def test_explain(api_key: str, query: str, explain: bool, base_url: str):
     _, results = search_phrases_page(
         api_key=api_key,
         query=query,
         size=1,
         explain=explain,
         minimal=False,
+        base_url=base_url,
     )
     assert len(results) > 0
     if explain:
@@ -67,24 +71,26 @@ def test_explain(api_key: str, query: str, explain: bool):
         assert results[0].explanation is None
 
 
-def test_index(api_key: str, query: str, index: Index):
+def test_index(api_key: str, query: str, index: Index, base_url: str):
     _, results = search_phrases_page(
         api_key=api_key,
         query=query,
         size=1,
         index=index,
         minimal=False,
+        base_url=base_url,
     )
     assert len(results) > 0
     assert results[0].index == index
 
 
-def test_iterable(api_key: str, query: str, minimal: bool):
+def test_iterable(api_key: str, query: str, minimal: bool, base_url: str):
     results = search_phrases(
         api_key=api_key,
         query=query,
         page_size=1,
         minimal=minimal,
+        base_url=base_url,
     )
     assert results is not None
     assert isinstance(results, Results)

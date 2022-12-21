@@ -4,10 +4,11 @@ from chatnoir_api import Index, SearchResult, ResultsMeta, Results
 from chatnoir_api.v1 import search_page, search
 
 
-def test_page(api_key: str, query: str):
+def test_page(api_key: str, query: str, base_url: str):
     meta, results = search_page(
         api_key=api_key,
         query=query,
+        base_url=base_url,
     )
     assert meta is not None
     assert isinstance(meta, ResultsMeta)
@@ -29,21 +30,23 @@ def test_page(api_key: str, query: str):
     assert isinstance(results[0], SearchResult)
 
 
-def test_page_size(api_key: str, query: str, page_size: int):
+def test_page_size(api_key: str, query: str, page_size: int, base_url: str):
     _, results = search_page(
         api_key=api_key,
         query=query,
         size=page_size,
+        base_url=base_url,
     )
     assert len(results) == page_size
 
 
-def test_explain(api_key: str, query: str, explain: bool):
+def test_explain(api_key: str, query: str, explain: bool, base_url: str):
     _, results = search_page(
         api_key=api_key,
         query=query,
         size=1,
         explain=explain,
+        base_url=base_url,
     )
     assert len(results) > 0
     if explain:
@@ -52,22 +55,24 @@ def test_explain(api_key: str, query: str, explain: bool):
         assert results[0].explanation is None
 
 
-def test_index(api_key: str, query: str, index: Index):
+def test_index(api_key: str, query: str, index: Index, base_url: str):
     _, results = search_page(
         api_key=api_key,
         query=query,
         size=1,
         index=index,
+        base_url=base_url,
     )
     assert len(results) > 0
     assert results[0].index == index
 
 
-def test_iterable(api_key: str, query: str):
+def test_iterable(api_key: str, query: str, base_url: str):
     results = search(
         api_key=api_key,
         query=query,
         page_size=1,
+        base_url=base_url,
     )
     assert results is not None
     assert isinstance(results, Results)
