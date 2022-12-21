@@ -6,6 +6,7 @@ from chatnoir_api.model import highlight, result
 # Re-export child modules.
 Index = model.Index
 Slop = model.Slop
+ShortUUID = model.ShortUUID
 Highlight = highlight.Highlight
 HighlightedText = highlight.HighlightedText
 Result = result.Result
