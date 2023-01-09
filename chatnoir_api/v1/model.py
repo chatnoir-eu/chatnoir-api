@@ -6,7 +6,7 @@ from uuid import UUID
 
 from dataclasses_json import config, DataClassJsonMixin
 
-from chatnoir_api.model import Index, Slop
+from chatnoir_api.model import Index, Slop, decode_uuid
 from chatnoir_api.model.highlight import HighlightedText
 from chatnoir_api.model.result import (
     ResultsMeta, SearchResult, PhraseSearchResult, MinimalPhraseSearchResult
@@ -50,7 +50,9 @@ class ResponseMeta(ResultsMeta, DataClassJsonMixin):
 @dataclass(frozen=True)
 class ResponseResult(DataClassJsonMixin):
     score: float
-    uuid: UUID
+    uuid: UUID = field(metadata=config(
+        decoder=decode_uuid,
+    ))
     target_uri: str
     snippet: HighlightedText = field(metadata=config(
         encoder=str,
