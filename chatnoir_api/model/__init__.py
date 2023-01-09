@@ -34,3 +34,10 @@ Slop = Literal[0, 1, 2]
 class ShortUUID(UUID):
     def __init__(self, short_uuid: str):
         super().__init__(bytes=urlsafe_b64decode(f"{short_uuid}=="))
+
+
+def decode_uuid(uuid_or_short_uuid: str) -> UUID:
+    if "-" in uuid_or_short_uuid:
+        return UUID(uuid_or_short_uuid)
+    else:
+        return ShortUUID(uuid_or_short_uuid)
