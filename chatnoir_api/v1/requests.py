@@ -7,7 +7,7 @@ from dataclasses_json import DataClassJsonMixin
 from requests import Response as HttpResponse, post
 
 from chatnoir_api.constants import BASE_URL
-from chatnoir_api.logging import logger
+from chatnoir_api.logger import logger
 from chatnoir_api.v1.defaults import DEFAULT_RETRIES, DEFAULT_BACKOFF_SECONDS
 from chatnoir_api.v1.model import Request, Response
 

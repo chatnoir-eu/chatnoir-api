@@ -5,7 +5,7 @@ from typing import (
     overload, Union
 )
 
-from chatnoir_api.logging import logger
+from chatnoir_api.logger import logger
 from chatnoir_api.model.result import Results, ResultsMeta, Result
 
 LazyResultType = TypeVar(
