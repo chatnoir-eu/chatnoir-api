@@ -90,13 +90,13 @@ class ExtendedMeta(Meta, ABC):
     terminated_early: bool
 
 
-MetaType = TypeVar("MetaType", bound=Meta)
-ResultType = TypeVar("ResultType", bound=MinimalResult)
+_MetaType = TypeVar("_MetaType", bound=Meta)
+_ResultType = TypeVar("_ResultType", bound=MinimalResult)
 
 
 class Results(
-    Sequence[ResultType],
-    Generic[MetaType, ResultType],
+    Sequence[_ResultType],
+    Generic[_MetaType, _ResultType],
     ABC
 ):
-    meta: MetaType
+    meta: _MetaType
