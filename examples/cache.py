@@ -29,14 +29,14 @@ plain_contents = cache_contents(
 print(plain_contents)
 
 contents = cache_contents(
-    ShortUUID("6svePe3PXteDeGPk1XqTLA"),
+    ShortUUID("MzOlTIayX9ub7c13GLPr_g"),
     Index.ClueWeb22,
     base_url="https://chatnoir.web.webis.de/"
 )
 print(contents)
 
 plain_contents = cache_contents(
-    ShortUUID("6svePe3PXteDeGPk1XqTLA"),
+    ShortUUID("MzOlTIayX9ub7c13GLPr_g"),
     Index.ClueWeb22,
     plain=True,
     base_url="https://chatnoir.web.webis.de/"
