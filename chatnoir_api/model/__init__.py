@@ -37,7 +37,7 @@ class ShortUUID(UUID):
 
 
 def decode_uuid(uuid_or_short_uuid: str) -> UUID:
-    if "-" in uuid_or_short_uuid:
+    if "-" in uuid_or_short_uuid and len(uuid_or_short_uuid) >= 36:
         return UUID(uuid_or_short_uuid)
     else:
         return ShortUUID(uuid_or_short_uuid)
