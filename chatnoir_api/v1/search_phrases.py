@@ -1,101 +1,67 @@
-from typing import List, Tuple, Type, overload, Union, Set
+from typing import List, Tuple, Type, Union, Set
 
-from chatnoir_api.constants import BASE_URL
 from chatnoir_api.lazy import LazyResultSequence
 from chatnoir_api.model import Index, Slop
 from chatnoir_api.model.result import (
-    ResultsMeta, PhraseSearchResult, MinimalPhraseSearchResult, Results
+    MinimalResult, ExplainedMinimalResult, Result, ExplainedResult,
+    Meta, ExtendedMeta, Results
 )
-from chatnoir_api.types import Literal
 from chatnoir_api.v1.defaults import (
     DEFAULT_START, DEFAULT_SIZE, DEFAULT_SLOP, DEFAULT_INDEX, DEFAULT_MINIMAL,
-    DEFAULT_EXPLAIN, DEFAULT_RETRIES, DEFAULT_BACKOFF_SECONDS
+    DEFAULT_EXPLAIN, DEFAULT_RETRIES, DEFAULT_BACKOFF_SECONDS,
+    DEFAULT_EXTENDED_META, DEFAULT_STAGING
 )
 from chatnoir_api.v1.model import (
-    PhraseSearchRequest, PhraseSearchResponse, MinimalPhraseSearchResponse
+    MinimalResponse, ExplainedMinimalResponse,
+    Response, ExplainedResponse,
+    MinimalResponseStaging, ExplainedMinimalResponseStaging,
+    ResponseStaging, ExplainedResponseStaging,
+    ExtendedMetaMinimalResponseStaging,
+    ExplainedExtendedMetaMinimalResponseStaging,
+    ExtendedMetaResponseStaging, ExplainedExtendedMetaResponseStaging,
+    PhraseRequest, PhraseRequestStaging
 )
 from chatnoir_api.v1.requests import request_page
 
 
-@overload
 def search_phrases(
         api_key: str,
         query: str,
-        slop: Slop = DEFAULT_SLOP,
         index: Union[Index, Set[Index]] = DEFAULT_INDEX,
-        minimal: Literal[False] = DEFAULT_MINIMAL,
-        explain: bool = DEFAULT_EXPLAIN,
-        page_size: int = DEFAULT_SIZE,
-        retries: int = DEFAULT_RETRIES,
-        backoff_seconds: float = DEFAULT_BACKOFF_SECONDS,
-        base_url: str = BASE_URL,
-) -> Results[PhraseSearchResult]:
-    pass
-
-
-@overload
-def search_phrases(
-        api_key: str,
-        query: str,
         slop: Slop = DEFAULT_SLOP,
-        index: Union[Index, Set[Index]] = DEFAULT_INDEX,
-        minimal: Literal[True] = DEFAULT_MINIMAL,
-        explain: bool = DEFAULT_EXPLAIN,
-        page_size: int = DEFAULT_SIZE,
-        retries: int = DEFAULT_RETRIES,
-        backoff_seconds: float = DEFAULT_BACKOFF_SECONDS,
-        base_url: str = BASE_URL,
-) -> Results[MinimalPhraseSearchResult]:
-    pass
-
-
-@overload
-def search_phrases(
-        api_key: str,
-        query: str,
-        slop: Slop = DEFAULT_SLOP,
-        index: Union[Index, Set[Index]] = DEFAULT_INDEX,
         minimal: bool = DEFAULT_MINIMAL,
         explain: bool = DEFAULT_EXPLAIN,
+        extended_meta: bool = DEFAULT_EXTENDED_META,
+        staging: bool = DEFAULT_STAGING,
         page_size: int = DEFAULT_SIZE,
         retries: int = DEFAULT_RETRIES,
         backoff_seconds: float = DEFAULT_BACKOFF_SECONDS,
-        base_url: str = BASE_URL,
-) -> Results[Union[PhraseSearchResult, MinimalPhraseSearchResult]]:
-    pass
-
-
-def search_phrases(
-        api_key: str,
-        query: str,
-        slop: Slop = DEFAULT_SLOP,
-        index: Union[Index, Set[Index]] = DEFAULT_INDEX,
-        minimal: bool = DEFAULT_MINIMAL,
-        explain: bool = DEFAULT_EXPLAIN,
-        page_size: int = DEFAULT_SIZE,
-        retries: int = DEFAULT_RETRIES,
-        backoff_seconds: float = DEFAULT_BACKOFF_SECONDS,
-        base_url: str = BASE_URL,
-) -> Results[Union[PhraseSearchResult, MinimalPhraseSearchResult]]:
+) -> Results[
+    Union[Meta, ExtendedMeta],
+    Union[MinimalResult, ExplainedMinimalResult, Result, ExplainedResult]
+]:
     def load_page(
             start: int,
             size: int
     ) -> Tuple[
-        ResultsMeta,
-        List[Union[MinimalPhraseSearchResult, PhraseSearchResult]]
+        Union[Meta, ExtendedMeta],
+        List[Union[
+            MinimalResult, ExplainedMinimalResult, Result, ExplainedResult
+        ]]
     ]:
         return search_phrases_page(
             api_key=api_key,
             query=query,
-            start=start,
-            size=size,
             slop=slop,
             index=index,
             minimal=minimal,
             explain=explain,
+            extended_meta=extended_meta,
+            staging=staging,
+            start=start,
+            size=size,
             retries=retries,
             backoff_seconds=backoff_seconds,
-            base_url=base_url,
         )
 
     return LazyResultSequence(
@@ -104,89 +70,39 @@ def search_phrases(
     )
 
 
-@overload
 def search_phrases_page(
         api_key: str,
         query: str,
-        start: int = DEFAULT_START,
-        size: int = DEFAULT_SIZE,
-        slop: Slop = DEFAULT_SLOP,
-        index: Union[Index, Set[Index]] = DEFAULT_INDEX,
-        minimal: Literal[False] = DEFAULT_MINIMAL,
-        explain: bool = DEFAULT_EXPLAIN,
-        retries: int = DEFAULT_RETRIES,
-        backoff_seconds: float = DEFAULT_BACKOFF_SECONDS,
-        base_url: str = BASE_URL,
-) -> Tuple[ResultsMeta, List[PhraseSearchResult]]:
-    pass
-
-
-@overload
-def search_phrases_page(
-        api_key: str,
-        query: str,
-        start: int = DEFAULT_START,
-        size: int = DEFAULT_SIZE,
-        slop: Slop = DEFAULT_SLOP,
-        index: Union[Index, Set[Index]] = DEFAULT_INDEX,
-        minimal: Literal[True] = DEFAULT_MINIMAL,
-        explain: bool = DEFAULT_EXPLAIN,
-        retries: int = DEFAULT_RETRIES,
-        backoff_seconds: float = DEFAULT_BACKOFF_SECONDS,
-        base_url: str = BASE_URL,
-) -> Tuple[ResultsMeta, List[MinimalPhraseSearchResult]]:
-    pass
-
-
-@overload
-def search_phrases_page(
-        api_key: str,
-        query: str,
-        start: int = DEFAULT_START,
-        size: int = DEFAULT_SIZE,
         slop: Slop = DEFAULT_SLOP,
         index: Union[Index, Set[Index]] = DEFAULT_INDEX,
         minimal: bool = DEFAULT_MINIMAL,
         explain: bool = DEFAULT_EXPLAIN,
-        retries: int = DEFAULT_RETRIES,
-        backoff_seconds: float = DEFAULT_BACKOFF_SECONDS,
-        base_url: str = BASE_URL,
-) -> Tuple[
-    ResultsMeta,
-    List[Union[PhraseSearchResult, MinimalPhraseSearchResult]]
-]:
-    pass
-
-
-def search_phrases_page(
-        api_key: str,
-        query: str,
+        extended_meta: bool = DEFAULT_EXTENDED_META,
+        staging: bool = DEFAULT_STAGING,
         start: int = DEFAULT_START,
         size: int = DEFAULT_SIZE,
-        slop: Slop = DEFAULT_SLOP,
-        index: Union[Index, Set[Index]] = DEFAULT_INDEX,
-        minimal: bool = DEFAULT_MINIMAL,
-        explain: bool = DEFAULT_EXPLAIN,
         retries: int = DEFAULT_RETRIES,
         backoff_seconds: float = DEFAULT_BACKOFF_SECONDS,
-        base_url: str = BASE_URL,
 ) -> Tuple[
-    ResultsMeta,
-    List[Union[PhraseSearchResult, MinimalPhraseSearchResult]]
+    Union[Meta, ExtendedMeta],
+    List[Union[MinimalResult, ExplainedMinimalResult, Result, ExplainedResult]]
 ]:
     if isinstance(index, Index):
         index = {index}
     index: Set[Index]
 
-    response_type: Type[
-        Union[MinimalPhraseSearchResponse, PhraseSearchResponse]
-    ]
-    if minimal:
-        response_type = MinimalPhraseSearchResponse
-    else:
-        response_type = PhraseSearchResponse
-    response = request_page(
-        request=PhraseSearchRequest(
+    request: Union[PhraseRequest, PhraseRequestStaging]
+    response_type: Type[Union[
+        MinimalResponse, ExplainedMinimalResponse,
+        Response, ExplainedResponse,
+        MinimalResponseStaging, ExplainedMinimalResponseStaging,
+        ResponseStaging, ExplainedResponseStaging,
+        ExtendedMetaMinimalResponseStaging,
+        ExplainedExtendedMetaMinimalResponseStaging,
+        ExtendedMetaResponseStaging, ExplainedExtendedMetaResponseStaging
+    ]]
+    if not staging:
+        request = PhraseRequest(
             apikey=api_key,
             query=query,
             start=start,
@@ -195,11 +111,62 @@ def search_phrases_page(
             explain=explain,
             minimal=minimal,
             slop=slop,
-        ),
+        )
+        if extended_meta:
+            raise ValueError(
+                "Extended meta is not supported on the legacy API."
+            )
+        if minimal:
+            if not explain:
+                response_type = MinimalResponse
+            else:
+                response_type = ExplainedMinimalResponse
+        else:
+            if not explain:
+                response_type = Response
+            else:
+                response_type = ExplainedResponse
+    else:
+        request = PhraseRequestStaging(
+            apikey=api_key,
+            query=query,
+            start=start,
+            size=size,
+            index=index,
+            explain=explain,
+            minimal=minimal,
+            extended_meta=extended_meta,
+            slop=slop,
+        )
+        if not extended_meta:
+            if minimal:
+                if not explain:
+                    response_type = MinimalResponseStaging
+                else:
+                    response_type = ExplainedMinimalResponseStaging
+            else:
+                if not explain:
+                    response_type = ResponseStaging
+                else:
+                    response_type = ExplainedResponseStaging
+        else:
+            if minimal:
+                if not explain:
+                    response_type = ExtendedMetaMinimalResponseStaging
+                else:
+                    response_type = ExplainedExtendedMetaMinimalResponseStaging
+            else:
+                if not explain:
+                    response_type = ExtendedMetaResponseStaging
+                else:
+                    response_type = ExplainedExtendedMetaResponseStaging
+
+    response = request_page(
+        request=request,
         response_type=response_type,
         endpoint="_phrases",
         retries=retries,
         backoff_seconds=backoff_seconds,
-        base_url=base_url,
+        staging=staging,
     )
     return response.meta, response.results

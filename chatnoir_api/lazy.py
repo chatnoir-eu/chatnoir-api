@@ -6,26 +6,32 @@ from typing import (
 )
 
 from chatnoir_api.logger import logger
-from chatnoir_api.model.result import Results, ResultsMeta, Result
+from chatnoir_api.model.result import Results, Meta, MinimalResult
 
 LazyResultType = TypeVar(
     "LazyResultType",
-    bound=Result,
+    bound=MinimalResult,
+    covariant=True,
+)
+
+LazyMetaType = TypeVar(
+    "LazyMetaType",
+    bound=Meta,
     covariant=True,
 )
 
 
 class LazyResultPage(
-    Results[LazyResultType],
-    Generic[LazyResultType],
+    Results[LazyMetaType, LazyResultType],
+    Generic[LazyMetaType, LazyResultType],
 ):
     _start: int
     _size: int
     _load_page: Callable[
         [int, int],
-        Tuple[ResultsMeta, List[LazyResultType]]
+        Tuple[Meta, List[LazyResultType]]
     ]
-    _maybe_response: Optional[Tuple[ResultsMeta, List[LazyResultType]]] = None
+    _maybe_response: Optional[Tuple[Meta, List[LazyResultType]]] = None
 
     def __init__(
             self,
@@ -33,7 +39,7 @@ class LazyResultPage(
             size: int,
             load_page: Callable[
                 [int, int],
-                Tuple[ResultsMeta, List[LazyResultType]]
+                Tuple[Meta, List[LazyResultType]]
             ],
     ):
         self._start = start
@@ -41,7 +47,7 @@ class LazyResultPage(
         self._load_page = load_page
 
     @property
-    def _response(self) -> Tuple[ResultsMeta, List[LazyResultType]]:
+    def _response(self) -> Tuple[Meta, List[LazyResultType]]:
         if self._maybe_response is None:
             self._maybe_response = self._load_page(self._start, self._size)
             _, results = self._maybe_response
@@ -52,7 +58,7 @@ class LazyResultPage(
         return self._maybe_response
 
     @property
-    def _meta(self) -> ResultsMeta:
+    def meta(self) -> LazyMetaType:
         meta, _ = self._response
         return meta
 
@@ -60,14 +66,6 @@ class LazyResultPage(
     def _results(self) -> Optional[List[LazyResultType]]:
         _, results = self._response
         return results
-
-    @property
-    def query_time(self) -> int:
-        return self._meta.query_time
-
-    @property
-    def total_results(self) -> int:
-        return self._meta.total_results
 
     @overload
     def __getitem__(self, i: int) -> LazyResultType:
@@ -107,7 +105,7 @@ class LazyResultPageList(
     Generic[LazyResultType]
 ):
     _page_size: int
-    _load_page: Callable[[int, int], Tuple[ResultsMeta, List[LazyResultType]]]
+    _load_page: Callable[[int, int], Tuple[Meta, List[LazyResultType]]]
 
     _pages: List[Optional[LazyResultPage[LazyResultType]]]
 
@@ -117,7 +115,7 @@ class LazyResultPageList(
             total_results: int,
             load_page: Callable[
                 [int, int],
-                Tuple[ResultsMeta, List[LazyResultType]]
+                Tuple[Meta, List[LazyResultType]]
             ],
     ):
         self._page_size = page_size
@@ -181,8 +179,8 @@ class LazyResultPageList(
 
 
 class LazyResultSequence(
-    Results[LazyResultType],
-    Generic[LazyResultType],
+    Results[LazyMetaType, LazyResultType],
+    Generic[LazyMetaType, LazyResultType],
 ):
     _page_size: int
     _pages: Sequence[LazyResultPage]
@@ -192,7 +190,7 @@ class LazyResultSequence(
             page_size: int,
             load_page: Callable[
                 [int, int],
-                Tuple[ResultsMeta, List[LazyResultType]]
+                Tuple[Meta, List[LazyResultType]]
             ],
     ):
         self._page_size = page_size
@@ -202,7 +200,7 @@ class LazyResultSequence(
             size=page_size,
             load_page=load_page,
         )
-        total_results = first_page.total_results
+        total_results = first_page.meta.total_results
         # Initialize remaining pages.
         self._pages = LazyResultPageList(
             self._page_size,
@@ -211,12 +209,8 @@ class LazyResultSequence(
         )
 
     @property
-    def query_time(self) -> int:
-        return self._pages[0].query_time
-
-    @property
-    def total_results(self) -> int:
-        return self._pages[0].total_results
+    def meta(self) -> LazyMetaType:
+        return self._pages[0].meta
 
     @overload
     def __getitem__(self, i: int) -> LazyResultType:
@@ -306,4 +300,4 @@ class LazyResultSequence(
         )
 
     def __len__(self) -> int:
-        return self.total_results
+        return self.meta.total_results

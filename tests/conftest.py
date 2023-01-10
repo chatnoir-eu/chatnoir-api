@@ -1,21 +1,18 @@
 from os import environ
+from typing import Type
 
 from pytest import fixture, skip
 
-from chatnoir_api import Index
-from chatnoir_api.constants import BASE_URL, BASE_URL_STAGING
+from chatnoir_api import Index, ExtendedMeta, Meta
 
 
 @fixture(scope="module")
-def api_key(base_url: str) -> str:
+def api_key(staging: bool) -> str:
     key: str
-    if base_url == BASE_URL:
-        key = "CHATNOIR_API_KEY"
-    elif base_url == BASE_URL_STAGING:
+    if staging:
         key = "CHATNOIR_API_KEY_STAGING"
     else:
-        skip("Unknown base URL")
-        raise
+        key = "CHATNOIR_API_KEY"
     if key not in environ:
         raise RuntimeError(
             f"Must specify ChatNoir api key "
@@ -42,13 +39,28 @@ def explain(request) -> bool:
 
 @fixture(
     scope="module",
-    params=[
-        # BASE_URL,
-        BASE_URL_STAGING,
-    ]
+    params=[True, False]
 )
-def base_url(request) -> str:
+def staging(request) -> str:
     return request.param
+
+
+@fixture(
+    scope="module",
+    params=[True, False]
+)
+def extended_meta(request, staging: bool) -> bool:
+    if not staging and request.param:
+        skip("Extended meta is not available on the production API.")
+    return request.param
+
+
+@fixture(scope="module")
+def meta_type(extended_meta: bool) -> Type:
+    if extended_meta:
+        return ExtendedMeta
+    else:
+        return Meta
 
 
 @fixture(
@@ -61,11 +73,11 @@ def base_url(request) -> str:
         Index.CommonCrawl1704,
     ]
 )
-def index(request, base_url: str) -> Index:
-    if base_url == BASE_URL and request.param == Index.ClueWeb22:
-        skip("ClueWeb22 is not available on the production base URL.")
-    if base_url == BASE_URL_STAGING and request.param == Index.CommonCrawl1511:
-        skip("Common Crawl 15/11 is not available on the staging base URL.")
-    if base_url == BASE_URL_STAGING and request.param == Index.CommonCrawl1704:
-        skip("Common Crawl 17/04 is not available on the staging base URL.")
+def index(request, staging: bool) -> Index:
+    if not staging and request.param == Index.ClueWeb22:
+        skip("ClueWeb22 is not available on the production API.")
+    if staging and request.param == Index.CommonCrawl1511:
+        skip("Common Crawl 15/11 is not available on the staging API.")
+    if staging and request.param == Index.CommonCrawl1704:
+        skip("Common Crawl 17/04 is not available on the staging API.")
     return request.param

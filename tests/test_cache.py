@@ -48,6 +48,7 @@ def test_html_contents_plain_uuid():
     assert isinstance(contents, str)
     assert "<title>hello world</title>" in contents
 
+
 def test_html_contents_short_uuid():
     contents = cache_contents(
         ShortUUID("f6J0lMPmVfWs19jJNQkHKA"),

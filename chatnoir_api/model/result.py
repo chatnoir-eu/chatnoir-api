@@ -1,5 +1,6 @@
 from abc import ABC
-from typing import TypeVar, Generic, Optional, Sequence
+from datetime import datetime
+from typing import TypeVar, Generic, Optional, AbstractSet, Sequence
 from uuid import UUID
 
 from chatnoir_api.cache import cache_contents
@@ -7,57 +8,95 @@ from chatnoir_api.model import Index
 from chatnoir_api.model.highlight import HighlightedText
 
 
-class Result(ABC):
-    score: float = NotImplemented
-    uuid: UUID = NotImplemented
-    target_uri: str = NotImplemented
-    snippet: HighlightedText = NotImplemented
+class MinimalResult(ABC):
+    score: float
+    uuid: UUID
+    target_uri: str
+    snippet: HighlightedText
 
 
-# noinspection DuplicatedCode
-class SearchResult(Result):
-    index: Index = NotImplemented
-    trec_id: Optional[str] = NotImplemented
-    target_hostname: str = NotImplemented
-    page_rank: Optional[float] = NotImplemented
-    spam_rank: Optional[float] = NotImplemented
-    title: HighlightedText = NotImplemented
-    explanation: Optional[dict] = NotImplemented
+class Explanation(ABC):
+    value: float
+    description: str
+    details: Sequence["Explanation"]
+
+
+class ExplainedMinimalResult(MinimalResult, ABC):
+    explanation: Explanation
+
+
+class Result(MinimalResult, ABC):
+    index: Index
+    trec_id: Optional[str]
+    target_hostname: str
+    page_rank: Optional[float]
+    spam_rank: Optional[float]
+    title: HighlightedText
 
     def cache_contents(self, plain: bool = False) -> str:
         return cache_contents(self.uuid, self.index, plain)
 
 
-class MinimalPhraseSearchResult(Result, ABC):
+class ExplainedResult(Result, ExplainedMinimalResult, ABC):
     pass
 
 
-# noinspection DuplicatedCode
-class PhraseSearchResult(MinimalPhraseSearchResult):
-    index: Index = NotImplemented
-    trec_id: Optional[str] = NotImplemented
-    target_hostname: str = NotImplemented
-    page_rank: Optional[float] = NotImplemented
-    spam_rank: Optional[float] = NotImplemented
-    title: HighlightedText = NotImplemented
-    explanation: Optional[dict] = NotImplemented
+class MinimalResultStaging(MinimalResult, ABC):
+    index: Index
+    title: HighlightedText
 
     def cache_contents(self, plain: bool = False) -> str:
         return cache_contents(self.uuid, self.index, plain)
 
 
-class ResultsMeta(ABC):
-    query_time: int = NotImplemented
-    total_results: int = NotImplemented
+class ExplainedMinimalResultStaging(
+    MinimalResultStaging, ExplainedMinimalResult, ABC
+                                    ):
+    pass
 
 
-ResultType = TypeVar("ResultType", bound=Result)
+class ResultStaging(MinimalResultStaging, Result, ABC):
+    warc_id: Optional[str]
+    cache_uri: str
+    crawl_date: Optional[datetime]
+    content_type: str
+    lang: str
+
+
+class ExplainedResultStaging(ResultStaging, ExplainedResult, ABC):
+    explanation: Explanation
+
+
+class Meta(ABC):
+    indices: AbstractSet[Index]
+    query_time: int
+    total_results: int
+
+
+class MetaIndex(ABC):
+    index: Index
+    name: str
+    selected: bool
+
+
+class ExtendedMeta(Meta, ABC):
+    indices: AbstractSet[MetaIndex]
+    explain: bool
+    max_page: int
+    page_size: int
+    query_string: str
+    results_from: int
+    results_to: int
+    terminated_early: bool
+
+
+MetaType = TypeVar("MetaType", bound=Meta)
+ResultType = TypeVar("ResultType", bound=MinimalResult)
 
 
 class Results(
     Sequence[ResultType],
-    ResultsMeta,
-    Generic[ResultType],
+    Generic[MetaType, ResultType],
     ABC
 ):
-    pass
+    meta: MetaType
