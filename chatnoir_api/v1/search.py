@@ -116,7 +116,7 @@ def search_page(
             raise ValueError(
                 "Minimal response is not supported on the legacy API."
             )
-        if explain:
+        if not explain:
             response_type = Response
         else:
             response_type = ExplainedResponse
