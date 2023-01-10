@@ -1,5 +1,5 @@
 [![PyPi](https://img.shields.io/pypi/v/chatnoir-api?style=flat-square)](https://pypi.org/project/chatnoir-api/)
-[![CI](https://img.shields.io/github/workflow/status/chatnoir-eu/chatnoir-api/CI?style=flat-square)](https://github.com/chatnoir-eu/chatnoir-api/actions?query=workflow%3A"CI")
+[![CI](https://img.shields.io/github/actions/workflow/status/chatnoir-eu/chatnoir-api/ci.yml?branch=main&style=flat-square)](https://github.com/chatnoir-eu/chatnoir-api/actions/workflows/ci.yml)
 [![Code coverage](https://img.shields.io/codecov/c/github/chatnoir-eu/chatnoir-api?style=flat-square)](https://codecov.io/github/chatnoir-eu/chatnoir-api/)
 [![Python](https://img.shields.io/pypi/pyversions/chatnoir-api?style=flat-square)](https://pypi.org/project/chatnoir-api/)
 [![Issues](https://img.shields.io/github/issues/chatnoir-eu/chatnoir-api?style=flat-square)](https://github.com/chatnoir-eu/chatnoir-api/issues)
