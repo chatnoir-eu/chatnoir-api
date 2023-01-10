@@ -194,7 +194,7 @@ def test_iterable_explain(api_key: str, query: str, explain: bool,
 
 def test_iterable_meta(api_key: str, query: str, extended_meta: bool,
                        staging: bool):
-    meta, _ = search(
+    results = search(
         api_key=api_key,
         query=query,
         page_size=1,
@@ -203,6 +203,6 @@ def test_iterable_meta(api_key: str, query: str, extended_meta: bool,
     )
 
     if extended_meta:
-        assert isinstance(meta, ExtendedMeta)
+        assert isinstance(results.meta, ExtendedMeta)
     else:
-        assert isinstance(meta, Meta)
+        assert isinstance(results.meta, Meta)
