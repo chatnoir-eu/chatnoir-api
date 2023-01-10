@@ -1,8 +1,7 @@
 from abc import ABC
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import List, Sequence, AbstractSet
-from typing import Optional, Set
+from typing import List, Optional, Set
 from uuid import UUID
 
 from dataclasses_json import config, DataClassJsonMixin
@@ -63,7 +62,7 @@ class MinimalResultResponse(MinimalResult, DataClassJsonMixin):
 class ExplanationResponse(Explanation, DataClassJsonMixin):
     value: float
     description: str
-    details: Sequence["Explanation"]
+    details: List["Explanation"]
 
 
 @dataclass(frozen=True)
@@ -137,7 +136,7 @@ class ExplainedResultResponseStaging(
 
 @dataclass(frozen=True)
 class MetaResponse(Meta, DataClassJsonMixin):
-    indices: AbstractSet[Index] = field(metadata=config(
+    indices: Set[Index] = field(metadata=config(
         decoder=lambda indices: {Index(index) for index in indices}
     ))
     query_time: int
@@ -145,8 +144,18 @@ class MetaResponse(Meta, DataClassJsonMixin):
 
 
 @dataclass(frozen=True)
+class MetaIndexResponse(MetaIndex, DataClassJsonMixin):
+    index: Index = field(metadata=config(
+        decoder=Index,
+        field_name="id",
+    ))
+    name: str
+    selected: bool
+
+
+@dataclass(frozen=True)
 class ExtendedMetaResponse(MetaResponse, ExtendedMeta, DataClassJsonMixin):
-    indices: AbstractSet[MetaIndex]
+    indices: Set[MetaIndexResponse]
     explain: bool
     max_page: int
     page_size: int
@@ -189,7 +198,7 @@ class MinimalResponseStaging(DataClassJsonMixin):
 @dataclass(frozen=True)
 class ExplainedMinimalResponseStaging(
     MinimalResponseStaging, DataClassJsonMixin
-                                      ):
+):
     meta: MetaResponse
     results: List[ExplainedMinimalResultResponseStaging]
 
