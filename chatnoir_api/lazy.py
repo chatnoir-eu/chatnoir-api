@@ -118,21 +118,21 @@ class LazyResultPageList(
         ))
 
     @overload
-    def __getitem__(self, i: int) -> LazyResultPage[_ResultType]:
+    def __getitem__(self, i: int) -> LazyResultPage[_MetaType, _ResultType]:
         pass
 
     @overload
     def __getitem__(
             self,
             s: slice
-    ) -> Sequence[LazyResultPage[_ResultType]]:
+    ) -> Sequence[LazyResultPage[_MetaType, _ResultType]]:
         pass
 
     def __getitem__(
             self, i: Union[int, slice]
     ) -> Union[
-        LazyResultPage[_ResultType],
-        Sequence[LazyResultPage[_ResultType]]
+        LazyResultPage[_MetaType, _ResultType],
+        Sequence[LazyResultPage[_MetaType, _ResultType]]
     ]:
         if isinstance(i, int):
             if self._pages[i] is None:
@@ -174,7 +174,7 @@ class LazyResultSequence(
     Generic[_MetaType, _ResultType],
 ):
     _page_size: int
-    _pages: Sequence[LazyResultPage]
+    _pages: Sequence[LazyResultPage[_MetaType, _ResultType]]
 
     def __init__(
             self,
@@ -219,7 +219,8 @@ class LazyResultSequence(
             page_index = i // self._page_size
             page_offset = page_index * self._page_size
             corrected_index = i - page_offset
-            page: LazyResultPage = self._pages[page_index]
+            page: LazyResultPage[_MetaType, _ResultType] = \
+                self._pages[page_index]
             return page[corrected_index]
         elif isinstance(i, slice):
             start = i.start
