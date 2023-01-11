@@ -57,7 +57,6 @@ def search(
             ResultStaging, ExplainedResultStaging,
         ]
     ]:
-        # noinspection PyTypeChecker
         return search_page(
             api_key=api_key,
             query=query,

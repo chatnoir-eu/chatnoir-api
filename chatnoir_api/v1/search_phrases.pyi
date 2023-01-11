@@ -168,6 +168,24 @@ def search_phrases(
 
 
 @overload
+def search_phrases(
+        api_key: str, query: str, index: Union[Index, Set[Index]] = ...,
+        slop: Slop = ...,
+        minimal: bool = ..., explain: bool = ...,
+        extended_meta: bool = ..., staging: bool = ...,
+        page_size: int = ..., retries: int = ..., backoff_seconds: float = ...,
+) -> Results[
+    Union[Meta, ExtendedMeta],
+    Union[
+        MinimalResult, ExplainedMinimalResult,
+        Result, ExplainedResult,
+        MinimalResultStaging, ExplainedMinimalResultStaging,
+        ResultStaging, ExplainedResultStaging,
+    ]
+]: ...
+
+
+@overload
 def search_phrases_page(
         api_key: str, query: str, index: Union[Index, Set[Index]] = ...,
         slop: Slop = ...,
@@ -341,3 +359,22 @@ def search_phrases_page(
         start: int = ..., size: int = ..., retries: int = ...,
         backoff_seconds: float = ...,
 ) -> Results[ExtendedMeta, ExplainedMinimalResultStaging]: ...
+
+
+@overload
+def search_phrases_page(
+        api_key: str, query: str, index: Union[Index, Set[Index]] = ...,
+        slop: Slop = ...,
+        minimal: bool = ..., explain: bool = ...,
+        extended_meta: bool = ..., staging: bool = ...,
+        start: int = ..., size: int = ..., retries: int = ...,
+        backoff_seconds: float = ...,
+) -> Results[
+    Union[Meta, ExtendedMeta],
+    Union[
+        MinimalResult, ExplainedMinimalResult,
+        Result, ExplainedResult,
+        MinimalResultStaging, ExplainedMinimalResultStaging,
+        ResultStaging, ExplainedResultStaging,
+    ]
+]: ...
