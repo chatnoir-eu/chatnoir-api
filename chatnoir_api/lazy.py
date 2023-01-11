@@ -43,8 +43,7 @@ class LazyResultPage(
     def _response(self) -> Results[_MetaType, _ResultType]:
         if self._maybe_response is None:
             self._maybe_response = self._load_page(self._start, self._size)
-            _, results = self._maybe_response
-            if len(results) > self._size:
+            if len(self._maybe_response) > self._size:
                 raise RuntimeError(
                     "Current page is larger than the page size."
                 )
@@ -52,13 +51,11 @@ class LazyResultPage(
 
     @property
     def meta(self) -> _MetaType:
-        meta, _ = self._response
-        return meta
+        return self._response.meta
 
     @property
     def results(self) -> Sequence[_ResultType]:
-        _, results = self._response
-        return results
+        return self._response.results
 
 
 class LazyResultPageList(

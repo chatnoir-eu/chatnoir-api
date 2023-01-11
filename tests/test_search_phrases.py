@@ -1,4 +1,4 @@
-from typing import List
+from typing import Sequence
 
 from pytest import fixture
 
@@ -15,11 +15,13 @@ def minimal(request) -> bool:
 
 
 def test_page(api_key: str, query: str, staging: bool):
-    meta, results = search_phrases_page(
+    results = search_phrases_page(
         api_key=api_key,
         query=query,
         staging=staging,
     )
+    meta = results.meta
+
     assert meta is not None
     assert isinstance(meta, Meta)
 
@@ -32,7 +34,7 @@ def test_page(api_key: str, query: str, staging: bool):
     assert meta.total_results > 0
 
     assert results is not None
-    assert isinstance(results, List)
+    assert isinstance(results, Sequence)
     assert len(results) > 0
     assert len(results) <= meta.total_results
 
@@ -41,7 +43,7 @@ def test_page(api_key: str, query: str, staging: bool):
 
 
 def test_page_size(api_key: str, query: str, page_size: int, staging: bool):
-    _, results = search_phrases_page(
+    results = search_phrases_page(
         api_key=api_key,
         query=query,
         size=page_size,
@@ -51,7 +53,7 @@ def test_page_size(api_key: str, query: str, page_size: int, staging: bool):
 
 
 def test_page_index(api_key: str, query: str, index: Index, staging: bool):
-    _, results = search_phrases_page(
+    results = search_phrases_page(
         api_key=api_key,
         query=query,
         size=1,
@@ -63,7 +65,7 @@ def test_page_index(api_key: str, query: str, index: Index, staging: bool):
 
 
 def test_page_minimal(api_key: str, query: str, minimal: bool, staging: bool):
-    _, results = search_phrases_page(
+    results = search_phrases_page(
         api_key=api_key,
         query=query,
         size=1,
@@ -77,7 +79,7 @@ def test_page_minimal(api_key: str, query: str, minimal: bool, staging: bool):
 
 
 def test_page_explain(api_key: str, query: str, explain: bool, staging: bool):
-    _, results = search_phrases_page(
+    results = search_phrases_page(
         api_key=api_key,
         query=query,
         size=1,
@@ -98,13 +100,14 @@ def test_page_explain(api_key: str, query: str, explain: bool, staging: bool):
 
 def test_page_meta(api_key: str, query: str, extended_meta: bool,
                    staging: bool):
-    meta, _ = search_phrases_page(
+    results = search_phrases_page(
         api_key=api_key,
         query=query,
         size=1,
         extended_meta=extended_meta,
         staging=staging,
     )
+    meta = results.meta
 
     if extended_meta:
         assert isinstance(meta, ExtendedMeta)
