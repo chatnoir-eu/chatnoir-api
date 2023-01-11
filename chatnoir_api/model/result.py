@@ -61,7 +61,7 @@ class ResultStaging(MinimalResultStaging, Result, ABC):
     cache_uri: str
     crawl_date: Optional[datetime]
     content_type: str
-    lang: str
+    language: str
 
 
 class ExplainedResultStaging(ResultStaging, ExplainedResult, ABC):

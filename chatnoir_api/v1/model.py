@@ -124,7 +124,7 @@ class ResultResponseStaging(
     cache_uri: Optional[str]
     crawl_date: Optional[datetime]
     content_type: str
-    lang: str
+    language: str = field(metadata=config(field_name="lang"))
 
 
 @dataclass(frozen=True)
