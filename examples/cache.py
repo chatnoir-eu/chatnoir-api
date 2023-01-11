@@ -31,7 +31,7 @@ print(plain_contents)
 contents = cache_contents(
     ShortUUID("MzOlTIayX9ub7c13GLPr_g"),
     Index.ClueWeb22,
-    base_url="https://chatnoir.web.webis.de/"
+    staging=True,
 )
 print(contents)
 
@@ -39,6 +39,6 @@ plain_contents = cache_contents(
     ShortUUID("MzOlTIayX9ub7c13GLPr_g"),
     Index.ClueWeb22,
     plain=True,
-    base_url="https://chatnoir.web.webis.de/"
+    staging=True,
 )
 print(plain_contents)

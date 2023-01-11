@@ -53,7 +53,7 @@ def test_html_contents_short_uuid():
     contents = cache_contents(
         ShortUUID("f6J0lMPmVfWs19jJNQkHKA"),
         Index.ClueWeb22,
-        base_url="https://chatnoir.web.webis.de/"
+        staging=True,
     )
 
     assert contents is not None
@@ -67,7 +67,7 @@ def test_html_contents_plain_short_uuid():
         ShortUUID("f6J0lMPmVfWs19jJNQkHKA"),
         Index.ClueWeb22,
         plain=True,
-        base_url="https://chatnoir.web.webis.de/"
+        staging=True,
     )
 
     assert contents is not None

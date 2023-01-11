@@ -47,7 +47,7 @@ class MinimalResultStaging(MinimalResult, ABC):
     title: HighlightedText
 
     def cache_contents(self, plain: bool = False) -> str:
-        return cache_contents(self.uuid, self.index, plain)
+        return cache_contents(self.uuid, self.index, plain, staging=True)
 
 
 class ExplainedMinimalResultStaging(
