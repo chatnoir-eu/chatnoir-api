@@ -18,8 +18,13 @@ pip install chatnoir-api
 ```
 
 ## Usage
+The ChatNoir API offers two main features: [search](#search) with BM25F and [retrieving document contents](#retrieve-document-content).
 
 ### Search
+To search with the ChatNoir API you need to request an [API key](https://chatnoir.eu/apikey/).
+Then you can use our Python client to search for documents.
+The `results` object is an iterable wrapper of the search results which handles pagination for you.
+List-style indexing is supported to access individual results or sub-lists of results:
 
 ```python
 from chatnoir_api.v1 import search
@@ -34,36 +39,92 @@ result_1234 = results[1234]
 print(result_1234)
 ```
 
-### Retrieve Document by ID
+#### Search the new ChatNoir
+There's a [new](https://chatnoir.web.webis.de/) ChatNoir version with the same API interface. To run your search requests against the new API (e.g., if you want to search the ClueWeb22), set `staging=True` like this:
+
+```python
+from chatnoir_api.v1 import search
+
+api_key: str = "<API_KEY>"
+results = search(api_key, "python library", staging=True)
+```
+
+#### Phrase Search
+To search for phrases, use the `search_phrases` method in the same way as normal `search`:
+
+```python
+from chatnoir_api.v1 import search_phrases
+
+api_key: str = "<API_KEY>"
+results = search_phrases(api_key, "python library", staging=True)
+```
+
+### Retrieve Document Content
+Often the title and ID of a document is not enough to effectively re-rank a list of search results.
+To retrieve the full content or plain text for a given document you can use the `html_contents` helper function.
+The `html_contents` function expects a ChatNoir-internal UUID, shorthand UUID, or a TREC ID 
+and the index from which to retrieve the document.
+
+#### Retrieve by TREC ID
+You can retrieve a document by its TREC ID like this:
+
+```python
+from chatnoir_api import cache_contents, Index
+
+contents = cache_contents(
+    "clueweb09-en0051-90-00849",
+    Index.ClueWeb09,
+)
+print(contents)
+
+plain_contents = cache_contents(
+    "clueweb09-en0051-90-00849",
+    Index.ClueWeb09,
+    plain=True,
+)
+print(plain_contents)
+```
+
+#### Retrieve by ChatNoir-internal UUID
+You can also retrieve a document by its ChatNoir-internal UUID like this:
 
 ```python
 from uuid import UUID
 
-from chatnoir_api import html_contents, Index
+from chatnoir_api import cache_contents, Index
 
-contents = html_contents(
+contents = cache_contents(
     UUID("e635baa8-7341-596a-b3cf-b33c05954361"),
     Index.CommonCrawl1511,
 )
 print(contents)
 
-plain_contents = html_contents(
+plain_contents = cache_contents(
     UUID("e635baa8-7341-596a-b3cf-b33c05954361"),
     Index.CommonCrawl1511,
     plain=True,
 )
 print(plain_contents)
+```
 
-contents = html_contents(
-    "clueweb09-en0051-90-00849",
-    Index.ClueWeb09,
+#### Retrieve by ChatNoir-internal short UUID
+For newer ChatNoir versions, you can also retrieve a document by its ChatNoir-internal _short_ UUID like this:
+
+```python
+from chatnoir_api import cache_contents, Index, ShortUUID
+
+contents = cache_contents(
+    ShortUUID("6svePe3PXteDeGPk1XqTLA"),
+    Index.ClueWeb22,
+    base_url="https://chatnoir.web.webis.de/"
 )
 print(contents)
 
-plain_contents = html_contents(
-    "clueweb09-en0051-90-00849",
-    Index.ClueWeb09,
+plain_contents = cache_contents(
+    ShortUUID("6svePe3PXteDeGPk1XqTLA"),
+    Index.ClueWeb22,
     plain=True,
+    base_url="https://chatnoir.web.webis.de/"
 )
 print(plain_contents)
 ```

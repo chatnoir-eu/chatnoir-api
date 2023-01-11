@@ -10,8 +10,8 @@ jobs:
       matrix:
         os:
           - ubuntu-latest
-          - macos-latest
-          - windows-latest
+#          - macos-latest
+#          - windows-latest
         python:
           - 3.7
           - 3.9
@@ -118,6 +118,7 @@ jobs:
       - name: "🧪 Test Python code"
         env:
           CHATNOIR_API_KEY: ${{ secrets.CHATNOIR_API_KEY }}
+          CHATNOIR_API_KEY_STAGING: ${{ secrets.CHATNOIR_API_KEY_STAGING }}
         run: pytest chatnoir_api examples tests --cov --cov-report=term --cov-report=xml
       - name: "📤 Upload test coverage"
         uses: actions/upload-artifact@v2

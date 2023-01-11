@@ -1,16 +1,29 @@
-from typing import List
+from typing import Sequence
 
-from chatnoir_api import Index, SearchResult, ResultsMeta, Results
+from pytest import fixture, skip
+
+from chatnoir_api import Index, Meta, Results, MinimalResult, \
+    Result, ExplainedMinimalResult, ExtendedMeta
 from chatnoir_api.v1 import search_page, search
 
 
-def test_page(api_key: str, query: str):
-    meta, results = search_page(
+@fixture(params=[True, False])
+def minimal(request, staging: bool) -> bool:
+    if not staging and request.param:
+        skip("Minimal response is not available on the production API.")
+    return request.param
+
+
+def test_page(api_key: str, query: str, staging: bool):
+    results = search_page(
         api_key=api_key,
         query=query,
+        staging=staging,
     )
+    meta = results.meta
+
     assert meta is not None
-    assert isinstance(meta, ResultsMeta)
+    assert isinstance(meta, Meta)
 
     assert meta.query_time is not None
     assert isinstance(meta.query_time, int)
@@ -21,71 +34,178 @@ def test_page(api_key: str, query: str):
     assert meta.total_results > 0
 
     assert results is not None
-    assert isinstance(results, List)
+    assert isinstance(results, Sequence)
     assert len(results) > 0
     assert len(results) <= meta.total_results
 
     assert results[0] is not None
-    assert isinstance(results[0], SearchResult)
+    assert isinstance(results[0], MinimalResult)
 
 
-def test_page_size(api_key: str, query: str, page_size: int):
-    _, results = search_page(
+def test_page_size(api_key: str, query: str, page_size: int, staging: bool):
+    results = search_page(
         api_key=api_key,
         query=query,
         size=page_size,
+        staging=staging,
     )
     assert len(results) == page_size
 
 
-def test_explain(api_key: str, query: str, explain: bool):
-    _, results = search_page(
-        api_key=api_key,
-        query=query,
-        size=1,
-        explain=explain,
-    )
-    assert len(results) > 0
-    if explain:
-        assert results[0].explanation is not None
-    else:
-        assert results[0].explanation is None
-
-
-def test_index(api_key: str, query: str, index: Index):
-    _, results = search_page(
+def test_page_index(api_key: str, query: str, index: Index, staging: bool):
+    results = search_page(
         api_key=api_key,
         query=query,
         size=1,
         index=index,
+        staging=staging,
     )
-    assert len(results) > 0
     assert results[0].index == index
 
 
-def test_iterable(api_key: str, query: str):
+def test_page_minimal(api_key: str, query: str, minimal: bool, staging: bool):
+    results = search_page(
+        api_key=api_key,
+        query=query,
+        size=1,
+        minimal=minimal,
+        staging=staging,
+    )
+    if minimal:
+        assert isinstance(results[0], MinimalResult)
+    else:
+        assert isinstance(results[0], Result)
+
+
+def test_page_explain(api_key: str, query: str, explain: bool, staging: bool):
+    results = search_page(
+        api_key=api_key,
+        query=query,
+        size=1,
+        explain=explain,
+        staging=staging,
+    )
+    if explain:
+        assert isinstance(results[0], ExplainedMinimalResult)
+
+        assert results[0].explanation is not None
+        assert results[0].explanation.value is not None
+        assert isinstance(results[0].explanation.value, float)
+        assert results[0].explanation.description is not None
+        assert isinstance(results[0].explanation.description, str)
+    else:
+        assert isinstance(results[0], MinimalResult)
+
+
+def test_page_meta(api_key: str, query: str, extended_meta: bool,
+                   staging: bool):
+    results = search_page(
+        api_key=api_key,
+        query=query,
+        size=1,
+        extended_meta=extended_meta,
+        staging=staging,
+    )
+    meta = results.meta
+
+    if extended_meta:
+        assert isinstance(meta, ExtendedMeta)
+    else:
+        assert isinstance(meta, Meta)
+
+
+def test_iterable(api_key: str, query: str, staging: bool):
     results = search(
         api_key=api_key,
         query=query,
         page_size=1,
+        staging=staging,
     )
     assert results is not None
     assert isinstance(results, Results)
 
-    assert results.query_time is not None
-    assert isinstance(results.query_time, int)
-    assert results.query_time > 0
+    assert results.meta is not None
+    assert isinstance(results.meta, Meta)
 
-    assert results.total_results is not None
-    assert isinstance(results.total_results, int)
-    assert results.total_results > 0
+    assert results.meta.query_time is not None
+    assert isinstance(results.meta.query_time, int)
+    assert results.meta.query_time > 0
+
+    assert results.meta.total_results is not None
+    assert isinstance(results.meta.total_results, int)
+    assert results.meta.total_results > 0
 
     result_iterator = iter(results)
 
     first_result = next(result_iterator, None)
     assert first_result is not None
-    assert isinstance(first_result, SearchResult)
+    assert isinstance(first_result, MinimalResult)
 
     second_result = next(result_iterator, None)
     assert second_result is not None
-    assert isinstance(second_result, SearchResult)
+    assert isinstance(second_result, MinimalResult)
+
+
+def test_iterable_index(api_key: str, query: str, index: Index, staging: bool):
+    results = search(
+        api_key=api_key,
+        query=query,
+        page_size=1,
+        index=index,
+        minimal=False,
+        staging=staging,
+    )
+    assert results[0].index == index
+
+
+def test_iterable_minimal(api_key: str, query: str, minimal: bool,
+                          staging: bool):
+    results = search(
+        api_key=api_key,
+        query=query,
+        page_size=1,
+        minimal=minimal,
+        staging=staging,
+    )
+    if minimal:
+        assert isinstance(results[0], MinimalResult)
+    else:
+        assert isinstance(results[0], Result)
+
+
+def test_iterable_explain(api_key: str, query: str, explain: bool,
+                          staging: bool):
+    results = search(
+        api_key=api_key,
+        query=query,
+        page_size=1,
+        explain=explain,
+        staging=staging,
+    )
+
+    if explain:
+        assert isinstance(results[0], ExplainedMinimalResult)
+
+        assert results[0].explanation is not None
+        assert results[0].explanation.value is not None
+        assert isinstance(results[0].explanation.value, float)
+        assert results[0].explanation.description is not None
+        assert isinstance(results[0].explanation.description, str)
+    else:
+        assert isinstance(results[0], MinimalResult)
+
+
+def test_iterable_meta(api_key: str, query: str, extended_meta: bool,
+                       staging: bool):
+    results = search(
+        api_key=api_key,
+        query=query,
+        page_size=1,
+        extended_meta=extended_meta,
+        staging=staging,
+    )
+
+    if extended_meta:
+        assert isinstance(results.meta, ExtendedMeta)
+    else:
+        assert isinstance(results.meta, Meta)
