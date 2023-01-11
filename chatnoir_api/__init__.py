@@ -1,4 +1,6 @@
-__version__ = "2.0.0"
+from importlib_metadata import version
+
+__version__ = version("chatnoir-api")
 
 from chatnoir_api import cache, model
 from chatnoir_api.model import highlight, result
