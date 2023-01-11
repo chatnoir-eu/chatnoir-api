@@ -18,6 +18,9 @@ pip install chatnoir-api
 ```
 
 ## Usage
+The ChatNoir API offers two main features: [search](#search) with BM25F and [retrieving document contents](#retrieve-document-content).
+
+### Search
 To search with the ChatNoir API you need to request an [API key](https://chatnoir.eu/apikey/).
 Then you can use our Python client to search for documents.
 The `results` object is an iterable wrapper of the search results which handles pagination for you.
@@ -34,6 +37,26 @@ print(top10_results)
 
 result_1234 = results[1234]
 print(result_1234)
+```
+
+#### Search the new ChatNoir
+There's a [new](https://chatnoir.web.webis.de/) ChatNoir version with the same API interface. To run your search requests against the new API (e.g., if you want to search the ClueWeb22), set `staging=True` like this:
+
+```python
+from chatnoir_api.v1 import search
+
+api_key: str = "<API_KEY>"
+results = search(api_key, "python library", staging=True)
+```
+
+#### Phrase Search
+To search for phrases, use the `search_phrases` method in the same way as normal `search`:
+
+```python
+from chatnoir_api.v1 import search_phrases
+
+api_key: str = "<API_KEY>"
+results = search_phrases(api_key, "python library", staging=True)
 ```
 
 ### Retrieve Document Content
