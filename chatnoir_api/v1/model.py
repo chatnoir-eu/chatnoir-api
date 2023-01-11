@@ -90,7 +90,8 @@ class ResultResponse(MinimalResultResponse, Result, DataClassJsonMixin):
 
 @dataclass(frozen=True)
 class ExplainedResultResponse(
-    ResultResponse, ExplainedResult, DataClassJsonMixin
+    ResultResponse, ExplainedMinimalResultResponse, ExplainedResult,
+    DataClassJsonMixin
 ):
     explanation: ExplanationResponse
 
@@ -110,15 +111,16 @@ class MinimalResultResponseStaging(
 
 @dataclass(frozen=True)
 class ExplainedMinimalResultResponseStaging(
-    ExplainedMinimalResultResponse, ExplainedMinimalResultStaging,
-    DataClassJsonMixin
+    MinimalResultResponseStaging, ExplainedMinimalResultResponse,
+    ExplainedMinimalResultStaging, DataClassJsonMixin
 ):
     explanation: ExplanationResponse
 
 
 @dataclass(frozen=True)
 class ResultResponseStaging(
-    ResultResponse, ResultStaging, DataClassJsonMixin
+    MinimalResultResponseStaging, ResultResponse, ResultStaging,
+    DataClassJsonMixin
 ):
     warc_id: Optional[str]
     cache_uri: Optional[str]
@@ -129,7 +131,8 @@ class ResultResponseStaging(
 
 @dataclass(frozen=True)
 class ExplainedResultResponseStaging(
-    ExplainedResultResponse, ExplainedResultStaging, DataClassJsonMixin
+    ResultResponseStaging, ExplainedResultResponse, ExplainedResultStaging,
+    DataClassJsonMixin
 ):
     explanation: ExplanationResponse
 
