@@ -14,8 +14,8 @@ _MetaType = TypeVar("_MetaType", bound=Meta, covariant=True)
 
 
 class LazyResultPage(
-    Results[_MetaType, _ResultType],
     ResultsMixin[_MetaType, _ResultType],
+    Results[_MetaType, _ResultType],
     Generic[_MetaType, _ResultType],
 ):
     _start: int
