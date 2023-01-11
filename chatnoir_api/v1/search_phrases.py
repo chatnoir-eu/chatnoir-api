@@ -58,6 +58,7 @@ def search_phrases(
             ResultStaging, ExplainedResultStaging,
         ]
     ]:
+        # noinspection PyTypeChecker
         return search_phrases_page(
             api_key=api_key,
             query=query,
