@@ -11,7 +11,10 @@
 
 Simple, type-safe access to the [ChatNoir](https://chatnoir.eu/) [search API](https://chatnoir.eu/doc/api/).
 
+Working with PyTerrier? Check out the [`chatnoir-pyterrier`](https://pypi.org/project/chatnoir-pyterrier/) package.
+
 ## Installation
+Install the package from PyPI:
 
 ```shell
 pip install chatnoir-api
