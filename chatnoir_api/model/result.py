@@ -1,6 +1,7 @@
-from abc import ABC
+from abc import ABC, abstractmethod
 from datetime import datetime
-from typing import TypeVar, Generic, Optional, AbstractSet, Sequence
+from typing import TypeVar, Generic, Optional, AbstractSet, Sequence, overload, \
+    Union, Any, Iterator
 from uuid import UUID
 
 from chatnoir_api.cache import cache_contents
@@ -51,7 +52,7 @@ class MinimalResultStaging(MinimalResult, ABC):
 
 class ExplainedMinimalResultStaging(
     MinimalResultStaging, ExplainedMinimalResult, ABC
-                                    ):
+):
     pass
 
 
@@ -100,3 +101,52 @@ class Results(
     ABC
 ):
     meta: _MetaType
+    results: Sequence[_ResultType]
+
+
+class ResultsMixin(
+    Results[_MetaType, _ResultType],
+    Generic[_MetaType, _ResultType],
+    ABC
+):
+    @property
+    @abstractmethod
+    def meta(self) -> _MetaType:
+        pass
+
+    @property
+    @abstractmethod
+    def results(self) -> Sequence[_ResultType]:
+        pass
+
+    @overload
+    def __getitem__(self, i: int) -> _ResultType:
+        pass
+
+    @overload
+    def __getitem__(self, s: slice) -> Sequence[_ResultType]:
+        pass
+
+    def __getitem__(
+            self,
+            i: Union[int, slice],
+    ) -> Union[_ResultType, Sequence[_ResultType]]:
+        return self.results[i]
+
+    def index(self, value: Any, start: int = ..., stop: int = ...) -> int:
+        return self.results.index(value, start, stop)
+
+    def count(self, value: Any) -> int:
+        return self.results.count(value)
+
+    def __contains__(self, x: object) -> bool:
+        return x in self.results
+
+    def __iter__(self) -> Iterator[_ResultType]:
+        return iter(self.results)
+
+    def __reversed__(self) -> Iterator[_ResultType]:
+        return reversed(self.results)
+
+    def __len__(self) -> int:
+        return len(self.results)

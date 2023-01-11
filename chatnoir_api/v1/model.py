@@ -11,7 +11,7 @@ from chatnoir_api.model.highlight import HighlightedText
 from chatnoir_api.model.result import Meta, Result, ExtendedMeta, MetaIndex, \
     MinimalResult, MinimalResultStaging, ExplainedMinimalResult, Explanation, \
     ExplainedMinimalResultStaging, ExplainedResult, ResultStaging, \
-    ExplainedResultStaging
+    ExplainedResultStaging, ResultsMixin
 
 
 @dataclass(frozen=True)
@@ -166,74 +166,109 @@ class ExtendedMetaResponse(MetaResponse, ExtendedMeta, DataClassJsonMixin):
 
 
 @dataclass(frozen=True)
-class MinimalResponse(DataClassJsonMixin):
+class MinimalResponse(
+    DataClassJsonMixin,
+    ResultsMixin[MetaResponse, MinimalResultResponse]
+):
     meta: MetaResponse
     results: List[MinimalResultResponse]
 
 
 @dataclass(frozen=True)
-class ExplainedMinimalResponse(MinimalResponse, DataClassJsonMixin):
+class ExplainedMinimalResponse(
+    DataClassJsonMixin,
+    ResultsMixin[MetaResponse, MinimalResultResponse]
+):
     meta: MetaResponse
     results: List[ExplainedMinimalResultResponse]
 
 
 @dataclass(frozen=True)
-class Response(MinimalResponse, DataClassJsonMixin):
+class Response(
+    DataClassJsonMixin,
+    ResultsMixin[MetaResponse, MinimalResultResponse]
+):
     meta: MetaResponse
     results: List[ResultResponse]
 
 
 @dataclass(frozen=True)
-class ExplainedResponse(Response, DataClassJsonMixin):
+class ExplainedResponse(
+    DataClassJsonMixin,
+    ResultsMixin[MetaResponse, MinimalResultResponse]
+):
     meta: MetaResponse
     results: List[ExplainedResultResponse]
 
 
 @dataclass(frozen=True)
-class MinimalResponseStaging(DataClassJsonMixin):
+class MinimalResponseStaging(
+    DataClassJsonMixin,
+    ResultsMixin[MetaResponse, MinimalResultResponse]
+):
     meta: MetaResponse
     results: List[MinimalResultResponseStaging]
 
 
 @dataclass(frozen=True)
 class ExplainedMinimalResponseStaging(
-    MinimalResponseStaging, DataClassJsonMixin
+    DataClassJsonMixin,
+    ResultsMixin[MetaResponse, MinimalResultResponse]
+
 ):
     meta: MetaResponse
     results: List[ExplainedMinimalResultResponseStaging]
 
 
 @dataclass(frozen=True)
-class ResponseStaging(DataClassJsonMixin):
+class ResponseStaging(
+    DataClassJsonMixin,
+    ResultsMixin[MetaResponse, MinimalResultResponse]
+):
     meta: MetaResponse
     results: List[ResultResponseStaging]
 
 
 @dataclass(frozen=True)
-class ExplainedResponseStaging(DataClassJsonMixin):
+class ExplainedResponseStaging(
+    DataClassJsonMixin,
+    ResultsMixin[MetaResponse, MinimalResultResponse]
+):
     meta: MetaResponse
     results: List[ExplainedResultResponseStaging]
 
 
 @dataclass(frozen=True)
-class ExtendedMetaMinimalResponseStaging(DataClassJsonMixin):
+class ExtendedMetaMinimalResponseStaging(
+    DataClassJsonMixin,
+    ResultsMixin[MetaResponse, MinimalResultResponse]
+):
     meta: ExtendedMetaResponse
     results: List[MinimalResultResponseStaging]
 
 
 @dataclass(frozen=True)
-class ExplainedExtendedMetaMinimalResponseStaging(DataClassJsonMixin):
+class ExplainedExtendedMetaMinimalResponseStaging(
+    DataClassJsonMixin,
+    ResultsMixin[MetaResponse, MinimalResultResponse]
+):
     meta: ExtendedMetaResponse
     results: List[ExplainedMinimalResultResponseStaging]
 
 
 @dataclass(frozen=True)
-class ExtendedMetaResponseStaging(DataClassJsonMixin):
+class ExtendedMetaResponseStaging(
+    DataClassJsonMixin,
+    ResultsMixin[MetaResponse, MinimalResultResponse]
+):
     meta: ExtendedMetaResponse
     results: List[ResultResponseStaging]
 
 
 @dataclass(frozen=True)
-class ExplainedExtendedMetaResponseStaging(DataClassJsonMixin):
+class ExplainedExtendedMetaResponseStaging(
+    DataClassJsonMixin,
+    ResultsMixin[MetaResponse, MinimalResultResponse]
+):
     meta: ExtendedMetaResponse
     results: List[ExplainedResultResponseStaging]

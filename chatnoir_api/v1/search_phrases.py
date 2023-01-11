@@ -1,10 +1,11 @@
-from typing import List, Tuple, Type, Union, Set
+from typing import Type, Union, Set
 
 from chatnoir_api.lazy import LazyResultSequence
 from chatnoir_api.model import Index, Slop
 from chatnoir_api.model.result import (
     MinimalResult, ExplainedMinimalResult, Result, ExplainedResult,
-    Meta, ExtendedMeta, Results
+    Meta, ExtendedMeta, Results, MinimalResultStaging,
+    ExplainedMinimalResultStaging, ResultStaging, ExplainedResultStaging
 )
 from chatnoir_api.v1.defaults import (
     DEFAULT_START, DEFAULT_SIZE, DEFAULT_SLOP, DEFAULT_INDEX, DEFAULT_MINIMAL,
@@ -38,16 +39,24 @@ def search_phrases(
         backoff_seconds: float = DEFAULT_BACKOFF_SECONDS,
 ) -> Results[
     Union[Meta, ExtendedMeta],
-    Union[MinimalResult, ExplainedMinimalResult, Result, ExplainedResult]
+    Union[
+        MinimalResult, ExplainedMinimalResult,
+        Result, ExplainedResult,
+        MinimalResultStaging, ExplainedMinimalResultStaging,
+        ResultStaging, ExplainedResultStaging,
+    ]
 ]:
     def load_page(
             start: int,
             size: int
-    ) -> Tuple[
+    ) -> Results[
         Union[Meta, ExtendedMeta],
-        List[Union[
-            MinimalResult, ExplainedMinimalResult, Result, ExplainedResult
-        ]]
+        Union[
+            MinimalResult, ExplainedMinimalResult,
+            Result, ExplainedResult,
+            MinimalResultStaging, ExplainedMinimalResultStaging,
+            ResultStaging, ExplainedResultStaging,
+        ]
     ]:
         return search_phrases_page(
             api_key=api_key,
@@ -83,9 +92,14 @@ def search_phrases_page(
         size: int = DEFAULT_SIZE,
         retries: int = DEFAULT_RETRIES,
         backoff_seconds: float = DEFAULT_BACKOFF_SECONDS,
-) -> Tuple[
+) -> Results[
     Union[Meta, ExtendedMeta],
-    List[Union[MinimalResult, ExplainedMinimalResult, Result, ExplainedResult]]
+    Union[
+        MinimalResult, ExplainedMinimalResult,
+        Result, ExplainedResult,
+        MinimalResultStaging, ExplainedMinimalResultStaging,
+        ResultStaging, ExplainedResultStaging,
+    ]
 ]:
     if isinstance(index, Index):
         index = {index}
@@ -169,4 +183,4 @@ def search_phrases_page(
         backoff_seconds=backoff_seconds,
         staging=staging,
     )
-    return response.meta, response.results
+    return response
