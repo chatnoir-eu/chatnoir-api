@@ -1,7 +1,7 @@
 from abc import ABC
 from datetime import datetime
-from typing import TypeVar, Generic, Optional, AbstractSet, Sequence, overload, \
-    Union, Any, Iterator
+from typing import TypeVar, Generic, Optional, AbstractSet, Sequence, \
+    overload, Union, Any, Iterator
 from uuid import UUID
 
 from chatnoir_api.cache import cache_contents
