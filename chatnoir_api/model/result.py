@@ -109,8 +109,8 @@ class ResultsMixin(
     Generic[_MetaType, _ResultType],
     ABC
 ):
-    meta: _MetaType = NotImplemented
-    results: Sequence[_ResultType] = NotImplemented
+    meta: _MetaType
+    results: Sequence[_ResultType]
 
     @overload
     def __getitem__(self, i: int) -> _ResultType:
