@@ -1,4 +1,4 @@
-from abc import ABC, abstractmethod
+from abc import ABC
 from datetime import datetime
 from typing import TypeVar, Generic, Optional, AbstractSet, Sequence, overload, \
     Union, Any, Iterator
@@ -109,15 +109,8 @@ class ResultsMixin(
     Generic[_MetaType, _ResultType],
     ABC
 ):
-    @property
-    @abstractmethod
-    def meta(self) -> _MetaType:
-        pass
-
-    @property
-    @abstractmethod
-    def results(self) -> Sequence[_ResultType]:
-        pass
+    meta: _MetaType = NotImplemented
+    results: Sequence[_ResultType] = NotImplemented
 
     @overload
     def __getitem__(self, i: int) -> _ResultType:
