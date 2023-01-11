@@ -183,7 +183,7 @@ Verify your changes against the test suite to verify.
 ```shell
 flake8 chatnoir_api examples
 pylint -E chatnoir_api examples
-CHATNOIR_API_KEY="<API_KEY>" pytest chatnoir_api examples
+CHATNOIR_API_KEY="<API_KEY>" CHATNOIR_API_KEY_STAGING="<API_KEY>" pytest chatnoir_api examples
 ```
 
 Please also add tests for your newly developed code.
