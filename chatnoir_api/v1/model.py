@@ -117,6 +117,12 @@ class ExplainedMinimalResultResponseStaging(
     explanation: ExplanationResponse
 
 
+def _decode_datetime(value: Optional[str]) -> Optional[datetime]:
+    if value is None:
+        return None
+    return datetime.fromisoformat(value)
+
+
 @dataclass(frozen=True)
 class ResultResponseStaging(
     MinimalResultResponseStaging, ResultResponse, ResultStaging,
@@ -125,7 +131,7 @@ class ResultResponseStaging(
     warc_id: Optional[str]
     cache_uri: Optional[str]
     crawl_date: Optional[datetime] = field(metadata=config(
-        decoder=datetime.fromisoformat
+        decoder=_decode_datetime
     ))
     content_type: str
     language: str = field(metadata=config(field_name="lang"))
