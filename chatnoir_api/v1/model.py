@@ -124,7 +124,9 @@ class ResultResponseStaging(
 ):
     warc_id: Optional[str]
     cache_uri: Optional[str]
-    crawl_date: Optional[datetime]
+    crawl_date: Optional[datetime] = field(metadata=config(
+        decoder=datetime.fromisoformat
+    ))
     content_type: str
     language: str = field(metadata=config(field_name="lang"))
 
