@@ -46,11 +46,14 @@ print(result_1234)
 There's a [new](https://chatnoir.web.webis.de/) ChatNoir version with the same API interface. To run your search requests against the new API (e.g., if you want to search the ClueWeb22), set `staging=True` like this:
 
 ```python
+from chatnoir_api import Index
 from chatnoir_api.v1 import search
 
 api_key: str = "<API_KEY>"
-results = search(api_key, "python library", staging=True)
+results = search(api_key, "python library", staging=True, index=Index.ClueWeb22)
 ```
+
+_Note for Touché 2023 participants: Set `index=Index.ClueWeb22` to search the ClueWeb22 index. (Otherwise, results from the ClueWeb09 and ClueWeb12 indices will be included.)_
 
 #### Phrase Search
 To search for phrases, use the `search_phrases` method in the same way as normal `search`:
