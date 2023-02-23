@@ -60,7 +60,7 @@ class ResultStaging(MinimalResultStaging, Result, ABC):
     warc_id: Optional[str]
     cache_uri: str
     crawl_date: Optional[datetime]
-    content_type: str
+    content_type: Optional[str]
     language: str
 
 

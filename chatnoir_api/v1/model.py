@@ -133,7 +133,7 @@ class ResultResponseStaging(
     crawl_date: Optional[datetime] = field(metadata=config(
         decoder=_decode_datetime
     ))
-    content_type: str
+    content_type: Optional[str]
     language: str = field(metadata=config(field_name="lang"))
 
 
