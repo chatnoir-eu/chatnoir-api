@@ -42,6 +42,15 @@ result_1234 = results[1234]
 print(result_1234)
 ```
 
+### Use Chatnoir-Chat
+Please generate an API key at [https://chat.web.webis.de/admin/api/keys](https://chat.web.webis.de/admin/api/keys).
+To use [chatnoir chat](https://chat.web.webis.de), please use:
+```python
+from chatnoir_api.v1.chat import chat
+
+print(chat(api_key="<API-KEY>", input_sentence="how are you?"))
+```
+
 #### Search the new ChatNoir
 There's a [new](https://chatnoir.web.webis.de/) ChatNoir version with the same API interface. To run your search requests against the new API (e.g., if you want to search the ClueWeb22), set `staging=True` like this:
 
