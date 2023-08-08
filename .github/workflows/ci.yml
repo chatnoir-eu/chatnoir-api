@@ -119,6 +119,7 @@ jobs:
         env:
           CHATNOIR_API_KEY: ${{ secrets.CHATNOIR_API_KEY }}
           CHATNOIR_API_KEY_STAGING: ${{ secrets.CHATNOIR_API_KEY_STAGING }}
+          CHATNOIR_API_KEY_CHAT: ${{ secrets.CHATNOIR_API_KEY_CHAT }}
         run: pytest chatnoir_api examples tests --cov --cov-report=term --cov-report=xml
       - name: "📤 Upload test coverage"
         uses: actions/upload-artifact@v2
