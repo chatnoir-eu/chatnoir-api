@@ -31,8 +31,6 @@ def chat(
         "Accept": "application/json",
         "Api-Key": api_key
     }
-    print(data)
-    print(headers)
     response = post(url, data=data, headers=headers)
     response.raise_for_status()
     response_json = response.json()
