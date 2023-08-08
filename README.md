@@ -62,7 +62,7 @@ To search for phrases, use the `search_phrases` method in the same way as normal
 from chatnoir_api.v1 import search_phrases
 
 api_key: str = "<API_KEY>"
-response = search_phrases(api_key, "python library", staging=True)
+results = search_phrases(api_key, "python library", staging=True)
 ```
 
 ### Chat
@@ -73,7 +73,7 @@ With your API key, you can chat with the cat, like this:
 from chatnoir_api.chat import chat
 
 api_key: str = "<API_KEY>"
-answer = chat(api_key, "how are you?")
+response = chat(api_key, "how are you?")
 ```
 
 ### Retrieve Document Contents
