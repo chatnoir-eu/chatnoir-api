@@ -21,6 +21,7 @@ def api_key(staging: bool) -> str:
         )
     return environ[key]
 
+
 @fixture(scope="module")
 def api_key_chat() -> str:
     key = "CHATNOIR_API_KEY_CHAT"
