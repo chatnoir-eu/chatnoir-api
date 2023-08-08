@@ -42,15 +42,6 @@ result_1234 = results[1234]
 print(result_1234)
 ```
 
-### Use Chatnoir-Chat
-Please generate an API key at [https://chat.web.webis.de/admin/api/keys](https://chat.web.webis.de/admin/api/keys).
-To use [chatnoir chat](https://chat.web.webis.de), please use:
-```python
-from chatnoir_api.v1.chat import chat
-
-print(chat(api_key="<API-KEY>", input_sentence="how are you?"))
-```
-
 #### Search the new ChatNoir
 There's a [new](https://chatnoir.web.webis.de/) ChatNoir version with the same API interface. To run your search requests against the new API (e.g., if you want to search the ClueWeb22), set `staging=True` like this:
 
@@ -71,10 +62,21 @@ To search for phrases, use the `search_phrases` method in the same way as normal
 from chatnoir_api.v1 import search_phrases
 
 api_key: str = "<API_KEY>"
-results = search_phrases(api_key, "python library", staging=True)
+response = search_phrases(api_key, "python library", staging=True)
 ```
 
-### Retrieve Document Content
+### Chat
+To generate text with the ChatNoir Chat API you need to request an API key from the [admins](mailto:maik.froebe@uni-jena.de).
+With your API key, you can chat with the cat, like this:
+
+```python
+from chatnoir_api.chat import chat
+
+api_key: str = "<API_KEY>"
+answer = chat(api_key, "how are you?")
+```
+
+### Retrieve Document Contents
 Often the title and ID of a document is not enough to effectively re-rank a list of search results.
 To retrieve the full content or plain text for a given document you can use the `html_contents` helper function.
 The `html_contents` function expects a ChatNoir-internal UUID, shorthand UUID, or a TREC ID 
