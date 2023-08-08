@@ -15,7 +15,18 @@ def api_key(staging: bool) -> str:
         key = "CHATNOIR_API_KEY"
     if key not in environ:
         raise RuntimeError(
-            f"Must specify ChatNoir api key "
+            f"Must specify ChatNoir API key "
+            f"in the {key} environment variable "
+            f"to run this test."
+        )
+    return environ[key]
+
+@fixture(scope="module")
+def api_key_chat() -> str:
+    key = "CHATNOIR_API_KEY_CHAT"
+    if key not in environ:
+        raise RuntimeError(
+            f"Must specify ChatNoir Chat API key "
             f"in the {key} environment variable "
             f"to run this test."
         )
