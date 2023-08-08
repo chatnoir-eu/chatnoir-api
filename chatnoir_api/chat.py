@@ -1,5 +1,5 @@
 from json import dumps
-from typing import Literal
+from typing_extensions import Literal
 from urllib.parse import urljoin
 
 from requests import post
