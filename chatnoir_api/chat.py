@@ -1,3 +1,4 @@
+from json import dumps
 from typing import Literal
 from urllib.parse import urljoin
 
@@ -22,14 +23,16 @@ def chat(
         model: ModelType = "alpaca-en-7b"
 ) -> str:
     url = urljoin(BASE_URL_CHAT, f"generate/{model}")
-    data = {
+    data = dumps({
         "input_sentence": input_sentence,
-    }
+    })
     headers = {
         "Content-Type": "application/json",
         "Accept": "application/json",
         "Api-Key": api_key
     }
+    print(data)
+    print(headers)
     response = post(url, data=data, headers=headers)
     response.raise_for_status()
     response_json = response.json()
