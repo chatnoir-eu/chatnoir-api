@@ -15,5 +15,5 @@ def uuid() -> UUID:
     return UUID("eacbde3d-edcf-5ed7-8378-63e4d57a932c")
 
 
-def test_document_id(short_uuid, uuid: UUID):
+def test_document_id(short_uuid, uuid: UUID) -> None:
     assert short_uuid == uuid

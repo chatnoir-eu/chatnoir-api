@@ -13,5 +13,6 @@ def text() -> str:
     return "this is an important test"
 
 
-def test_highlighted_text(highlighted_text: HighlightedText, text: str):
+def test_highlighted_text(highlighted_text: HighlightedText,
+                          text: str) -> None:
     assert str(highlighted_text) == text

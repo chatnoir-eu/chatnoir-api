@@ -3,7 +3,7 @@ from uuid import UUID
 from chatnoir_api import cache_contents, Index, ShortUUID
 
 
-def test_html_contents_trec_id():
+def test_html_contents_trec_id() -> None:
     contents = cache_contents(
         "clueweb09-en0051-90-00849",
         Index.ClueWeb09,
@@ -14,7 +14,7 @@ def test_html_contents_trec_id():
     assert "<title>Test, test, test</title>" in contents
 
 
-def test_html_contents_plain_trec_id():
+def test_html_contents_plain_trec_id() -> None:
     contents = cache_contents(
         "clueweb09-en0051-90-00849",
         Index.ClueWeb09,
@@ -26,7 +26,7 @@ def test_html_contents_plain_trec_id():
     assert "<title>Test, test, test</title>" in contents
 
 
-def test_html_contents_uuid():
+def test_html_contents_uuid() -> None:
     contents = cache_contents(
         UUID("e635baa8-7341-596a-b3cf-b33c05954361"),
         Index.CommonCrawl1511,
@@ -37,7 +37,7 @@ def test_html_contents_uuid():
     assert "<title>hello world</title>" in contents
 
 
-def test_html_contents_plain_uuid():
+def test_html_contents_plain_uuid() -> None:
     contents = cache_contents(
         UUID("e635baa8-7341-596a-b3cf-b33c05954361"),
         Index.CommonCrawl1511,
@@ -49,7 +49,7 @@ def test_html_contents_plain_uuid():
     assert "<title>hello world</title>" in contents
 
 
-def test_html_contents_short_uuid():
+def test_html_contents_short_uuid() -> None:
     contents = cache_contents(
         ShortUUID("f6J0lMPmVfWs19jJNQkHKA"),
         Index.ClueWeb22,
@@ -62,7 +62,7 @@ def test_html_contents_short_uuid():
            "Hello World | Codecademy</title>" in contents
 
 
-def test_html_contents_plain_short_uuid():
+def test_html_contents_plain_short_uuid() -> None:
     contents = cache_contents(
         ShortUUID("f6J0lMPmVfWs19jJNQkHKA"),
         Index.ClueWeb22,

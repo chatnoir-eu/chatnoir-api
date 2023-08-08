@@ -14,7 +14,7 @@ def minimal(request, staging: bool) -> bool:
     return request.param
 
 
-def test_page(api_key: str, query: str, staging: bool):
+def test_page(api_key: str, query: str, staging: bool) -> None:
     results = search_page(
         api_key=api_key,
         query=query,
@@ -42,7 +42,8 @@ def test_page(api_key: str, query: str, staging: bool):
     assert isinstance(results[0], MinimalResult)
 
 
-def test_page_size(api_key: str, query: str, page_size: int, staging: bool):
+def test_page_size(api_key: str, query: str, page_size: int,
+                   staging: bool) -> None:
     results = search_page(
         api_key=api_key,
         query=query,
@@ -52,7 +53,8 @@ def test_page_size(api_key: str, query: str, page_size: int, staging: bool):
     assert len(results) == page_size
 
 
-def test_page_index(api_key: str, query: str, index: Index, staging: bool):
+def test_page_index(api_key: str, query: str, index: Index,
+                    staging: bool) -> None:
     results = search_page(
         api_key=api_key,
         query=query,
@@ -63,7 +65,8 @@ def test_page_index(api_key: str, query: str, index: Index, staging: bool):
     assert results[0].index == index
 
 
-def test_page_minimal(api_key: str, query: str, minimal: bool, staging: bool):
+def test_page_minimal(api_key: str, query: str, minimal: bool,
+                      staging: bool) -> None:
     results = search_page(
         api_key=api_key,
         query=query,
@@ -77,7 +80,8 @@ def test_page_minimal(api_key: str, query: str, minimal: bool, staging: bool):
         assert isinstance(results[0], Result)
 
 
-def test_page_explain(api_key: str, query: str, explain: bool, staging: bool):
+def test_page_explain(api_key: str, query: str, explain: bool,
+                      staging: bool) -> None:
     results = search_page(
         api_key=api_key,
         query=query,
@@ -98,7 +102,7 @@ def test_page_explain(api_key: str, query: str, explain: bool, staging: bool):
 
 
 def test_page_meta(api_key: str, query: str, extended_meta: bool,
-                   staging: bool):
+                   staging: bool) -> None:
     results = search_page(
         api_key=api_key,
         query=query,
@@ -114,7 +118,7 @@ def test_page_meta(api_key: str, query: str, extended_meta: bool,
         assert isinstance(meta, Meta)
 
 
-def test_iterable(api_key: str, query: str, staging: bool):
+def test_iterable(api_key: str, query: str, staging: bool) -> None:
     results = search(
         api_key=api_key,
         query=query,
@@ -146,7 +150,8 @@ def test_iterable(api_key: str, query: str, staging: bool):
     assert isinstance(second_result, MinimalResult)
 
 
-def test_iterable_index(api_key: str, query: str, index: Index, staging: bool):
+def test_iterable_index(api_key: str, query: str, index: Index,
+                        staging: bool) -> None:
     results = search(
         api_key=api_key,
         query=query,
@@ -159,7 +164,7 @@ def test_iterable_index(api_key: str, query: str, index: Index, staging: bool):
 
 
 def test_iterable_minimal(api_key: str, query: str, minimal: bool,
-                          staging: bool):
+                          staging: bool) -> None:
     results = search(
         api_key=api_key,
         query=query,
@@ -174,7 +179,7 @@ def test_iterable_minimal(api_key: str, query: str, minimal: bool,
 
 
 def test_iterable_explain(api_key: str, query: str, explain: bool,
-                          staging: bool):
+                          staging: bool) -> None:
     results = search(
         api_key=api_key,
         query=query,
@@ -196,7 +201,7 @@ def test_iterable_explain(api_key: str, query: str, explain: bool,
 
 
 def test_iterable_meta(api_key: str, query: str, extended_meta: bool,
-                       staging: bool):
+                       staging: bool) -> None:
     results = search(
         api_key=api_key,
         query=query,
