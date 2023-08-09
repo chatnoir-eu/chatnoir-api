@@ -21,7 +21,7 @@ pip install chatnoir-api
 ```
 
 ## Usage
-The ChatNoir API offers two main features: [search](#search) with BM25F and [retrieving document contents](#retrieve-document-content).
+The ChatNoir API offers two main features: [search](#search) with BM25F and [retrieving document contents](#retrieve-document-contents).
 
 ### Search
 To search with the ChatNoir API you need to request an [API key](https://chatnoir.eu/apikey/).
