@@ -114,7 +114,7 @@ jobs:
       run: pytest --cov --cov-report=xml chatnoir_api tests examples
     - name: "📤 Upload coverage to Codecov"
       uses: codecov/codecov-action@v3
-      if: matrix.python == '3.9'
+      if: matrix.python == '3.11'
       with:
         fail_ci_if_error: true
         token: ${{ secrets.CODECOV_TOKEN }}
