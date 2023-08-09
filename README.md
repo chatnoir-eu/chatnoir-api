@@ -158,7 +158,6 @@ You can use the following BibTeX information for citation:
   author =                {Janek Bevendorff and Benno Stein and Matthias Hagen and Martin Potthast},
   booktitle =             {Advances in Information Retrieval. 40th European Conference on IR Research (ECIR 2018)},
   editor =                {Leif Azzopardi and Allan Hanbury and Gabriella Pasi and Benjamin Piwowarski},
-  ids =                   {potthast:2018c,stein:2018c},
   month =                 mar,
   publisher =             {Springer},
   series =                {Lecture Notes in Computer Science},
@@ -170,45 +169,54 @@ You can use the following BibTeX information for citation:
 
 ## Development
 
-To build and develop this package you need to install the `build` package:
+To build this package and contribute to its development you need to install the `build`, and `setuptools` and `wheel` packages:
 
 ```shell
-pip install build
+pip install build setuptools wheel
 ```
+
+(On most systems, these packages are already pre-installed.)
 
 ### Installation
 
-Install package dependencies:
-
-```shell
-pip install -e .
-```
-
-### Testing
-
-Install test dependencies:
+Install package and test dependencies:
 
 ```shell
 pip install -e .[test]
 ```
 
+### Testing
+
+Configure the API keys for testing:
+
+```shell
+export CHATNOIR_API_KEY="<API_KEY>"
+export CHATNOIR_API_KEY_STAGING="<API_KEY>"
+export CHATNOIR_API_KEY_CHAT="<API_KEY>"
+```
+
 Verify your changes against the test suite to verify.
 
 ```shell
-flake8 chatnoir_api examples
-pylint -E chatnoir_api examples
-CHATNOIR_API_KEY="<API_KEY>" CHATNOIR_API_KEY_STAGING="<API_KEY>" pytest chatnoir_api examples
+flake8 chatnoir_api tests examples
+pylint -E chatnoir_api tests examples
+pytest chatnoir_api tests examples
 ```
 
 Please also add tests for your newly developed code.
 
 ### Build wheels
 
-Wheels for this package can be built by:
+Wheels for this package can be built with:
 
 ```shell
 python -m build
 ```
+
+## Support
+
+If you hit any problems using this package, please file an [issue](https://github.com/chatnoir-eu/chatnoir-api/issues/new).
+We're happy to help!
 
 ## License
 
