@@ -48,7 +48,7 @@ build-backend = "setuptools.build_meta"
 include-package-data = true
 
 [tool.setuptools.packages.find]
-include = ["ir_axioms"]
+include = ["chatnoir_api"]
 namespaces = false
 
 [tool.setuptools.package-data]
