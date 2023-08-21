@@ -29,8 +29,6 @@ def default_config(key, default=None):
 
     return os.environ.get(key, default), "Environment variable"
 
-default_api_key = 
-
 
 class ChatNoirChatClient():
     def __init__(self,
