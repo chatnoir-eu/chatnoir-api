@@ -14,11 +14,8 @@ def default_from_tira_environment(key):
             continue
 
         for file_name in ['metadata.json', '.chatnoir-settings.json']:
-            try:
-                ret = load(open(Path(os.environ.get(potential_key)) / file_name))
-                return ret[key]
-            except:
-                pass
+            ret = load(open(Path(os.environ.get(potential_key)) / file_name))
+            return ret[key]
 
 
 def default_from_environment(key, default=None):
@@ -35,15 +32,18 @@ class ChatNoirChatClient():
         self.api_key = api_key
         self.model = model
         self.endpoint = endpoint
-        
+
         if not self.api_key:
-            raise ValueError('Please provide a proper api_key, got: ' + str(self.api_key))
+            raise ValueError('Please provide an api_key, got: '
+                             + str(self.api_key))
 
         if not self.model:
-            raise ValueError('Please provide a proper model, got: ' + str(self.api_key))
+            raise ValueError('Please provide an model, got: '
+                             + str(self.model))
 
         if not self.endpoint:
-            raise ValueError('Please provide a proper model, got: ' + str(self.api_key))
+            raise ValueError('Please provide an endpoint, got: '
+                             + str(self.endpoint))
 
     def chat(self, input_sentence: str) -> str:
         url = urljoin(BASE_URL_CHAT, f"generate/{self.model}")
@@ -59,6 +59,6 @@ class ChatNoirChatClient():
         response_json = response.json()
 
         if "response" not in response_json:
-            raise ValueError(f"Invalid ChatNoir Chat response: {response_json}")
+            raise ValueError(f"Invalid ChatNoir response: {response_json}")
         return response_json["response"]
 
