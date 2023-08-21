@@ -70,10 +70,10 @@ To generate text with the ChatNoir Chat API you need to request an API key from 
 With your API key, you can chat with the cat, like this:
 
 ```python
-from chatnoir_api.chat import chat
+from chatnoir_api.chat import ChatNoirChatClient
 
-api_key: str = "<API_KEY>"
-response = chat(api_key, "how are you?")
+chat_client = ChatNoirChatClient(api_key="<API_KEY>")
+response = chat_client.chat("how are you?")
 ```
 
 ### Retrieve Document Contents
