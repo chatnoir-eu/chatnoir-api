@@ -40,21 +40,23 @@ class ChatNoirChatClient():
             print(f"ChatNoir Chat uses API key from {api_key[1]}")
             self.api_key = api_key[0]
         else:
-            print(f"ChatNoir Chat uses API key from from parameters")
+            print("ChatNoir Chat uses API key from parameters")
             self.api_key = api_key
 
         if type(model) == tuple:
-            print(f"ChatNoir Chat uses model '{model[0]}' from {self.model[1]}")
+            print(f"ChatNoir Chat uses model '{model[0]}' from {model[1]}")
             self.model = model[0]
         else:
-            print(f"ChatNoir Chat uses model '{model}' from from parameters")
+            print("ChatNoir Chat uses model '{model}' from from parameters")
             self.model = model
         
         if type(endpoint) == tuple:
-            print(f"ChatNoir Chat uses endpoint '{endpoint[0]}' from {self.endpoint[1]}")
+            print(f"ChatNoir Chat uses endpoint '{endpoint[0]}' " +
+                   "from {endpoint[1]}")
             self.endpoint = endpoint[0]
         else:
-            print(f"ChatNoir Chat uses endpoint '{endpoint}' from from parameters")
+            print(f"ChatNoir Chat uses endpoint '{endpoint}' " +
+                   "from parameters")
             self.endpoint = endpoint
 
     def chat(self, input_sentence: str) -> str:
