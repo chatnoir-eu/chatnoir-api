@@ -5,6 +5,10 @@ from requests import post
 from pathlib import Path
 
 from chatnoir_api.constants import BASE_URL_CHAT
+from chatnoir_api.v1.requests import request_page
+from dataclasses_json import config, DataClassJsonMixin
+from chatnoir_api.v1.defaults import (DEFAULT_RETRIES, DEFAULT_BACKOFF_SECONDS)
+from dataclasses import dataclass
 import os
 
 
@@ -29,12 +33,25 @@ def default_config(key, default=None):
 
     return os.environ.get(key, default), "Environment variable"
 
+@dataclass(frozen=True)
+class ChatRequest(DataClassJsonMixin):
+    input_sentence: str
+    
+@dataclass(frozen=True)
+class ChatResponse(DataClassJsonMixin):
+    response: str
 
 class ChatNoirChatClient():
     def __init__(self,
                  api_key=default_config('chatnoir_chat_api_key'),
                  model=default_config('chatnoir_chat_model', 'alpaca-en-7b'),
-                 endpoint=default_config('chatnoir_chat_endpoint', BASE_URL_CHAT)):
+                 endpoint=default_config('chatnoir_chat_endpoint', BASE_URL_CHAT),
+                 retries=DEFAULT_RETRIES,
+                 backoff_seconds=DEFAULT_BACKOFF_SECONDS,
+                 ):
+
+        self.retries = retries
+        self.backoff_seconds = backoff_seconds
 
         if type(api_key) == tuple:
             print(f"ChatNoir Chat uses API key from {api_key[1]}")
@@ -60,18 +77,20 @@ class ChatNoirChatClient():
             self.endpoint = endpoint
 
     def chat(self, input_sentence: str) -> str:
-        url = urljoin(BASE_URL_CHAT, f"generate/{self.model}")
-        data = dumps({"input_sentence": input_sentence})
         headers = {
             "Content-Type": "application/json",
             "Accept": "application/json",
             "Api-Key": self.api_key
         }
 
-        response = post(url, data=data, headers=headers)
-        response.raise_for_status()
-        response_json = response.json()
-
-        if "response" not in response_json:
-            raise ValueError(f"Invalid ChatNoir response: {response_json}")
-        return response_json["response"]
+        response = request_page(
+                request=ChatRequest(input_sentence),
+                response_type=ChatResponse,
+                endpoint='chat',
+                url_for_request=urljoin(BASE_URL_CHAT, f"generate/{self.model}"),
+                non_default_headers=headers, 
+                retries=self.retries,
+                backoff_seconds=self.backoff_seconds
+        )
+        
+        return response.response

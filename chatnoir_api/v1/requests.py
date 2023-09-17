@@ -24,6 +24,8 @@ def request_page(
         retries: int = DEFAULT_RETRIES,
         backoff_seconds: float = DEFAULT_BACKOFF_SECONDS,
         staging: bool = DEFAULT_STAGING,
+        url_for_request: str = None,
+        non_default_headers: dict = None
 ) -> _JsonResponse:
     request_json = request.to_json()
 
@@ -31,10 +33,11 @@ def request_page(
         "Accept": "application/json",
         "Content-Type": "text/plain",
     }
+
     base_url = BASE_URL_STAGING if staging else BASE_URL
     raw_response: HttpResponse = post(
-        urljoin(base_url, f"api/v1/{endpoint}"),
-        headers=headers,
+        urljoin(base_url, f"api/v1/{endpoint}") if url_for_request is None else url_for_request,
+        headers=headers if non_default_headers is None else non_default_headers,
         data=request_json.encode("utf-8")
     )
     if raw_response.status_code // 100 == 5:
@@ -57,6 +60,8 @@ def request_page(
                 retries - 1,
                 round(backoff_seconds) * 2 + uniform(-0.5, 0.5),
                 staging,
+                url_for_request,
+                non_default_headers,
             )
     if raw_response.status_code == 401:
         raise RuntimeError(
@@ -87,6 +92,8 @@ def request_page(
             retries - 1,
             round(backoff_seconds) * 2 + uniform(-0.5, 0.5),
             staging,
+            url_for_request,
+            non_default_headers,
         )
     elif not raw_response.ok:
         raise RuntimeError(
