@@ -101,7 +101,7 @@ class ChatNoirChatClient():
         
         return response.response
 
-    def serve_chat_backend(self, backend_id, backend_implementation, in_backend_thread=False):
+    def serve_chat_backend(self, backend_id, backend_implementation, in_backend_thread=False, failsave=True):
         from websocket import create_connection
         if in_backend_thread:
             thread_method = lambda: self.serve_chat_backend(backend_id, backend_implementation)
@@ -121,4 +121,6 @@ class ChatNoirChatClient():
                     ws.send(json.dumps({'uuid': result['uuid'], 'text': ret, 'backend_id': backend_id}))
             except Exception as e:
                 print('Restart loop because of error ' + str(e))
+                if not failsave:
+                    raise e
 
