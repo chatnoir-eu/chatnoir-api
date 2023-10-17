@@ -111,10 +111,10 @@ class ChatNoirChatClient():
 
         while True:
             try:
-                print('Will connect to ' + self.ws_host, flush=True)
+                print(('Will connect to ' + self.ws_host), flush=True)
                 ws = create_connection(self.ws_host)
                 ws.send(json.dumps({'backend_id': backend_id}))
-                print('Done. Connected to ' +  self.ws_host, flush=True)
+                print(('Done. Connected to ' +  self.ws_host), flush=True)
                 while True:
                     result = json.loads(ws.recv())
                     ret = backend_implementation(result['text'])
