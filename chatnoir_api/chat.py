@@ -4,12 +4,13 @@ from urllib.parse import urljoin
 from requests import post
 from pathlib import Path
 
-from chatnoir_api.constants import BASE_URL_CHAT
+from chatnoir_api.constants import BASE_URL_CHAT, BASE_URL_CHAT_SOCKET
 from chatnoir_api.v1.requests import request_page
 from dataclasses_json import config, DataClassJsonMixin
 from chatnoir_api.v1.defaults import (DEFAULT_RETRIES, DEFAULT_BACKOFF_SECONDS)
 from dataclasses import dataclass
 import os
+import threading
 
 
 def default_from_tira_environment(key):
@@ -36,6 +37,7 @@ def default_config(key, default=None):
 @dataclass(frozen=True)
 class ChatRequest(DataClassJsonMixin):
     input_sentence: str
+    seed: str
     
 @dataclass(frozen=True)
 class ChatResponse(DataClassJsonMixin):
@@ -46,6 +48,7 @@ class ChatNoirChatClient():
                  api_key=default_config('chatnoir_chat_api_key'),
                  model=default_config('chatnoir_chat_model', 'alpaca-en-7b'),
                  endpoint=default_config('chatnoir_chat_endpoint', BASE_URL_CHAT),
+                 ws_host=default_config('chatnoir_chat_ws_endpoint', BASE_URL_CHAT_SOCKET),
                  retries=DEFAULT_RETRIES,
                  backoff_seconds=DEFAULT_BACKOFF_SECONDS,
                  ):
@@ -76,7 +79,7 @@ class ChatNoirChatClient():
                    "from parameters")
             self.endpoint = endpoint
 
-    def chat(self, input_sentence: str) -> str:
+    def chat(self, input_sentence: str, seed: str = "0") -> str:
         headers = {
             "Content-Type": "application/json",
             "Accept": "application/json",
@@ -84,13 +87,33 @@ class ChatNoirChatClient():
         }
 
         response = request_page(
-                request=ChatRequest(input_sentence),
+                request=ChatRequest(input_sentence, seed),
                 response_type=ChatResponse,
                 endpoint='chat',
-                url_for_request=urljoin(BASE_URL_CHAT, f"generate/{self.model}"),
+                url_for_request=urljoin(self.endpoint, f"seq2seq/{self.model}"),
                 non_default_headers=headers, 
                 retries=self.retries,
                 backoff_seconds=self.backoff_seconds
         )
         
         return response.response
+
+    def serve_chat_backend(backend_id, backend_implementation, in_backend_thread=False):
+        from websocket import create_connection
+        if in_backend_thread:
+            thread_method = lambda: serve_chat_backend(backend_id, backend_implementation)
+            threading.Thread(target=thread_method, name="serve_chat_backend_thread", daemon=True).start()
+            time.sleep(.05)
+            return
+
+        while True:
+            try:
+                ws = create_connection(ws_host)
+                ws.send(json.dumps({'backend_id': backend_id}))
+                print('Connected backend to ' + ws_host)
+                while True:
+                    result = json.loads(ws.recv())
+                    ret = backend_implementation(result['text'])
+                    ws.send(json.dumps({'uuid': result['uuid'], 'text': ret, 'backend_id': backend_id}))
+            except: pass
+
