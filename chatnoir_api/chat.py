@@ -98,10 +98,10 @@ class ChatNoirChatClient():
         
         return response.response
 
-    def serve_chat_backend(backend_id, backend_implementation, in_backend_thread=False):
+    def serve_chat_backend(self, backend_id, backend_implementation, in_backend_thread=False):
         from websocket import create_connection
         if in_backend_thread:
-            thread_method = lambda: serve_chat_backend(backend_id, backend_implementation)
+            thread_method = lambda: self.serve_chat_backend(backend_id, backend_implementation)
             threading.Thread(target=thread_method, name="serve_chat_backend_thread", daemon=True).start()
             time.sleep(.05)
             return
