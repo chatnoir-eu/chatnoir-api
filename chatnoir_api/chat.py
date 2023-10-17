@@ -11,6 +11,7 @@ from chatnoir_api.v1.defaults import (DEFAULT_RETRIES, DEFAULT_BACKOFF_SECONDS)
 from dataclasses import dataclass
 import os
 import time
+import json
 import threading
 
 
@@ -37,7 +38,7 @@ def default_config(key, default=None):
 
 @dataclass(frozen=True)
 class ChatRequest(DataClassJsonMixin):
-    input_sentence: str
+    text_request: str
     seed: str
     
 @dataclass(frozen=True)
@@ -56,6 +57,7 @@ class ChatNoirChatClient():
 
         self.retries = retries
         self.backoff_seconds = backoff_seconds
+        self.ws_host = ws_host
 
         if type(api_key) == tuple:
             print(f"ChatNoir Chat uses API key from {api_key[1]}")
@@ -109,14 +111,14 @@ class ChatNoirChatClient():
 
         while True:
             try:
-                print('Will connect to ' + ws_host, flush=True)
-                ws = create_connection(ws_host)
+                print('Will connect to ' + self.ws_host, flush=True)
+                ws = create_connection(self.ws_host)
                 ws.send(json.dumps({'backend_id': backend_id}))
-                print('Done. Connected to ' + ws_host, flush=True)
+                print('Done. Connected to ' +  self.ws_host, flush=True)
                 while True:
                     result = json.loads(ws.recv())
                     ret = backend_implementation(result['text'])
                     ws.send(json.dumps({'uuid': result['uuid'], 'text': ret, 'backend_id': backend_id}))
-            except exception as e:
-                raise e
+            except Exception as e:
+                print('Restart loop because of error ' + str(e))
 
