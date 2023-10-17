@@ -82,7 +82,7 @@ class ChatNoirChatClient():
                    "from parameters")
             self.endpoint = endpoint
 
-    def chat(self, input_sentence: str, seed: str = "0") -> str:
+    def chat(self, text_request: str, seed: str = "0") -> str:
         headers = {
             "Content-Type": "application/json",
             "Accept": "application/json",
@@ -90,7 +90,7 @@ class ChatNoirChatClient():
         }
 
         response = request_page(
-                request=ChatRequest(input_sentence, seed),
+                request=ChatRequest(text_request, seed),
                 response_type=ChatResponse,
                 endpoint='chat',
                 url_for_request=urljoin(self.endpoint, f"seq2seq/{self.model}"),
