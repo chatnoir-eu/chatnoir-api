@@ -59,7 +59,7 @@ class ChatNoirChatClient():
         self.backoff_seconds = backoff_seconds
 
         if type(ws_host) == tuple:
-            print(f"ChatNoir Chat uses ws_host from environment {self.ws_host[1]}")
+            print(f"ChatNoir Chat uses ws_host from environment {ws_host[1]}")
             self.ws_host = ws_host[0]
         else:
             self.ws_host = ws_host
