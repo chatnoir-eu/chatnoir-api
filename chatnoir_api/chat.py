@@ -10,6 +10,7 @@ from dataclasses_json import config, DataClassJsonMixin
 from chatnoir_api.v1.defaults import (DEFAULT_RETRIES, DEFAULT_BACKOFF_SECONDS)
 from dataclasses import dataclass
 import os
+import time
 import threading
 
 
@@ -108,12 +109,14 @@ class ChatNoirChatClient():
 
         while True:
             try:
+                print('Will connect to ' + ws_host, flush=True)
                 ws = create_connection(ws_host)
                 ws.send(json.dumps({'backend_id': backend_id}))
-                print('Connected backend to ' + ws_host)
+                print('Done. Connected to ' + ws_host, flush=True)
                 while True:
                     result = json.loads(ws.recv())
                     ret = backend_implementation(result['text'])
                     ws.send(json.dumps({'uuid': result['uuid'], 'text': ret, 'backend_id': backend_id}))
-            except: pass
+            except exception as e:
+                raise e
 
