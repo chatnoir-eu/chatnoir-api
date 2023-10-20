@@ -1,12 +1,11 @@
-from json import dumps, load
+from json import load
 from urllib.parse import urljoin
 
-from requests import post
 from pathlib import Path
 
 from chatnoir_api.constants import BASE_URL_CHAT, BASE_URL_CHAT_SOCKET
 from chatnoir_api.v1.requests import request_page
-from dataclasses_json import config, DataClassJsonMixin
+from dataclasses_json import DataClassJsonMixin
 from chatnoir_api.v1.defaults import (DEFAULT_RETRIES, DEFAULT_BACKOFF_SECONDS)
 from dataclasses import dataclass
 import os
