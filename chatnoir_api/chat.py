@@ -142,13 +142,13 @@ class ChatNoirChatClient():
 
                 while True:
                     result = json.loads(ws.recv())
+                    ret = backend_implementation(result['text'])
                     init_message = json.dumps({
                                                'uuid': result['uuid'],
                                                'text': ret,
                                                'backend_id': backend_id
                                               })
 
-                    ret = backend_implementation(result['text'])
                     ws.send(init_message)
             except Exception as e:
                 print('Restart loop because of error ' + str(e))
