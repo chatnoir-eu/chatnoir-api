@@ -25,7 +25,7 @@ dependencies = [
     "dataclasses-json~=0.5.5",
     "typing-extensions~=4.0",
     "importlib-metadata~=4.0",
-    "websockets~=10.4",
+    "websocket-client~=1.6.3",
 ]
 dynamic = ["version"]
 
