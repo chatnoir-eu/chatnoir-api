@@ -14,6 +14,10 @@ import json
 import threading
 
 
+def chat(api_key, input_sentence, model='alpaca-en-7b):
+    return ChatNoirChatClient(api_key=api_key, model=model)
+
+
 def default_from_tira_environment(key):
     ENVIRONMENT_LOOKUP_KEYS = ['inputDataset', 'TIRA_INPUT_DATASET',
                                'CHATNOIR_CHAT_CONFIGURATION_DIR']
