@@ -35,14 +35,17 @@ def default_config(key, default=None):
 
     return os.environ.get(key, default), "Environment variable"
 
+
 @dataclass(frozen=True)
 class ChatRequest(DataClassJsonMixin):
     text_request: str
     seed: str
-    
+
+
 @dataclass(frozen=True)
 class ChatResponse(DataClassJsonMixin):
     response: str
+
 
 class ChatNoirChatClient():
     def __init__(self,
@@ -88,7 +91,7 @@ class ChatNoirChatClient():
             self.endpoint = endpoint[0]
         else:
             print(f"ChatNoir Chat uses endpoint '{endpoint}' " +
-                   "from parameters")
+                  "from parameters")
             self.endpoint = endpoint
 
     def chat(self, text_request: str, seed: str = "0") -> str:
@@ -98,7 +101,7 @@ class ChatNoirChatClient():
             "Api-Key": self.api_key
         }
         url = urljoin(self.endpoint, f"seq2seq/{self.model}")
-        
+
         response = request_page(
                 request=ChatRequest(text_request, seed),
                 response_type=ChatResponse,
@@ -108,15 +111,15 @@ class ChatNoirChatClient():
                 retries=self.retries,
                 backoff_seconds=self.backoff_seconds
         )
-        
+
         return response.response
 
-    def serve_chat_backend(self, 
+    def serve_chat_backend(self,
                            backend_id,
                            backend_implementation,
                            in_backend_thread=False,
                            failsave=True
-                          ):
+                           ):
         from websocket import create_connection
         if in_backend_thread:
             def thread_method():
@@ -136,12 +139,17 @@ class ChatNoirChatClient():
                 ws = create_connection(self.ws_host)
                 ws.send(json.dumps({'backend_id': backend_id}))
                 print('Done. Connected to ' + str(self.ws_host), flush=True)
+                init_message = json.dumps({
+                                           'uuid': result['uuid'],
+                                           'text': ret,
+                                           'backend_id': backend_id
+                                          })
+
                 while True:
                     result = json.loads(ws.recv())
                     ret = backend_implementation(result['text'])
-                    ws.send(json.dumps({'uuid': result['uuid'], 'text': ret, 'backend_id': backend_id}))
+                    ws.send(init_message)
             except Exception as e:
                 print('Restart loop because of error ' + str(e))
                 if not failsave:
                     raise e
-
