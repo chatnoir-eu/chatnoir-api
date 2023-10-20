@@ -35,11 +35,11 @@ def request_page(
     }
 
     headers=headers if non_default_headers is None else non_default_headers
+    base_url = BASE_URL_STAGING if staging else BASE_URL
     url = urljoin(base_url, f"api/v1/{endpoint}")
     if url_for_request is not None:
         url = url_for_request
-
-    base_url = BASE_URL_STAGING if staging else BASE_URL
+    
     raw_response: HttpResponse = post(
         url,
         headers=headers,

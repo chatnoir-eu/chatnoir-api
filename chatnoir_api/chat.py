@@ -119,7 +119,7 @@ class ChatNoirChatClient():
                           ):
         from websocket import create_connection
         if in_backend_thread:
-            def thread_method()
+            def thread_method():
                 self.serve_chat_backend(backend_id, backend_implementation)
 
             threading.Thread(
