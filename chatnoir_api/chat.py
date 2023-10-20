@@ -14,7 +14,7 @@ import json
 import threading
 
 
-def chat(api_key, input_sentence, model='alpaca-en-7b):
+def chat(api_key, input_sentence, model='alpaca-en-7b'):
     return ChatNoirChatClient(api_key=api_key, model=model)
 
 
