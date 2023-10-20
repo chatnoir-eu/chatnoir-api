@@ -26,7 +26,6 @@ dependencies = [
     "typing-extensions~=4.0",
     "importlib-metadata~=4.0",
     "websockets~=10.4",
-    "websocket"
 ]
 dynamic = ["version"]
 
