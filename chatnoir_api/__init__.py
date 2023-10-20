@@ -2,7 +2,7 @@ from importlib_metadata import version
 
 __version__ = version("chatnoir-api")
 
-from chatnoir_api import cache, model, chat
+from chatnoir_api import cache, model
 from chatnoir_api.model import highlight, result
 
 # Re-export child modules.
@@ -25,3 +25,4 @@ MetaIndex = result.MetaIndex
 ExtendedMeta = result.ExtendedMeta
 Results = result.Results
 cache_contents = cache.cache_contents
+
