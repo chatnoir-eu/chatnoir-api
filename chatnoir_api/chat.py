@@ -139,14 +139,15 @@ class ChatNoirChatClient():
                 ws = create_connection(self.ws_host)
                 ws.send(json.dumps({'backend_id': backend_id}))
                 print('Done. Connected to ' + str(self.ws_host), flush=True)
-                init_message = json.dumps({
-                                           'uuid': result['uuid'],
-                                           'text': ret,
-                                           'backend_id': backend_id
-                                          })
 
                 while True:
                     result = json.loads(ws.recv())
+                    init_message = json.dumps({
+                                               'uuid': result['uuid'],
+                                               'text': ret,
+                                               'backend_id': backend_id
+                                              })
+
                     ret = backend_implementation(result['text'])
                     ws.send(init_message)
             except Exception as e:
