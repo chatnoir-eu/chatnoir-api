@@ -49,8 +49,14 @@ class ChatNoirChatClient():
     def __init__(self,
                  api_key=default_config('chatnoir_chat_api_key'),
                  model=default_config('chatnoir_chat_model', 'alpaca-en-7b'),
-                 endpoint=default_config('chatnoir_chat_endpoint', BASE_URL_CHAT),
-                 ws_host=default_config('chatnoir_chat_ws_endpoint', BASE_URL_CHAT_SOCKET),
+                 endpoint=default_config(
+                                         'chatnoir_chat_endpoint',
+                                         BASE_URL_CHAT
+                                        ),
+                 ws_host=default_config(
+                                        'chatnoir_chat_ws_endpoint',
+                                        BASE_URL_CHAT_SOCKET
+                                       ),
                  retries=DEFAULT_RETRIES,
                  backoff_seconds=DEFAULT_BACKOFF_SECONDS,
                  ):
@@ -76,10 +82,10 @@ class ChatNoirChatClient():
         else:
             print("ChatNoir Chat uses model '{model}' from from parameters")
             self.model = model
-        
+
         if type(endpoint) == tuple:
             print(f"ChatNoir Chat uses endpoint '{endpoint[0]}' " +
-                   "from {endpoint[1]}")
+                  "from {endpoint[1]}")
             self.endpoint = endpoint[0]
         else:
             print(f"ChatNoir Chat uses endpoint '{endpoint}' " +
@@ -92,24 +98,36 @@ class ChatNoirChatClient():
             "Accept": "application/json",
             "Api-Key": self.api_key
         }
-
+        url = urljoin(self.endpoint, f"seq2seq/{self.model}")
+        
         response = request_page(
                 request=ChatRequest(text_request, seed),
                 response_type=ChatResponse,
                 endpoint='chat',
-                url_for_request=urljoin(self.endpoint, f"seq2seq/{self.model}"),
-                non_default_headers=headers, 
+                url_for_request=url,
+                non_default_headers=headers,
                 retries=self.retries,
                 backoff_seconds=self.backoff_seconds
         )
         
         return response.response
 
-    def serve_chat_backend(self, backend_id, backend_implementation, in_backend_thread=False, failsave=True):
+    def serve_chat_backend(self, 
+                           backend_id,
+                           backend_implementation,
+                           in_backend_thread=False,
+                           failsave=True
+                          ):
         from websocket import create_connection
         if in_backend_thread:
-            thread_method = lambda: self.serve_chat_backend(backend_id, backend_implementation)
-            threading.Thread(target=thread_method, name="serve_chat_backend_thread", daemon=True).start()
+            def thread_method()
+                self.serve_chat_backend(backend_id, backend_implementation)
+
+            threading.Thread(
+                target=thread_method,
+                name="serve_chat_backend_thread",
+                daemon=True
+            ).start()
             time.sleep(.05)
             return
 
@@ -118,7 +136,7 @@ class ChatNoirChatClient():
                 print('Will connect to ' + str(self.ws_host), flush=True)
                 ws = create_connection(self.ws_host)
                 ws.send(json.dumps({'backend_id': backend_id}))
-                print('Done. Connected to ' +  str(self.ws_host), flush=True)
+                print('Done. Connected to ' + str(self.ws_host), flush=True)
                 while True:
                     result = json.loads(ws.recv())
                     ret = backend_implementation(result['text'])
