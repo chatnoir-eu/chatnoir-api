@@ -25,4 +25,3 @@ MetaIndex = result.MetaIndex
 ExtendedMeta = result.ExtendedMeta
 Results = result.Results
 cache_contents = cache.cache_contents
-
