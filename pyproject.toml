@@ -22,7 +22,7 @@ classifiers = [
 ]
 dependencies = [
     "requests~=2.26",
-    "dataclasses-json~=0.5.5",
+    "dataclasses-json>=0.5.5,<0.7.0",
     "typing-extensions~=4.0",
     "importlib-metadata~=4.0",
     "websocket-client",
