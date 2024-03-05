@@ -70,26 +70,26 @@ class ChatNoirChatClient():
         self.retries = retries
         self.backoff_seconds = backoff_seconds
 
-        if type(ws_host) == tuple:
+        if isinstance(ws_host, tuple):
             print(f"ChatNoir Chat uses ws_host from environment {ws_host[1]}")
             self.ws_host = ws_host[0]
         else:
             self.ws_host = ws_host
-        if type(api_key) == tuple:
+        if isinstance(api_key, tuple):
             print(f"ChatNoir Chat uses API key from {api_key[1]}")
             self.api_key = api_key[0]
         else:
             print("ChatNoir Chat uses API key from parameters")
             self.api_key = api_key
 
-        if type(model) == tuple:
+        if isinstance(model, tuple):
             print(f"ChatNoir Chat uses model '{model[0]}' from {model[1]}")
             self.model = model[0]
         else:
             print("ChatNoir Chat uses model '{model}' from from parameters")
             self.model = model
 
-        if type(endpoint) == tuple:
+        if isinstance(endpoint, tuple):
             print(f"ChatNoir Chat uses endpoint '{endpoint[0]}' " +
                   "from {endpoint[1]}")
             self.endpoint = endpoint[0]
