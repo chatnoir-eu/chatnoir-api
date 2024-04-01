@@ -110,7 +110,7 @@ jobs:
         CHATNOIR_API_KEY_CHAT: ${{ secrets.CHATNOIR_API_KEY_CHAT }}
       run: pytest --cov --cov-report=xml chatnoir_api tests examples
     - name: 📤 Upload coverage to Codecov
-      uses: codecov/codecov-action@v3
+      uses: codecov/codecov-action@v4
       if: matrix.python == '3.11'
       with:
         fail_ci_if_error: true
