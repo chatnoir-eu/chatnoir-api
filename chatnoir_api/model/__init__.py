@@ -11,6 +11,8 @@ class Index(Enum):
     ClueWeb22 = "cw22"
     CommonCrawl1511 = "cc1511"
     CommonCrawl1704 = "cc1704"
+    MSMarcoV21 = "msmarco-v2.1"
+    MSMarcoV21Segmented = "msmarco-v2.1-segmented"
 
     @property
     def prefix(self) -> str:
@@ -24,6 +26,10 @@ class Index(Enum):
             return "commoncrawl"
         elif self is Index.CommonCrawl1704:
             return "commoncrawl"
+        elif self is Index.MSMarcoV21:
+            return "msmarco-v2.1-document"
+        elif self is Index.MSMarcoV21Segmented:
+            return "msmarco-v2.1-document-segmented"
         else:
             raise ValueError(f"Unknown Index enum: {self}")
 
