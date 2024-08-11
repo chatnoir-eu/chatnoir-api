@@ -1,6 +1,7 @@
 from typing import Union
 from urllib.parse import urljoin
 from uuid import UUID, uuid5, NAMESPACE_URL
+import json
 
 from requests import get, Response
 
@@ -31,4 +32,11 @@ def cache_contents(
         }
     )
     response.raise_for_status()
+
+    if index in (Index.MSMarcoV21, Index.MSMarcoV21Segmented):
+        ret = json.loads(response.text)
+        if uuid_or_document_id != ret['docid']:
+            raise ValueError(f'Document Id is not as expected. Expected "{uuid_or_document_id}" but have "{ret["docid"]}".')
+        return ret
+
     return response.text
