@@ -3,7 +3,6 @@ from html.parser import HTMLParser
 from typing import List, Union, Optional
 
 from chatnoir_api.logger import logger
-from chatnoir_api.types import cached_property
 
 
 class Highlight(str):
@@ -21,7 +20,7 @@ class HighlightedText(str):
     def __str__(self) -> str:
         return self.text
 
-    @cached_property
+    @property
     def sequence(self) -> List[Union[str, Highlight]]:
         parser = _HighlightParser()
         parser.feed(self.html)

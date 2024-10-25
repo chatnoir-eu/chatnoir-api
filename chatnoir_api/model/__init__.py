@@ -1,8 +1,8 @@
 from base64 import urlsafe_b64decode
 from enum import Enum
+from typing_extensions import Literal, TypeAlias
 from uuid import UUID
 
-from chatnoir_api.types import Literal
 
 
 class Index(Enum):
