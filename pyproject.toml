@@ -1,16 +1,15 @@
 [project]
 name = "chatnoir-api"
 authors = [
-    {name = "Jan Heinrich Reimer", email = "heinrich.reimer@uni-jena.de"},
+    {name = "Jan Heinrich Merker", email = "heinrich.merker@uni-jena.de"},
     {name = "Maik Fröbe", email = "maik.froebe@uni-jena.de"},
 ]
 description = "Simple, type-safe access to the ChatNoir search API."
 readme = "README.md"
-requires-python = ">=3.7"
+requires-python = ">=3.8"
 classifiers = [
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3 :: Only",
-    "Programming Language :: Python :: 3.7",
     "Programming Language :: Python :: 3.8",
     "Programming Language :: Python :: 3.9",
     "Programming Language :: Python :: 3.10",
@@ -22,21 +21,23 @@ classifiers = [
     "Topic :: Scientific/Engineering",
 ]
 dependencies = [
-    "requests~=2.26",
-    "dataclasses-json>=0.5.5,<0.7.0",
-    "typing-extensions~=4.0",
-    "importlib-metadata>=4,<8",
-    "websocket-client",
+    "requests~=2.32",
+    "dataclasses-json~=0.6.7",
+    "typing-extensions~=4.12",
+    "importlib-metadata~=8.5",
+    "websocket-client~=1.8",
 ]
 dynamic = ["version"]
 
 [project.optional-dependencies]
-test =[
-    "flake8>=5,<8",
-    "pylint~=2.12",
-    "pytest>=7.2,<9.0",
-    "pytest-cov>=4,<6",
+tests =[
+    "bandit[toml]~=1.7",
+    "mypy~=1.13",
+    "pytest~=8.3",
+    "pytest-cov~=5.0",
+    "ruff~=0.7.1",
 ]
+
 
 [project.urls]
 "Homepage" = "https://github.com/chatnoir-eu/chatnoir-api"
