@@ -106,7 +106,6 @@ jobs:
     - name: 🧪 Test Python code
       env:
         CHATNOIR_API_KEY: ${{ secrets.CHATNOIR_API_KEY }}
-        CHATNOIR_API_KEY_STAGING: ${{ secrets.CHATNOIR_API_KEY_STAGING }}
         CHATNOIR_API_KEY_CHAT: ${{ secrets.CHATNOIR_API_KEY_CHAT }}
       run: pytest --cov --cov-report=xml chatnoir_api tests examples
     - name: 📤 Upload coverage to Codecov
