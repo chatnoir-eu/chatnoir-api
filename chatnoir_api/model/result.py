@@ -1,7 +1,17 @@
-from abc import ABC
+from abc import ABC, abstractmethod
 from datetime import datetime
-from typing import TypeVar, Generic, Optional, AbstractSet, Sequence, \
-    overload, Union, Any, Iterator
+from typing import (
+    TypeVar,
+    Generic,
+    Optional,
+    AbstractSet,
+    Sequence,
+    overload,
+    Union,
+    Any,
+    Iterator,
+    final
+)
 from uuid import UUID
 
 from chatnoir_api.cache import cache_contents
@@ -14,6 +24,11 @@ class MinimalResult(ABC):
     uuid: UUID
     target_uri: str
     snippet: HighlightedText
+    index: Index
+    title: HighlightedText
+
+    def cache_contents(self, plain: bool = False) -> str:
+        return cache_contents(self.uuid, self.index, plain)
 
 
 class Explanation(ABC):
@@ -33,30 +48,6 @@ class Result(MinimalResult, ABC):
     page_rank: Optional[float]
     spam_rank: Optional[float]
     title: HighlightedText
-
-    def cache_contents(self, plain: bool = False) -> str:
-        return cache_contents(self.uuid, self.index, plain)
-
-
-class ExplainedResult(Result, ExplainedMinimalResult, ABC):
-    pass
-
-
-class MinimalResultStaging(MinimalResult, ABC):
-    index: Index
-    title: HighlightedText
-
-    def cache_contents(self, plain: bool = False) -> str:
-        return cache_contents(self.uuid, self.index, plain, staging=True)
-
-
-class ExplainedMinimalResultStaging(
-    MinimalResultStaging, ExplainedMinimalResult, ABC
-):
-    pass
-
-
-class ResultStaging(MinimalResultStaging, Result, ABC):
     warc_id: Optional[str]
     cache_uri: str
     crawl_date: Optional[datetime]
@@ -64,8 +55,8 @@ class ResultStaging(MinimalResultStaging, Result, ABC):
     language: str
 
 
-class ExplainedResultStaging(ResultStaging, ExplainedResult, ABC):
-    explanation: Explanation
+class ExplainedResult(Result, ExplainedMinimalResult, ABC):
+    pass
 
 
 class Meta(ABC):
@@ -81,7 +72,7 @@ class MetaIndex(ABC):
 
 
 class ExtendedMeta(Meta, ABC):
-    indices: AbstractSet[MetaIndex]
+    indices: AbstractSet[MetaIndex]  # type: ignore
     explain: bool
     max_page: int
     page_size: int
@@ -91,26 +82,35 @@ class ExtendedMeta(Meta, ABC):
     terminated_early: bool
 
 
-_MetaType = TypeVar("_MetaType", bound=Meta)
-_ResultType = TypeVar("_ResultType", bound=MinimalResult)
+_MetaType = TypeVar("_MetaType", bound=Meta, covariant=True)
+_ResultType = TypeVar("_ResultType", bound=MinimalResult, covariant=True)
 
 
-class Results(
-    Sequence[_ResultType],
-    Generic[_MetaType, _ResultType],
-    ABC
-):
-    meta: _MetaType
-    results: Sequence[_ResultType]
+class Results(Sequence[_ResultType], Generic[_MetaType, _ResultType], ABC):
+    @property
+    @abstractmethod
+    def meta(self) -> _MetaType:
+        pass
+
+    @property
+    @abstractmethod
+    def results(self) -> Sequence[_ResultType]:
+        pass
 
 
 class ResultsMixin(
-    Results[_MetaType, _ResultType],
-    Generic[_MetaType, _ResultType],
-    ABC
+    Results[_MetaType, _ResultType], Generic[_MetaType, _ResultType], ABC
 ):
-    meta: _MetaType
-    results: Sequence[_ResultType]
+    _meta: _MetaType
+    _results: Sequence[_ResultType]
+
+    @property
+    def meta(self) -> _MetaType:
+        return self._meta
+
+    @property
+    def results(self) -> Sequence[_ResultType]:
+        return self._results
 
     @overload
     def __getitem__(self, i: int) -> _ResultType:
@@ -120,26 +120,33 @@ class ResultsMixin(
     def __getitem__(self, s: slice) -> Sequence[_ResultType]:
         pass
 
+    @final
     def __getitem__(
-            self,
-            i: Union[int, slice],
+        self,
+        i: Union[int, slice],
     ) -> Union[_ResultType, Sequence[_ResultType]]:
         return self.results[i]
 
-    def index(self, value: Any, start: int = ..., stop: int = ...) -> int:
+    @final
+    def index(self, value: Any, start: int = 0, stop: int = -1) -> int:
         return self.results.index(value, start, stop)
 
+    @final
     def count(self, value: Any) -> int:
         return self.results.count(value)
 
+    @final
     def __contains__(self, x: object) -> bool:
         return x in self.results
 
+    @final
     def __iter__(self) -> Iterator[_ResultType]:
         return iter(self.results)
 
+    @final
     def __reversed__(self) -> Iterator[_ResultType]:
         return reversed(self.results)
 
+    @final
     def __len__(self) -> int:
         return len(self.results)
