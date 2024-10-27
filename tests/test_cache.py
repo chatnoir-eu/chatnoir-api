@@ -1,4 +1,5 @@
 from dataclasses import dataclass
+from typing import Optional
 from uuid import UUID
 from pytest import fixture, skip
 
@@ -9,7 +10,7 @@ from chatnoir_api import cache_contents, ShortUUID, Index
 class _TestCase:
     index: Index
     uuid: UUID
-    trec_id: str | None
+    trec_id: Optional[str]
     contains_raw: str
     contains_plain: str
 
