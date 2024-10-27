@@ -119,6 +119,9 @@ jobs:
         python:
         - '3.12'
     runs-on: ubuntu-latest
+    env:
+      CHATNOIR_API_KEY: ${{ secrets.CHATNOIR_API_KEY }}
+      CHATNOIR_API_KEY_CHAT: ${{ secrets.CHATNOIR_API_KEY_CHAT }}
     steps:
     - name: "📥 Check-out"
       uses: actions/checkout@v4
