@@ -1,5 +1,6 @@
 from base64 import urlsafe_b64decode
-from typing import Literal, TypeAlias
+from typing import Literal
+from typing_extensions import TypeAlias
 from uuid import UUID
 
 
