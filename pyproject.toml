@@ -36,6 +36,7 @@ tests =[
     "pytest~=8.3",
     "pytest-cov~=5.0",
     "ruff~=0.7.1",
+    "types-requests~=2.32",
 ]
 
 
@@ -51,11 +52,32 @@ build-backend = "setuptools.build_meta"
 include-package-data = true
 
 [tool.setuptools.packages.find]
-include = ["chatnoir_api"]
-namespaces = false
+exclude = [
+    "build",
+    "venv",
+    ".venv",
+]
 
 [tool.setuptools.package-data]
 mypkg = ["*.txt", "*.md", "*.rst"]
+
+[tool.mypy]
+exclude = [
+    "build",
+    "venv",
+    ".venv",
+]
+ignore_missing_imports = true
+
+[tool.bandit]
+exclude_dirs = [
+    "build",
+    "venv",
+    ".venv",
+]
+
+[tool.bandit.assert_used]
+skips = ["**/test_*.py", "**/conftest.py"]
 
 [tool.pytest.ini_options]
 log_cli = "True"
