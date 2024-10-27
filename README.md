@@ -9,11 +9,12 @@
 
 # 🔍 chatnoir-api
 
-Simple, type-safe access to the [ChatNoir](https://chatnoir.eu/) [search API](https://chatnoir.eu/doc/api/).
+Simple, type-safe access to the [ChatNoir](https://chatnoir.web.webis.de/) [search API](https://chatnoir.web.webis.de/api/).
 
 Working with PyTerrier? Check out the [`chatnoir-pyterrier`](https://pypi.org/project/chatnoir-pyterrier/) package.
 
 ## Installation
+
 Install the package from PyPI:
 
 ```shell
@@ -21,10 +22,12 @@ pip install chatnoir-api
 ```
 
 ## Usage
+
 The ChatNoir API offers two main features: [search](#search) with BM25F and [retrieving document contents](#retrieve-document-contents).
 
 ### Search
-To search with the ChatNoir API you need to request an [API key](https://chatnoir.eu/apikey/).
+
+To search with the ChatNoir API you need to request an [API key](https://chatnoir.web.webis.de/apikey/).
 Then you can use our Python client to search for documents.
 The `results` object is an iterable wrapper of the search results which handles pagination for you.
 List-style indexing is supported to access individual results or sub-lists of results:
@@ -42,30 +45,31 @@ result_1234 = results[1234]
 print(result_1234)
 ```
 
-#### Search the new ChatNoir
-There's a [new](https://chatnoir.web.webis.de/) ChatNoir version with the same API interface. To run your search requests against the new API (e.g., if you want to search the ClueWeb22), set `staging=True` like this:
+#### Search a specific index
+
+To limit your search requests to a single index (e.g., ClueWeb22), set the `index` parameter like this:
 
 ```python
 from chatnoir_api import Index
 from chatnoir_api.v1 import search
 
 api_key: str = "<API_KEY>"
-results = search(api_key, "python library", staging=True, index=Index.ClueWeb22)
+results = search(api_key, "python library", index=Index.ClueWeb22)
 ```
 
-_Note for Touché 2023 participants: Set `index=Index.ClueWeb22` to search the ClueWeb22 index. (Otherwise, results from the ClueWeb09 and ClueWeb12 indices will be included.)_
+#### Phrase search
 
-#### Phrase Search
 To search for phrases, use the `search_phrases` method in the same way as normal `search`:
 
 ```python
 from chatnoir_api.v1 import search_phrases
 
 api_key: str = "<API_KEY>"
-results = search_phrases(api_key, "python library", staging=True)
+results = search_phrases(api_key, "python library")
 ```
 
 ### Chat
+
 To generate text with the ChatNoir Chat API you need to request an API key from the [admins](mailto:maik.froebe@uni-jena.de).
 With your API key, you can chat with the cat, like this:
 
@@ -76,13 +80,14 @@ chat_client = ChatNoirChatClient(api_key="<API_KEY>")
 response = chat_client.chat("how are you?")
 ```
 
-### Retrieve Document Contents
+### Retrieve document contents
+
 Often the title and ID of a document is not enough to effectively re-rank a list of search results.
 To retrieve the full content or plain text for a given document you can use the `html_contents` helper function.
-The `html_contents` function expects a ChatNoir-internal UUID, shorthand UUID, or a TREC ID 
-and the index from which to retrieve the document.
+The `html_contents` function expects a ChatNoir-internal UUID, shorthand UUID, or a TREC ID and the index from which to retrieve the document.
 
 #### Retrieve by TREC ID
+
 You can retrieve a document by its TREC ID like this:
 
 ```python
@@ -103,6 +108,7 @@ print(plain_contents)
 ```
 
 #### Retrieve by ChatNoir-internal UUID
+
 You can also retrieve a document by its ChatNoir-internal UUID like this:
 
 ```python
@@ -125,6 +131,7 @@ print(plain_contents)
 ```
 
 #### Retrieve by ChatNoir-internal short UUID
+
 For newer ChatNoir versions, you can also retrieve a document by its ChatNoir-internal _short_ UUID like this:
 
 ```python
@@ -133,7 +140,6 @@ from chatnoir_api import cache_contents, Index, ShortUUID
 contents = cache_contents(
     ShortUUID("6svePe3PXteDeGPk1XqTLA"),
     Index.ClueWeb22,
-    staging=True,
 )
 print(contents)
 
@@ -141,12 +147,11 @@ plain_contents = cache_contents(
     ShortUUID("6svePe3PXteDeGPk1XqTLA"),
     Index.ClueWeb22,
     plain=True,
-    staging=True,
 )
 print(plain_contents)
 ```
 
-## Citation
+<!-- ## Citation
 
 If you use this package, please cite the [paper](https://webis.de/publications.html#bevendorff_2018)
 from the [ChatNoir](https://github.com/chatnoir-eu) authors. 
@@ -165,7 +170,7 @@ You can use the following BibTeX information for citation:
   title =                 {{Elastic ChatNoir: Search Engine for the ClueWeb and the Common Crawl}},
   year =                  2018
 }
-```
+``` -->
 
 ## Development
 
@@ -177,12 +182,12 @@ pip install build setuptools wheel
 
 (On most systems, these packages are already pre-installed.)
 
-### Installation
+### Developer installation
 
 Install package and test dependencies:
 
 ```shell
-pip install -e .[test]
+pip install -e .[tests]
 ```
 
 ### Testing
@@ -191,16 +196,17 @@ Configure the API keys for testing:
 
 ```shell
 export CHATNOIR_API_KEY="<API_KEY>"
-export CHATNOIR_API_KEY_STAGING="<API_KEY>"
+export CHATNOIR_API_KEY_LEGACY="<API_KEY>"
 export CHATNOIR_API_KEY_CHAT="<API_KEY>"
 ```
 
 Verify your changes against the test suite to verify.
 
 ```shell
-flake8 chatnoir_api tests examples
-pylint -E chatnoir_api tests examples
-pytest chatnoir_api tests examples
+ruff check .                   # Code format and LINT
+mypy .                         # Static typing
+bandit -c pyproject.toml -r .  # Security
+pytest .                       # Unit tests
 ```
 
 Please also add tests for your newly developed code.
