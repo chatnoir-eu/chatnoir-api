@@ -56,16 +56,18 @@ exclude = [
     "build",
     "venv",
     ".venv",
+    ".github",
 ]
 
 [tool.setuptools.package-data]
-mypkg = ["*.txt", "*.md", "*.rst"]
+"*" = ["*.txt", "*.md", "*.rst"]
 
 [tool.mypy]
 exclude = [
     "build",
     "venv",
     ".venv",
+    ".github",
 ]
 ignore_missing_imports = true
 
@@ -74,6 +76,7 @@ exclude_dirs = [
     "build",
     "venv",
     ".venv",
+    ".github",
 ]
 
 [tool.bandit.assert_used]
