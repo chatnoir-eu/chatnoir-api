@@ -14,11 +14,10 @@ def minimal(request) -> bool:
     return request.param
 
 
-def test_page(api_key: str, query: str, staging: bool) -> None:
+def test_page(api_key: str, query: str) -> None:
     results = search_phrases_page(
         api_key=api_key,
         query=query,
-        staging=staging,
     )
     meta = results.meta
 
@@ -42,38 +41,32 @@ def test_page(api_key: str, query: str, staging: bool) -> None:
     assert isinstance(results[0], MinimalResult)
 
 
-def test_page_size(api_key: str, query: str, page_size: int,
-                   staging: bool) -> None:
+def test_page_size(api_key: str, query: str, page_size: int) -> None:
     results = search_phrases_page(
         api_key=api_key,
         query=query,
         size=page_size,
-        staging=staging,
     )
     assert len(results) == page_size
 
 
-def test_page_index(api_key: str, query: str, index: Index,
-                    staging: bool) -> None:
+def test_page_index(api_key: str, query: str, index: Index) -> None:
     results = search_phrases_page(
         api_key=api_key,
         query=query,
         size=1,
         index=index,
         minimal=False,
-        staging=staging,
     )
     assert results[0].index == index
 
 
-def test_page_minimal(api_key: str, query: str, minimal: bool,
-                      staging: bool) -> None:
+def test_page_minimal(api_key: str, query: str, minimal: bool) -> None:
     results = search_phrases_page(
         api_key=api_key,
         query=query,
         size=1,
         minimal=minimal,
-        staging=staging,
     )
     if minimal:
         assert isinstance(results[0], MinimalResult)
@@ -81,14 +74,12 @@ def test_page_minimal(api_key: str, query: str, minimal: bool,
         assert isinstance(results[0], Result)
 
 
-def test_page_explain(api_key: str, query: str, explain: bool,
-                      staging: bool) -> None:
+def test_page_explain(api_key: str, query: str, explain: bool) -> None:
     results = search_phrases_page(
         api_key=api_key,
         query=query,
         size=1,
         explain=explain,
-        staging=staging,
     )
     if explain:
         assert isinstance(results[0], ExplainedMinimalResult)
@@ -102,14 +93,12 @@ def test_page_explain(api_key: str, query: str, explain: bool,
         assert isinstance(results[0], MinimalResult)
 
 
-def test_page_meta(api_key: str, query: str, extended_meta: bool,
-                   staging: bool) -> None:
+def test_page_meta(api_key: str, query: str, extended_meta: bool) -> None:
     results = search_phrases_page(
         api_key=api_key,
         query=query,
         size=1,
         extended_meta=extended_meta,
-        staging=staging,
     )
     meta = results.meta
 
@@ -119,12 +108,11 @@ def test_page_meta(api_key: str, query: str, extended_meta: bool,
         assert isinstance(meta, Meta)
 
 
-def test_iterable(api_key: str, query: str, staging: bool) -> None:
+def test_iterable(api_key: str, query: str) -> None:
     results = search_phrases(
         api_key=api_key,
         query=query,
         page_size=1,
-        staging=staging,
     )
     assert results is not None
     assert isinstance(results, Results)
@@ -151,27 +139,23 @@ def test_iterable(api_key: str, query: str, staging: bool) -> None:
     assert isinstance(second_result, MinimalResult)
 
 
-def test_iterable_index(api_key: str, query: str, index: Index,
-                        staging: bool) -> None:
+def test_iterable_index(api_key: str, query: str, index: Index) -> None:
     results = search_phrases(
         api_key=api_key,
         query=query,
         page_size=1,
         index=index,
         minimal=False,
-        staging=staging,
     )
     assert results[0].index == index
 
 
-def test_iterable_minimal(api_key: str, query: str, minimal: bool,
-                          staging: bool) -> None:
+def test_iterable_minimal(api_key: str, query: str, minimal: bool) -> None:
     results = search_phrases(
         api_key=api_key,
         query=query,
         page_size=1,
         minimal=minimal,
-        staging=staging,
     )
     if minimal:
         assert isinstance(results[0], MinimalResult)
@@ -179,14 +163,12 @@ def test_iterable_minimal(api_key: str, query: str, minimal: bool,
         assert isinstance(results[0], Result)
 
 
-def test_iterable_explain(api_key: str, query: str, explain: bool,
-                          staging: bool) -> None:
+def test_iterable_explain(api_key: str, query: str, explain: bool) -> None:
     results = search_phrases(
         api_key=api_key,
         query=query,
         page_size=1,
         explain=explain,
-        staging=staging,
     )
 
     if explain:
@@ -201,14 +183,12 @@ def test_iterable_explain(api_key: str, query: str, explain: bool,
         assert isinstance(results[0], MinimalResult)
 
 
-def test_iterable_meta(api_key: str, query: str, extended_meta: bool,
-                       staging: bool) -> None:
+def test_iterable_meta(api_key: str, query: str, extended_meta: bool) -> None:
     results = search_phrases(
         api_key=api_key,
         query=query,
         page_size=1,
         extended_meta=extended_meta,
-        staging=staging,
     )
 
     if extended_meta:
