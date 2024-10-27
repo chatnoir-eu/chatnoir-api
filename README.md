@@ -27,16 +27,14 @@ The ChatNoir API offers two main features: [search](#search) with BM25F and [ret
 
 ### Search
 
-To search with the ChatNoir API you need to request an [API key](https://chatnoir.web.webis.de/apikey/).
-Then you can use our Python client to search for documents.
+You can use our Python client to search for documents.
 The `results` object is an iterable wrapper of the search results which handles pagination for you.
 List-style indexing is supported to access individual results or sub-lists of results:
 
 ```python
 from chatnoir_api.v1 import search
 
-api_key: str = "<API_KEY>"
-results = search(api_key, "python library")
+results = search("python library")
 
 top10_results = results[:10]
 print(top10_results)
@@ -47,14 +45,14 @@ print(result_1234)
 
 #### Search a specific index
 
-To limit your search requests to a single index (e.g., ClueWeb22), set the `index` parameter like this:
+To limit your search requests to a single index (e.g., ClueWeb22 category B), set the `index` parameter like this:
 
 ```python
 from chatnoir_api import Index
 from chatnoir_api.v1 import search
 
 api_key: str = "<API_KEY>"
-results = search(api_key, "python library", index=Index.ClueWeb22)
+results = search("python library", index="clueweb22/b")
 ```
 
 #### Phrase search
@@ -64,8 +62,18 @@ To search for phrases, use the `search_phrases` method in the same way as normal
 ```python
 from chatnoir_api.v1 import search_phrases
 
-api_key: str = "<API_KEY>"
-results = search_phrases(api_key, "python library")
+results = search_phrases("python library")
+```
+
+#### API key
+
+The public, shared, default API key comes with a limited request budget.
+To use the ChatNoir API more extensively, please request a dedicated [API key](https://chatnoir.web.webis.de/apikey/).
+
+Then, use the `api_key` parameter to add it to your requests like this:
+
+```python
+results = search("python library", api_key="<YOUR_API_KEY>")
 ```
 
 ### Chat
@@ -95,36 +103,13 @@ from chatnoir_api import cache_contents, Index
 
 contents = cache_contents(
     "clueweb09-en0051-90-00849",
-    Index.ClueWeb09,
+    index="clueweb09",
 )
 print(contents)
 
 plain_contents = cache_contents(
     "clueweb09-en0051-90-00849",
-    Index.ClueWeb09,
-    plain=True,
-)
-print(plain_contents)
-```
-
-#### Retrieve by ChatNoir-internal UUID
-
-You can also retrieve a document by its ChatNoir-internal UUID like this:
-
-```python
-from uuid import UUID
-
-from chatnoir_api import cache_contents, Index
-
-contents = cache_contents(
-    UUID("e635baa8-7341-596a-b3cf-b33c05954361"),
-    Index.CommonCrawl1511,
-)
-print(contents)
-
-plain_contents = cache_contents(
-    UUID("e635baa8-7341-596a-b3cf-b33c05954361"),
-    Index.CommonCrawl1511,
+    index="clueweb09",
     plain=True,
 )
 print(plain_contents)
@@ -138,14 +123,14 @@ For newer ChatNoir versions, you can also retrieve a document by its ChatNoir-in
 from chatnoir_api import cache_contents, Index, ShortUUID
 
 contents = cache_contents(
-    ShortUUID("6svePe3PXteDeGPk1XqTLA"),
-    Index.ClueWeb22,
+    ShortUUID("MzOlTIayX9ub7c13GLPr_g"),
+    index="clueweb22/b",
 )
 print(contents)
 
 plain_contents = cache_contents(
-    ShortUUID("6svePe3PXteDeGPk1XqTLA"),
-    Index.ClueWeb22,
+    ShortUUID("MzOlTIayX9ub7c13GLPr_g"),
+    index="clueweb22/b",
     plain=True,
 )
 print(plain_contents)
@@ -196,7 +181,6 @@ Configure the API keys for testing:
 
 ```shell
 export CHATNOIR_API_KEY="<API_KEY>"
-export CHATNOIR_API_KEY_LEGACY="<API_KEY>"
 export CHATNOIR_API_KEY_CHAT="<API_KEY>"
 ```
 
