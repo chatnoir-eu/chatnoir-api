@@ -104,6 +104,6 @@ def request_page(
         )
 
     response_json = raw_response.text
-    response = response_type.from_json(response_json)
+    response = response_type.from_json(response_json, infer_missing=True)
 
     return response

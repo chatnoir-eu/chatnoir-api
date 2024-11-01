@@ -22,7 +22,7 @@ from chatnoir_api.model.highlight import HighlightedText
 class MinimalResult(ABC):
     score: float
     uuid: UUID
-    target_uri: str
+    target_uri: str | None
     snippet: HighlightedText
     index: Index
     title: HighlightedText
