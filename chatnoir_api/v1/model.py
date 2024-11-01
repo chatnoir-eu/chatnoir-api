@@ -43,7 +43,7 @@ class PhraseRequest(Request, DataClassJsonMixin):
 class MinimalResultResponse(MinimalResult, DataClassJsonMixin):
     score: float
     uuid: UUID = field(metadata=config(decoder=decode_uuid))
-    target_uri: str | None
+    target_uri: Optional[str]
     snippet: HighlightedText = field(metadata=config(decoder=HighlightedText))
     index: Index = field(metadata=config(decoder=parse_index))
     title: HighlightedText = field(
