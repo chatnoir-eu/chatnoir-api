@@ -69,6 +69,10 @@ def meta_type(extended_meta: bool) -> Type:
         "clueweb22/b",
         "msmarco-document-v2.1",
         "msmarco-passage-v2.1",
+        "msmarco-document-v2",
+        "msmarco-passage-v2",
+        "msmarco-document",
+        "msmarco-passage",
         "trec-tot/2024",
         # "vaswani",
     ]
