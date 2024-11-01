@@ -10,7 +10,10 @@ Index: TypeAlias = Literal[
     "clueweb22/b",
     "msmarco-document-v2.1",
     "msmarco-passage-v2.1",
-    "msmarco-passage-v2.1",
+    "msmarco-document-v2",
+    "msmarco-passage-v2",
+    "msmarco-document",
+    "msmarco-passage",
     "trec-tot/2024",
     # "vaswani",
 ]
@@ -27,6 +30,14 @@ def parse_index(index_id: str) -> Index:
         return "msmarco-document-v2.1"
     elif index_id == "msmarco-v2.1-segmented":
         return "msmarco-passage-v2.1"
+    elif index_id == "msmarco-document-v2":
+        return "msmarco-document-v2"
+    elif index_id == "msmarco-passage-v2":
+        return "msmarco-passage-v2"
+    elif index_id == "msmarco-document":
+        return "msmarco-document"
+    elif index_id == "msmarco-passage":
+        return "msmarco-passage"
     elif index_id == "trec-tot-2024":
         return "trec-tot/2024"
     # elif index_id == "vaswani":
@@ -46,6 +57,14 @@ def index_id(index: Index) -> str:
         return "msmarco-v2.1"
     elif index == "msmarco-passage-v2.1":
         return "msmarco-v2.1-segmented"
+    elif index == "msmarco-document-v2":
+        return "msmarco-document-v2"
+    elif index == "msmarco-passage-v2":
+        return "msmarco-passage-v2"
+    elif index == "msmarco-document":
+        return "msmarco-document"
+    elif index == "msmarco-passage":
+        return "msmarco-passage"
     elif index == "trec-tot/2024":
         return "trec-tot-2024"
     # elif index == "vaswani":
@@ -65,6 +84,14 @@ def index_prefix(index: Index) -> str:
         return "msmarco-v2.1-document"
     elif index == "msmarco-passage-v2.1":
         return "msmarco-v2.1-document-segmented"
+    elif index == "msmarco-document-v2":
+        return "msmarco-v2-document"
+    elif index == "msmarco-passage-v2":
+        return "msmarco-v2-passage"
+    elif index == "msmarco-document":
+        return "msmarco-v1-document"
+    elif index == "msmarco-passage":
+        return "msmarco-1-passage"
     elif index == "trec-tot/2024":
         return "trec-tot-2024-document"
     # elif index == "vaswani":
