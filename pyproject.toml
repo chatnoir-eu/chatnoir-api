@@ -57,6 +57,7 @@ exclude = [
     "venv",
     ".venv",
     ".github",
+    "dist",
 ]
 
 [tool.setuptools.package-data]
@@ -68,6 +69,7 @@ exclude = [
     "venv",
     ".venv",
     ".github",
+    "dist",
 ]
 ignore_missing_imports = true
 
@@ -77,6 +79,7 @@ exclude_dirs = [
     "venv",
     ".venv",
     ".github",
+    "dist",
 ]
 
 [tool.bandit.assert_used]
