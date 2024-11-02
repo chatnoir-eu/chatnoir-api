@@ -39,22 +39,20 @@ class _TestCase:
             """<title data-dcnode-id="184">Hello World!</title>""",
             "Hello World!",
         ),
-        # FIXME
-        # _TestCase(
-        #     "msmarco-document-v2.1",
-        #     ShortUUID("RPcdaMiaUFqd4x4qZgkAjQ"),
-        #     "msmarco_v2.1_doc_18_2701526052",
-        #     """"title": "Test - Wikipedia",""",
-        #     "Test - Wikipedia",
-        # ),
-        # FIXME
-        # _TestCase(
-        #     "msmarco-passage-v2.1",
-        #     ShortUUID("JLNEtARbVQqPi1fxu4AbwQ"),
-        #     "msmarco_v2.1_doc_18_2701526052#0_3051069337",
-        #     """"title": "Test - Wikipedia",""",
-        #     "Test - Wikipedia",
-        # ),
+        _TestCase(
+            "msmarco-document",
+            ShortUUID("4LHqIydnVNe7IrzTvMxj3g"),
+            "D1504178",
+            """"title": "Test",""",
+            "Test To make test edits on Wikipedia",
+        ),
+        _TestCase(
+            "msmarco-passage",
+            ShortUUID("L8WF4AfPWdOC8MRA6vtdIw"),
+            "8650939",
+            """"text": "AVEENO""",
+            "test test test. Date published: 2017-02-02",
+        ),
         _TestCase(
             "msmarco-document-v2",
             ShortUUID("Sn6oMDtnXv2zYvI9zUoIcw"),
@@ -70,27 +68,26 @@ class _TestCase:
             "The multi stage fitness test (also know as the bleep test",
         ),
         _TestCase(
-            "msmarco-document",
-            ShortUUID("4LHqIydnVNe7IrzTvMxj3g"),
-            "D1504178",
-            """"title": "Test",""",
-            "Test To make test edits on Wikipedia",
+             "msmarco-document-v2.1",
+             ShortUUID("RPcdaMiaUFqd4x4qZgkAjQ"),
+             "msmarco_v2.1_doc_18_2701526052",
+             """"title": "Test - Wikipedia",""",
+             "Test - Wikipedia",
         ),
         _TestCase(
-            "msmarco-passage",
-            ShortUUID("L8WF4AfPWdOC8MRA6vtdIw"),
-            "8650939",
-            """"text": "AVEENO""",
-            "test test test. Date published: 2017-02-02",
+             "msmarco-passage-v2.1",
+             ShortUUID("JLNEtARbVQqPi1fxu4AbwQ"),
+             "msmarco_v2.1_doc_18_2701526052#0_3051069337",
+             """"title": "Test - Wikipedia",""",
+             "Test - Wikipedia",
         ),
-        # FIXME
-        # _TestCase(
-        #     "trec-tot/2024",
-        #     ShortUUID("sH2tKdt-WBKNwfAVfaWW8A"),
-        #     "23949652",
-        #     """"title": "Zack Test",""",
-        #     "Zack Test",
-        # ),
+        _TestCase(
+             "trec-tot/2024",
+             ShortUUID("sH2tKdt-WBKNwfAVfaWW8A"),
+             "23949652",
+             """"title": "Zack Test",""",
+             "Zack Test",
+        ),
         # TODO: Add test for `vaswani`.
     ],
 )
