@@ -34,7 +34,7 @@ tests =[
     "bandit[toml]~=1.7",
     "mypy~=1.13",
     "pytest~=8.3",
-    "pytest-cov~=5.0",
+    "pytest-cov>=5,<7",
     "ruff~=0.7.1",
     "types-requests~=2.32",
 ]
