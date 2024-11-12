@@ -21,6 +21,7 @@ from chatnoir_api.defaults import (
     DEFAULT_RETRIES,
     DEFAULT_BACKOFF_SECONDS,
     DEFAULT_EXTENDED_META,
+    DEFAULT_RETRIEVAL_SYSTEM,
 )
 from chatnoir_api.v1.model import (
     MinimalSearchResponse,
@@ -180,6 +181,7 @@ def search(
     retries: int = DEFAULT_RETRIES,
     backoff_seconds: float = DEFAULT_BACKOFF_SECONDS,
     api_key: str = DEFAULT_API_KEY,
+    retrieval_system: str = DEFAULT_RETRIEVAL_SYSTEM
 ) -> Results[
     Union[Meta, ExtendedMeta],
     Union[
@@ -209,6 +211,7 @@ def search(
             size=size,
             retries=retries,
             backoff_seconds=backoff_seconds,
+            retrieval_system=retrieval_system,
         )
 
     return LazyResultSequence(
@@ -371,6 +374,7 @@ def search_page(
     retries: int = DEFAULT_RETRIES,
     backoff_seconds: float = DEFAULT_BACKOFF_SECONDS,
     api_key: str = DEFAULT_API_KEY,
+    retrieval_system: str = DEFAULT_RETRIEVAL_SYSTEM
 ) -> Results[
     Union[Meta, ExtendedMeta],
     Union[
@@ -406,6 +410,7 @@ def search_page(
         explain=explain,
         minimal=minimal,
         extended_meta=extended_meta,
+        search_method=retrieval_system,
     )
     if not extended_meta:
         if minimal:
