@@ -33,3 +33,20 @@ def cache_contents(
     )
     response.raise_for_status()
     return response.text
+
+def term_vectors(
+    trec_id: str,
+    index: Index,
+    timeout: int = DEFAULT_TIMEOUT,
+) -> str:
+    response: Response = get(
+        urljoin('https://chatnoir-webcontent.web.webis.de/', "_termvectors"),
+
+        params={
+            "trec-id": trec_id,
+            "index": index_id(index)
+        },
+        timeout=timeout,
+    )
+    response.raise_for_status()
+    return response.json()

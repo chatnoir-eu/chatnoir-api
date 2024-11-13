@@ -431,6 +431,7 @@ def search_phrases_page(
         minimal=minimal,
         extended_meta=extended_meta,
         slop=slop,
+        search_method='default'
     )
     if not extended_meta:
         if minimal:

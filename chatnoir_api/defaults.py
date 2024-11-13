@@ -15,4 +15,5 @@ DEFAULT_RETRIES: int = 5
 DEFAULT_BACKOFF_SECONDS: int = 1
 DEFAULT_TIMEOUT: int = 60
 # Note: This public API key has a small request budget. If you want to use ChatNoir more extensively, please request an API key at https://chatnoir.web.webis.de/apikey/
+DEFAULT_RETRIEVAL_SYSTEM = 'default'
 DEFAULT_API_KEY = "LTmnNLQeQvBlNjwWeuNxz1vdya3HpSzN"

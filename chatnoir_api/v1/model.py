@@ -32,6 +32,7 @@ class Request(DataClassJsonMixin):
     explain: bool
     minimal: bool
     extended_meta: bool
+    search_method: str
 
 
 @dataclass(frozen=True)
@@ -103,6 +104,7 @@ class MetaResponse(Meta, DataClassJsonMixin):
     )
     query_time: int
     total_results: int
+    search_method: str
 
 
 @dataclass(frozen=True)
