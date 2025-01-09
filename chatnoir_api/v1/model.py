@@ -5,7 +5,7 @@ from uuid import UUID
 
 from dataclasses_json import config, DataClassJsonMixin
 
-from chatnoir_api.model import Index, Slop, decode_uuid, index_id, parse_index
+from chatnoir_api.model import Index, Slop, decode_uuid, index_id, parse_index, SearchMethod
 from chatnoir_api.model.highlight import HighlightedText
 from chatnoir_api.model.result import (
     Meta,
@@ -32,6 +32,7 @@ class Request(DataClassJsonMixin):
     explain: bool
     minimal: bool
     extended_meta: bool
+    search_method: SearchMethod
 
 
 @dataclass(frozen=True)
@@ -103,6 +104,7 @@ class MetaResponse(Meta, DataClassJsonMixin):
     )
     query_time: int
     total_results: int
+    search_method: SearchMethod
 
 
 @dataclass(frozen=True)
