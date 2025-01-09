@@ -1,6 +1,6 @@
 from base64 import urlsafe_b64decode
 from typing import Literal
-from typing_extensions import TypeAlias
+from typing_extensions import TypeAlias # type: ignore
 from uuid import UUID
 
 
@@ -113,3 +113,6 @@ def decode_uuid(uuid_or_short_uuid: str) -> UUID:
         return UUID(uuid_or_short_uuid)
     else:
         return ShortUUID(uuid_or_short_uuid)
+
+
+SearchMethod = Literal["default", "bm25"]
