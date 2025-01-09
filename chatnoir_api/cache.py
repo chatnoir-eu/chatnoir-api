@@ -1,10 +1,10 @@
-from typing import Union
+from typing import Union, Any
 from urllib.parse import urljoin
 from uuid import UUID, uuid5, NAMESPACE_URL
 
 from requests import get, Response
 
-from chatnoir_api.constants import BASE_URL
+from chatnoir_api.constants import BASE_URL, BASE_URL_WEBCONTENT
 from chatnoir_api.defaults import DEFAULT_TIMEOUT
 from chatnoir_api.model import Index, index_id, index_prefix
 
@@ -34,17 +34,17 @@ def cache_contents(
     response.raise_for_status()
     return response.text
 
+
 def term_vectors(
     trec_id: str,
     index: Index,
     timeout: int = DEFAULT_TIMEOUT,
-) -> str:
+) -> Any:
     response: Response = get(
-        urljoin('https://chatnoir-webcontent.web.webis.de/', "_termvectors"),
-
+        urljoin(BASE_URL_WEBCONTENT, "_termvectors"),
         params={
             "trec-id": trec_id,
-            "index": index_id(index)
+            "index": index_id(index),
         },
         timeout=timeout,
     )
