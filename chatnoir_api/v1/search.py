@@ -1,7 +1,7 @@
 from typing import Type, Union, Set, overload, Literal
 
 from chatnoir_api.lazy import LazyResultSequence
-from chatnoir_api.model import Index
+from chatnoir_api.model import Index, SearchMethod
 from chatnoir_api.model.result import (
     MinimalResult,
     ExplainedMinimalResult,
@@ -21,7 +21,7 @@ from chatnoir_api.defaults import (
     DEFAULT_RETRIES,
     DEFAULT_BACKOFF_SECONDS,
     DEFAULT_EXTENDED_META,
-    DEFAULT_RETRIEVAL_SYSTEM,
+    DEFAULT_SEARCH_METHOD,
 )
 from chatnoir_api.v1.model import (
     MinimalSearchResponse,
@@ -48,6 +48,7 @@ def search(
     retries: int = ...,
     backoff_seconds: float = ...,
     api_key: str = ...,
+    search_method: SearchMethod = ...,
 ) -> Results[Meta, Result]: ...
 
 
@@ -62,6 +63,7 @@ def search(
     retries: int = ...,
     backoff_seconds: float = ...,
     api_key: str = ...,
+    search_method: SearchMethod = ...,
 ) -> Results[ExtendedMeta, Result]: ...
 
 
@@ -76,6 +78,7 @@ def search(
     retries: int = ...,
     backoff_seconds: float = ...,
     api_key: str = ...,
+    search_method: SearchMethod = ...,
 ) -> Results[Meta, ExplainedResult]: ...
 
 
@@ -90,6 +93,7 @@ def search(
     retries: int = ...,
     backoff_seconds: float = ...,
     api_key: str = ...,
+    search_method: SearchMethod = ...,
 ) -> Results[ExtendedMeta, ExplainedResult]: ...
 
 
@@ -104,6 +108,7 @@ def search(
     retries: int = ...,
     backoff_seconds: float = ...,
     api_key: str = ...,
+    search_method: SearchMethod = ...,
 ) -> Results[Meta, MinimalResult]: ...
 
 
@@ -118,6 +123,7 @@ def search(
     retries: int = ...,
     backoff_seconds: float = ...,
     api_key: str = ...,
+    search_method: SearchMethod = ...,
 ) -> Results[ExtendedMeta, MinimalResult]: ...
 
 
@@ -132,6 +138,7 @@ def search(
     retries: int = ...,
     backoff_seconds: float = ...,
     api_key: str = ...,
+    search_method: SearchMethod = ...,
 ) -> Results[Meta, ExplainedMinimalResult]: ...
 
 
@@ -146,6 +153,7 @@ def search(
     retries: int = ...,
     backoff_seconds: float = ...,
     api_key: str = ...,
+    search_method: SearchMethod = ...,
 ) -> Results[ExtendedMeta, ExplainedMinimalResult]: ...
 
 
@@ -160,6 +168,7 @@ def search(
     retries: int = ...,
     backoff_seconds: float = ...,
     api_key: str = ...,
+    search_method: SearchMethod = ...,
 ) -> Results[
     Union[Meta, ExtendedMeta],
     Union[
@@ -181,7 +190,7 @@ def search(
     retries: int = DEFAULT_RETRIES,
     backoff_seconds: float = DEFAULT_BACKOFF_SECONDS,
     api_key: str = DEFAULT_API_KEY,
-    retrieval_system: str = DEFAULT_RETRIEVAL_SYSTEM
+    search_method: SearchMethod = DEFAULT_SEARCH_METHOD,
 ) -> Results[
     Union[Meta, ExtendedMeta],
     Union[
@@ -211,7 +220,7 @@ def search(
             size=size,
             retries=retries,
             backoff_seconds=backoff_seconds,
-            retrieval_system=retrieval_system,
+            search_method=search_method,
         )
 
     return LazyResultSequence(
@@ -232,6 +241,7 @@ def search_page(
     retries: int = ...,
     backoff_seconds: float = ...,
     api_key: str = ...,
+    search_method: SearchMethod = ...,
 ) -> Results[Meta, Result]: ...
 
 
@@ -247,6 +257,7 @@ def search_page(
     retries: int = ...,
     backoff_seconds: float = ...,
     api_key: str = ...,
+    search_method: SearchMethod = ...,
 ) -> Results[ExtendedMeta, Result]: ...
 
 
@@ -262,6 +273,7 @@ def search_page(
     retries: int = ...,
     backoff_seconds: float = ...,
     api_key: str = ...,
+    search_method: SearchMethod = ...,
 ) -> Results[Meta, ExplainedResult]: ...
 
 
@@ -277,6 +289,7 @@ def search_page(
     retries: int = ...,
     backoff_seconds: float = ...,
     api_key: str = ...,
+    search_method: SearchMethod = ...,
 ) -> Results[ExtendedMeta, ExplainedResult]: ...
 
 
@@ -292,6 +305,7 @@ def search_page(
     retries: int = ...,
     backoff_seconds: float = ...,
     api_key: str = ...,
+    search_method: SearchMethod = ...,
 ) -> Results[Meta, MinimalResult]: ...
 
 
@@ -307,6 +321,7 @@ def search_page(
     retries: int = ...,
     backoff_seconds: float = ...,
     api_key: str = ...,
+    search_method: SearchMethod = ...,
 ) -> Results[ExtendedMeta, MinimalResult]: ...
 
 
@@ -322,6 +337,7 @@ def search_page(
     retries: int = ...,
     backoff_seconds: float = ...,
     api_key: str = ...,
+    search_method: SearchMethod = ...,
 ) -> Results[Meta, ExplainedMinimalResult]: ...
 
 
@@ -337,6 +353,7 @@ def search_page(
     retries: int = ...,
     backoff_seconds: float = ...,
     api_key: str = ...,
+    search_method: SearchMethod = ...,
 ) -> Results[ExtendedMeta, ExplainedMinimalResult]: ...
 
 
@@ -352,6 +369,7 @@ def search_page(
     retries: int = ...,
     backoff_seconds: float = ...,
     api_key: str = ...,
+    search_method: SearchMethod = ...,
 ) -> Results[
     Union[Meta, ExtendedMeta],
     Union[
@@ -374,7 +392,7 @@ def search_page(
     retries: int = DEFAULT_RETRIES,
     backoff_seconds: float = DEFAULT_BACKOFF_SECONDS,
     api_key: str = DEFAULT_API_KEY,
-    retrieval_system: str = DEFAULT_RETRIEVAL_SYSTEM
+    search_method: SearchMethod = DEFAULT_SEARCH_METHOD
 ) -> Results[
     Union[Meta, ExtendedMeta],
     Union[
@@ -410,7 +428,7 @@ def search_page(
         explain=explain,
         minimal=minimal,
         extended_meta=extended_meta,
-        search_method=retrieval_system,
+        search_method=search_method,
     )
     if not extended_meta:
         if minimal:
