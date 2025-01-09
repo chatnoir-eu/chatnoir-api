@@ -15,7 +15,7 @@ from typing import (
 from uuid import UUID
 
 from chatnoir_api.cache import cache_contents
-from chatnoir_api.model import Index
+from chatnoir_api.model import Index, SearchMethod
 from chatnoir_api.model.highlight import HighlightedText
 
 
@@ -63,6 +63,7 @@ class Meta(ABC):
     indices: AbstractSet[Index]
     query_time: int
     total_results: int
+    search_method: SearchMethod
 
 
 class MetaIndex(ABC):
