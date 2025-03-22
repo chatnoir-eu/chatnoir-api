@@ -15,6 +15,7 @@ Index: TypeAlias = Literal[
     "msmarco-document",
     "msmarco-passage",
     "trec-tot/2024",
+    "longeval-sci-2024-11",
     # "vaswani",
 ]
 
@@ -40,6 +41,10 @@ def parse_index(index_id: str) -> Index:
         return "msmarco-passage"
     elif index_id == "trec-tot-2024":
         return "trec-tot/2024"
+    elif index.startswith("longeval-sci/2024-11"):
+        return "longeval-sci/2024-11"
+    elif index == "longeval-sci-2024-11":
+        return "longeval-sci/2024-11"
     # elif index_id == "vaswani":
     #     return "vaswani"
     else:
@@ -67,6 +72,10 @@ def index_id(index: Index) -> str:
         return "msmarco-passage"
     elif index == "trec-tot/2024":
         return "trec-tot-2024"
+    elif index.startswith("longeval-sci/2024-11"):
+        return "longeval-sci-2024-11"
+    elif index == "longeval-sci-2024-11":
+        return "longeval-sci-2024-11"
     # elif index == "vaswani":
     #     return "vaswani"
     else:
@@ -94,6 +103,10 @@ def index_prefix(index: Index) -> str:
         return "msmarco-1-passage"
     elif index == "trec-tot/2024":
         return "trec-tot-2024-document"
+    elif index.startswith("longeval-sci/2024-11"):
+        return "longeval-sci-2024-11"
+    elif index == "longeval-sci-2024-11":
+        return "longeval-sci-2024-11"
     # elif index == "vaswani":
     #     return "vaswani"
     else:
