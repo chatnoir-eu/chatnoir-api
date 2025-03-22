@@ -74,6 +74,7 @@ def meta_type(extended_meta: bool) -> Type:
         "msmarco-document",
         "msmarco-passage",
         "trec-tot/2024",
+        "longeval-sci-2024-11",
         # "vaswani",
     ]
 )

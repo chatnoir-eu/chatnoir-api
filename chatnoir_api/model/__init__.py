@@ -41,9 +41,9 @@ def parse_index(index_id: str) -> Index:
         return "msmarco-passage"
     elif index_id == "trec-tot-2024":
         return "trec-tot/2024"
-    elif index.startswith("longeval-sci/2024-11"):
+    elif index_id.startswith("longeval-sci/2024-11"):
         return "longeval-sci/2024-11"
-    elif index == "longeval-sci-2024-11":
+    elif index_id == "longeval-sci-2024-11":
         return "longeval-sci/2024-11"
     # elif index_id == "vaswani":
     #     return "vaswani"
