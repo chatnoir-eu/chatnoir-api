@@ -136,6 +136,10 @@ plain_contents = cache_contents(
 print(plain_contents)
 ```
 
+## Indexing
+
+Head over to the [ChatNoir `ir_datasets` indexer](https://github.com/chatnoir-eu/chatnoir-ir-datasets-indexer) to learn more on how new `ir_datasets`-compatible datasets are indexed into ChatNoir.
+
 <!-- ## Citation
 
 If you use this package, please cite the [paper](https://webis.de/publications.html#bevendorff_2018)
