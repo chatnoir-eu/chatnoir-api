@@ -72,7 +72,8 @@ def request_page(
                 non_default_headers=non_default_headers,
             )
     if raw_response.status_code == 401:
-        raise RuntimeError("ChatNoir API key invalid or missing.")
+        raise RuntimeError("ChatNoir API key invalid. "
+                           "You can request a new API key at https://www.chatnoir.eu/apikey/.")
     elif raw_response.status_code == 403:
         raise RuntimeError(
             "ChatNoir API blocked this IP address. "
