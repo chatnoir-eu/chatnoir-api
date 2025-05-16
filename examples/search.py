@@ -4,7 +4,7 @@ query: str = input("Query: ")
 
 print("Search results:")
 print()
-results_search = search(query)
+results_search = search(query, "API_KEY")
 for i, result in enumerate(results_search[:10]):
     print(i + 1, result.title.text[:50], result.score, result.target_uri)
     print("\t", result.snippet.text[:200])
@@ -12,7 +12,7 @@ for i, result in enumerate(results_search[:10]):
 
 print("Phrases results:")
 print()
-results_search = search_phrases(query, minimal=False)
+results_search = search_phrases(query, "API_KEY", minimal=False)
 for i, result in enumerate(results_search[:10]):
     print(i + 1, result.title.text[:50], result.score, result.target_uri)
     print("\t", result.snippet.text[:200])
