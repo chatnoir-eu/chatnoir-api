@@ -34,7 +34,7 @@ List-style indexing is supported to access individual results or sub-lists of re
 ```python
 from chatnoir_api.v1 import search
 
-results = search("python library")
+results = search("python library", api_key="<YOUR_API_KEY>")
 
 top10_results = results[:10]
 print(top10_results)
@@ -48,11 +48,9 @@ print(result_1234)
 To limit your search requests to a single index (e.g., ClueWeb22 category B), set the `index` parameter like this:
 
 ```python
-from chatnoir_api import Index
 from chatnoir_api.v1 import search
 
-api_key: str = "<API_KEY>"
-results = search("python library", index="clueweb22/b")
+results = search("python library", index="clueweb22/b", api_key="<YOUR_API_KEY>")
 ```
 
 #### Phrase search

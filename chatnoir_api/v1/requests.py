@@ -28,12 +28,14 @@ def request_page(
     url_for_request: Optional[str] = None,
     non_default_headers: Optional[dict] = None,
 ) -> _JsonResponse:
-    request_json = request.to_json()
 
     headers = {
         "Accept": "application/json",
         "Content-Type": "text/plain",
     }
+    if hasattr(request, "apikey"):
+        headers["Authorization"] = f"Bearer {getattr(request, 'apikey')}"
+    request_json = request.to_json()
 
     headers = headers if non_default_headers is None else non_default_headers
     url = urljoin(BASE_URL, f"api/v1/{endpoint}")
