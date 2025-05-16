@@ -9,7 +9,7 @@
 
 # ![🔍](https://www.chatnoir.eu/static/ui/img/chatnoir-icon%4032x32.png) chatnoir-api
 
-Simple, type-safe access to the [ChatNoir](https://chatnoir.web.webis.de/) [search API](https://chatnoir.web.webis.de/api/).
+Simple, type-safe access to the [ChatNoir](https://www.chatnoir.eu/) [search API](https://www.chatnoir.eu/api/v1/).
 
 Working with PyTerrier? Check out the [`chatnoir-pyterrier`](https://pypi.org/project/chatnoir-pyterrier/) package.
 
