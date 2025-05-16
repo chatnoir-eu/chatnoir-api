@@ -7,7 +7,7 @@
 [![Downloads](https://img.shields.io/pypi/dm/chatnoir-api?style=flat-square)](https://pypi.org/project/chatnoir-api/)
 [![License](https://img.shields.io/github/license/chatnoir-eu/chatnoir-api?style=flat-square)](LICENSE)
 
-# 🔍 chatnoir-api
+# <img src="https://www.chatnoir.eu/static/ui/img/chatnoir-icon@64x.png" width="48" alt=""> chatnoir-api
 
 Simple, type-safe access to the [ChatNoir](https://www.chatnoir.eu/) [search API](https://www.chatnoir.eu/api/v1/).
 
@@ -34,7 +34,7 @@ List-style indexing is supported to access individual results or sub-lists of re
 ```python
 from chatnoir_api.v1 import search
 
-results = search("python library")
+results = search("python library", api_key="<YOUR_API_KEY>")
 
 top10_results = results[:10]
 print(top10_results)
@@ -48,11 +48,9 @@ print(result_1234)
 To limit your search requests to a single index (e.g., ClueWeb22 category B), set the `index` parameter like this:
 
 ```python
-from chatnoir_api import Index
 from chatnoir_api.v1 import search
 
-api_key: str = "<API_KEY>"
-results = search("python library", index="clueweb22/b")
+results = search("python library", index="clueweb22/b", api_key="<YOUR_API_KEY>")
 ```
 
 #### Phrase search
