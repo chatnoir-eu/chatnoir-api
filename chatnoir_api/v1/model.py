@@ -1,9 +1,10 @@
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Optional, Sequence, Set
+from typing import Dict, Optional, Sequence, Set
 from uuid import UUID
 
 from dataclasses_json import config, DataClassJsonMixin
+from dataclasses_json.core import Json
 
 from chatnoir_api.model import Index, Slop, decode_uuid, index_id, parse_index, SearchMethod
 from chatnoir_api.model.highlight import HighlightedText
@@ -33,6 +34,10 @@ class Request(DataClassJsonMixin):
     minimal: bool
     extended_meta: bool
     search_method: SearchMethod
+
+    def to_dict(self, encode_json=False) -> Dict[str, Json]:
+        # Don't serialize apikey, which is sent via Authorization header
+        return {k: v for k, v in super().to_dict(encode_json=encode_json).items() if k != "apikey"}
 
 
 @dataclass(frozen=True)
