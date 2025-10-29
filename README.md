@@ -76,18 +76,6 @@ Then, use the `api_key` parameter to add it to your requests like this:
 results = search("python library", api_key="<YOUR_API_KEY>")
 ```
 
-### Chat
-
-To generate text with the ChatNoir Chat API you need to request an API key from the [admins](mailto:maik.froebe@uni-jena.de).
-With your API key, you can chat with the cat, like this:
-
-```python
-from chatnoir_api.chat import ChatNoirChatClient
-
-chat_client = ChatNoirChatClient(api_key="<API_KEY>")
-response = chat_client.chat("how are you?")
-```
-
 ### Retrieve document contents
 
 Often the title and ID of a document is not enough to effectively re-rank a list of search results.
