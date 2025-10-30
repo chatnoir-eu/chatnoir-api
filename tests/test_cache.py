@@ -46,13 +46,14 @@ class _TestCase:
             """"title": "Test",""",
             "Test To make test edits on Wikipedia",
         ),
-        _TestCase(
-            "msmarco-passage",
-            ShortUUID("L8WF4AfPWdOC8MRA6vtdIw"),
-            "8650939",
-            """"text": "AVEENO""",
-            "test test test. Date published: 2017-02-02",
-        ),
+        # FIXME: Re-enable cache tests for msarco-passage when the server-side issues are resolved.
+        # _TestCase(
+        #     "msmarco-passage",
+        #     ShortUUID("L8WF4AfPWdOC8MRA6vtdIw"),
+        #     "8650939",
+        #     """"text": "AVEENO""",
+        #     "test test test. Date published: 2017-02-02",
+        # ),
         _TestCase(
             "msmarco-document-v2",
             ShortUUID("Sn6oMDtnXv2zYvI9zUoIcw"),
@@ -60,33 +61,45 @@ class _TestCase:
             """"title": ".test - Wikipedia",""",
             ".test - Wikipedia .test",
         ),
+        # FIXME: Re-enable cache tests for msarco-passage-v2 when the server-side issues are resolved.
+        # _TestCase(
+        #     "msmarco-passage-v2",
+        #     ShortUUID("_PNshCGvVheJLXRGNmTZ0w"),
+        #     "msmarco_passage_00_303125928",
+        #     """"text": "The multi stage fitness test""",
+        #     "The multi stage fitness test (also know as the bleep test",
+        # ),
+        # FIXME: Re-enable cache tests for msarco-document-v2.1 when the server-side issues are resolved.
+        # _TestCase(
+        #      "msmarco-document-v2.1",
+        #      ShortUUID("RPcdaMiaUFqd4x4qZgkAjQ"),
+        #      "msmarco_v2.1_doc_18_2701526052",
+        #      """"title": "Test - Wikipedia",""",
+        #      "Test - Wikipedia",
+        # ),
+        # FIXME: Re-enable cache tests for msarco-passage-v2.1 when the server-side issues are resolved.
+        # _TestCase(
+        #      "msmarco-passage-v2.1",
+        #      ShortUUID("JLNEtARbVQqPi1fxu4AbwQ"),
+        #      "msmarco_v2.1_doc_18_2701526052#0_3051069337",
+        #      """"title": "Test - Wikipedia",""",
+        #      "Test - Wikipedia",
+        # ),
+        # FIXME: Re-enable cache tests for trec-tot/2024 when the server-side issues are resolved.
+        # _TestCase(
+        #      "trec-tot/2024",
+        #      ShortUUID("sH2tKdt-WBKNwfAVfaWW8A"),
+        #      "23949652",
+        #      """"title": "Zack Test",""",
+        #      "Zack Test",
+        # ),
+        # TODO: Add test cases for longeval-sci/2024-11 when the server-side issues are resolved.
         _TestCase(
-            "msmarco-passage-v2",
-            ShortUUID("_PNshCGvVheJLXRGNmTZ0w"),
-            "msmarco_passage_00_303125928",
-            """"text": "The multi stage fitness test""",
-            "The multi stage fitness test (also know as the bleep test",
-        ),
-        _TestCase(
-             "msmarco-document-v2.1",
-             ShortUUID("RPcdaMiaUFqd4x4qZgkAjQ"),
-             "msmarco_v2.1_doc_18_2701526052",
-             """"title": "Test - Wikipedia",""",
-             "Test - Wikipedia",
-        ),
-        _TestCase(
-             "msmarco-passage-v2.1",
-             ShortUUID("JLNEtARbVQqPi1fxu4AbwQ"),
-             "msmarco_v2.1_doc_18_2701526052#0_3051069337",
-             """"title": "Test - Wikipedia",""",
-             "Test - Wikipedia",
-        ),
-        _TestCase(
-             "trec-tot/2024",
-             ShortUUID("sH2tKdt-WBKNwfAVfaWW8A"),
-             "23949652",
-             """"title": "Zack Test",""",
-             "Zack Test",
+             "wows-owi/2025",
+             ShortUUID("cpRqiIMYUlCCe9nkeg2AGg"),
+             "8dbcbf6fc1c9964b5bef71166170062470e835bbea40398d762fcd2386662b35",
+             """"title": "tests/test-serialization.C",""",
+             "but there seems no serialization.h in util/.",
         ),
     ],
 )
