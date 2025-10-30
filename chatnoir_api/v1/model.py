@@ -1,10 +1,9 @@
 from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Dict, Optional, Sequence, Set
+from typing import Optional, Sequence, Set
 from uuid import UUID
 
 from dataclasses_json import config, DataClassJsonMixin
-from dataclasses_json.core import Json
 
 from chatnoir_api.model import Index, Slop, decode_uuid, index_id, parse_index, SearchMethod
 from chatnoir_api.model.highlight import HighlightedText
