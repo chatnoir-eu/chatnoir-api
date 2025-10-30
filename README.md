@@ -126,7 +126,7 @@ print(plain_contents)
 
 Head over to the [ChatNoir `ir_datasets` indexer](https://github.com/chatnoir-eu/chatnoir-ir-datasets-indexer) to learn more on how new `ir_datasets`-compatible datasets are indexed into ChatNoir.
 
-<!-- ## Citation
+## Citation
 
 If you use this package, please cite the [paper](https://webis.de/publications.html#bevendorff_2018)
 from the [ChatNoir](https://github.com/chatnoir-eu) authors. 
@@ -134,18 +134,33 @@ You can use the following BibTeX information for citation:
 
 ```bibtex
 @InProceedings{bevendorff:2018,
-  address =               {Berlin Heidelberg New York},
-  author =                {Janek Bevendorff and Benno Stein and Matthias Hagen and Martin Potthast},
-  booktitle =             {Advances in Information Retrieval. 40th European Conference on IR Research (ECIR 2018)},
-  editor =                {Leif Azzopardi and Allan Hanbury and Gabriella Pasi and Benjamin Piwowarski},
-  month =                 mar,
-  publisher =             {Springer},
-  series =                {Lecture Notes in Computer Science},
-  site =                  {Grenoble, France},
-  title =                 {{Elastic ChatNoir: Search Engine for the ClueWeb and the Common Crawl}},
-  year =                  2018
+  address =   {Berlin Heidelberg New York},
+  author =    {Janek Bevendorff and Benno Stein and Matthias Hagen and Martin Potthast},
+  booktitle = {Advances in Information Retrieval. 40th European Conference on IR Research (ECIR 2018)},
+  editor =    {Leif Azzopardi and Allan Hanbury and Gabriella Pasi and Benjamin Piwowarski},
+  month =     mar,
+  publisher = {Springer},
+  series =    {Lecture Notes in Computer Science},
+  site =      {Grenoble, France},
+  title =     {{Elastic ChatNoir: Search Engine for the ClueWeb and the Common Crawl}},
+  year =      2018
 }
-``` -->
+@InProceedings{merker:2025a,
+  address =   {Cham, Switzerland},
+  author =    {Jan Heinrich Merker and Janek Bevendorff and Maik Fr{\"o}be and Tim Hagen and Harrisen Scells and Matti Wiegmann and Benno Stein and Matthias Hagen and  Martin Potthast},
+  booktitle = {Advances in Information Retrieval. 47th European Conference on IR Research (ECIR 2025)},
+  doi =       {10.1007/978-3-031-88720-8_17},
+  editor =    {Claudia Hauff and Craig Macdonal and Dietmar Jannach and Gabriella Kazai and Franco Maria Nardini and Fabio Pinelli and Fabrizio Silvestri and Nicola Tonellotto},
+  month =     apr,
+  pages =     {96--104},
+  publisher = {Springer Nature},
+  series =    {Lecture Notes in Computer Science},
+  site =      {Lucca, Italy},
+  title =     {{Web-scale Retrieval Experimentation with chatnoir-pyterrier}},
+  volume =    15576,
+  year =      2025
+}
+```
 
 ## Development
 
