@@ -7,7 +7,7 @@
 [![Downloads](https://img.shields.io/pypi/dm/chatnoir-api?style=flat-square)](https://pypi.org/project/chatnoir-api/)
 [![License](https://img.shields.io/github/license/chatnoir-eu/chatnoir-api?style=flat-square)](LICENSE)
 
-# 🔍 chatnoir-api
+# ![🔍](https://www.chatnoir.eu/static/ui/img/chatnoir-icon%4032x32.png) chatnoir-api
 
 Simple, type-safe access to the [ChatNoir](https://chatnoir.web.webis.de/) [search API](https://chatnoir.web.webis.de/api/).
 
