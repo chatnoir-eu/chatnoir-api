@@ -3,7 +3,7 @@ from typing import Sequence
 from pytest import fixture
 
 from chatnoir_api import (
-    Index, Results, Meta, MinimalResult, Result, ExtendedMeta,
+    Index, Results, Meta, MinimalResult, Result,
     ExplainedMinimalResult
 )
 from chatnoir_api.v1 import search_phrases_page, search_phrases
@@ -94,19 +94,15 @@ def test_page_explain(api_key: str, query: str, explain: bool) -> None:
         assert isinstance(first_result, MinimalResult)
 
 
-def test_page_meta(api_key: str, query: str, extended_meta: bool) -> None:
+def test_page_meta(api_key: str, query: str) -> None:
     results = search_phrases_page(
         api_key=api_key,
         query=query,
         size=1,
-        extended_meta=extended_meta,
     )
     meta = results.meta
 
-    if extended_meta:
-        assert isinstance(meta, ExtendedMeta)
-    else:
-        assert isinstance(meta, Meta)
+    assert isinstance(meta, Meta)
 
 
 def test_iterable(api_key: str, query: str) -> None:
@@ -184,15 +180,11 @@ def test_iterable_explain(api_key: str, query: str, explain: bool) -> None:
         assert isinstance(first_result, MinimalResult)
 
 
-def test_iterable_meta(api_key: str, query: str, extended_meta: bool) -> None:
+def test_iterable_meta(api_key: str, query: str) -> None:
     results = search_phrases(
         api_key=api_key,
         query=query,
         page_size=1,
-        extended_meta=extended_meta,
     )
 
-    if extended_meta:
-        assert isinstance(results.meta, ExtendedMeta)
-    else:
-        assert isinstance(results.meta, Meta)
+    assert isinstance(results.meta, Meta)

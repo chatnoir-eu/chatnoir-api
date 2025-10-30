@@ -1,9 +1,8 @@
 from os import environ
-from typing import Type
 
 from pytest import fixture
 
-from chatnoir_api import Index, ExtendedMeta, Meta
+from chatnoir_api import Index
 
 
 @fixture(scope="module")
@@ -43,19 +42,6 @@ def page_size(request) -> int:
 @fixture(scope="module", params=[True, False])
 def explain(request) -> bool:
     return request.param
-
-
-@fixture(scope="module", params=[True, False])
-def extended_meta(request) -> bool:
-    return request.param
-
-
-@fixture(scope="module")
-def meta_type(extended_meta: bool) -> Type:
-    if extended_meta:
-        return ExtendedMeta
-    else:
-        return Meta
 
 
 @fixture(

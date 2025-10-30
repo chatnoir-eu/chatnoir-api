@@ -10,8 +10,6 @@ from chatnoir_api.model.highlight import HighlightedText
 from chatnoir_api.model.result import (
     Meta,
     Result,
-    ExtendedMeta,
-    MetaIndex,
     MinimalResult,
     ExplainedMinimalResult,
     Explanation,
@@ -31,7 +29,6 @@ class Request(DataClassJsonMixin):
     size: Optional[int]
     explain: bool
     minimal: bool
-    extended_meta: bool
     search_method: SearchMethod
 
 
@@ -108,30 +105,6 @@ class MetaResponse(Meta, DataClassJsonMixin):
 
 
 @dataclass(frozen=True)
-class MetaIndexResponse(MetaIndex, DataClassJsonMixin):
-    index: Index = field(
-        metadata=config(
-            decoder=parse_index,
-            field_name="id",
-        )
-    )
-    name: str
-    selected: bool
-
-
-@dataclass(frozen=True)
-class ExtendedMetaResponse(MetaResponse, ExtendedMeta, DataClassJsonMixin):
-    indices: Set[MetaIndexResponse]  # type: ignore
-    explain: bool
-    max_page: int
-    page_size: int
-    query_string: str
-    results_from: int
-    results_to: int
-    terminated_early: bool
-
-
-@dataclass(frozen=True)
 class MinimalSearchResponse(
     DataClassJsonMixin, ResultsMixin[MetaResponse, MinimalResultResponse]
 ):
@@ -160,36 +133,4 @@ class ExplainedSearchResponse(
     DataClassJsonMixin, ResultsMixin[MetaResponse, MinimalResultResponse]
 ):
     _meta: MetaResponse = field(metadata=config(field_name="meta"))
-    _results: Sequence[ExplainedResultResponse] = field(metadata=config(field_name="results"))
-
-
-@dataclass(frozen=True)
-class ExtendedMetaMinimalSearchResponse(
-    DataClassJsonMixin, ResultsMixin[MetaResponse, MinimalResultResponse]
-):
-    _meta: ExtendedMetaResponse = field(metadata=config(field_name="meta"))
-    _results: Sequence[MinimalResultResponse] = field(metadata=config(field_name="results"))
-
-
-@dataclass(frozen=True)
-class ExplainedExtendedMetaMinimalSearchResponse(
-    DataClassJsonMixin, ResultsMixin[MetaResponse, MinimalResultResponse]
-):
-    _meta: ExtendedMetaResponse = field(metadata=config(field_name="meta"))
-    _results: Sequence[ExplainedMinimalResultResponse] = field(metadata=config(field_name="results"))
-
-
-@dataclass(frozen=True)
-class ExtendedMetaSearchResponse(
-    DataClassJsonMixin, ResultsMixin[MetaResponse, MinimalResultResponse]
-):
-    _meta: ExtendedMetaResponse = field(metadata=config(field_name="meta"))
-    _results: Sequence[ResultResponse] = field(metadata=config(field_name="results"))
-
-
-@dataclass(frozen=True)
-class ExplainedExtendedMetaSearchResponse(
-    DataClassJsonMixin, ResultsMixin[MetaResponse, MinimalResultResponse]
-):
-    _meta: ExtendedMetaResponse = field(metadata=config(field_name="meta"))
     _results: Sequence[ExplainedResultResponse] = field(metadata=config(field_name="results"))

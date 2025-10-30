@@ -66,23 +66,6 @@ class Meta(ABC):
     search_method: SearchMethod
 
 
-class MetaIndex(ABC):
-    index: Index
-    name: str
-    selected: bool
-
-
-class ExtendedMeta(Meta, ABC):
-    indices: AbstractSet[MetaIndex]  # type: ignore
-    explain: bool
-    max_page: int
-    page_size: int
-    query_string: str
-    results_from: int
-    results_to: int
-    terminated_early: bool
-
-
 _MetaType = TypeVar("_MetaType", bound=Meta, covariant=True)
 _ResultType = TypeVar("_ResultType", bound=MinimalResult, covariant=True)
 
@@ -118,7 +101,7 @@ class ResultsMixin(
         pass
 
     @overload
-    def __getitem__(self, s: slice) -> Sequence[_ResultType]:
+    def __getitem__(self, i: slice) -> Sequence[_ResultType]:
         pass
 
     @final
