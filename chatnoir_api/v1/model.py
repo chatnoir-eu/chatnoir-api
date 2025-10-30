@@ -76,7 +76,7 @@ def _decode_datetime(value: Optional[str]) -> Optional[datetime]:
 class ResultResponse(MinimalResultResponse, Result, DataClassJsonMixin):
     index: Index = field(metadata=config(decoder=parse_index))
     trec_id: Optional[str]
-    target_hostname: str
+    target_hostname: Optional[str]
     page_rank: Optional[float]
     spam_rank: Optional[float]
     title: HighlightedText = field(metadata=config(decoder=HighlightedText))

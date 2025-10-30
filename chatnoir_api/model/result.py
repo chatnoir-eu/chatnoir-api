@@ -44,7 +44,7 @@ class ExplainedMinimalResult(MinimalResult, ABC):
 class Result(MinimalResult, ABC):
     index: Index
     trec_id: Optional[str]
-    target_hostname: str
+    target_hostname: Optional[str]
     page_rank: Optional[float]
     spam_rank: Optional[float]
     title: HighlightedText
