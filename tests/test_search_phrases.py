@@ -81,16 +81,17 @@ def test_page_explain(api_key: str, query: str, explain: bool) -> None:
         size=1,
         explain=explain,
     )
+    first_result = results[0]
     if explain:
-        assert isinstance(results[0], ExplainedMinimalResult)
+        assert isinstance(first_result, ExplainedMinimalResult)
 
-        assert results[0].explanation is not None
-        assert results[0].explanation.value is not None
-        assert isinstance(results[0].explanation.value, float)
-        assert results[0].explanation.description is not None
-        assert isinstance(results[0].explanation.description, str)
+        assert first_result.explanation is not None
+        assert first_result.explanation.value is not None
+        assert isinstance(first_result.explanation.value, float)
+        assert first_result.explanation.description is not None
+        assert isinstance(first_result.explanation.description, str)
     else:
-        assert isinstance(results[0], MinimalResult)
+        assert isinstance(first_result, MinimalResult)
 
 
 def test_page_meta(api_key: str, query: str, extended_meta: bool) -> None:
@@ -170,17 +171,17 @@ def test_iterable_explain(api_key: str, query: str, explain: bool) -> None:
         page_size=1,
         explain=explain,
     )
-
+    first_result = results[0]
     if explain:
-        assert isinstance(results[0], ExplainedMinimalResult)
+        assert isinstance(first_result, ExplainedMinimalResult)
 
-        assert results[0].explanation is not None
-        assert results[0].explanation.value is not None
-        assert isinstance(results[0].explanation.value, float)
-        assert results[0].explanation.description is not None
-        assert isinstance(results[0].explanation.description, str)
+        assert first_result.explanation is not None
+        assert first_result.explanation.value is not None
+        assert isinstance(first_result.explanation.value, float)
+        assert first_result.explanation.description is not None
+        assert isinstance(first_result.explanation.description, str)
     else:
-        assert isinstance(results[0], MinimalResult)
+        assert isinstance(first_result, MinimalResult)
 
 
 def test_iterable_meta(api_key: str, query: str, extended_meta: bool) -> None:
