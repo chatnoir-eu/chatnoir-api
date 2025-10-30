@@ -8,15 +8,15 @@ Index: TypeAlias = Literal[
     "clueweb09",
     "clueweb12",
     "clueweb22/b",
-    "msmarco-document-v2.1",
-    "msmarco-passage-v2.1",
-    "msmarco-document-v2",
-    "msmarco-passage-v2",
     "msmarco-document",
     "msmarco-passage",
+    "msmarco-document-v2",
+    "msmarco-passage-v2",
+    "msmarco-document-v2.1",
+    "msmarco-passage-v2.1",
     "trec-tot/2024",
-    "longeval-sci-2024-11",
-    # "vaswani",
+    "longeval-sci/2024-11",
+    "wows-owi/2025",
 ]
 
 
@@ -27,26 +27,24 @@ def parse_index(index_id: str) -> Index:
         return "clueweb12"
     elif index_id == "cw22":
         return "clueweb22/b"
-    elif index_id == "msmarco-v2.1":
-        return "msmarco-document-v2.1"
-    elif index_id == "msmarco-v2.1-segmented":
-        return "msmarco-passage-v2.1"
-    elif index_id == "msmarco-document-v2":
-        return "msmarco-document-v2"
-    elif index_id == "msmarco-passage-v2":
-        return "msmarco-passage-v2"
     elif index_id == "msmarco-document":
         return "msmarco-document"
     elif index_id == "msmarco-passage":
         return "msmarco-passage"
+    elif index_id == "msmarco-document-v2":
+        return "msmarco-document-v2"
+    elif index_id == "msmarco-passage-v2":
+        return "msmarco-passage-v2"
+    elif index_id == "msmarco-v2.1":
+        return "msmarco-document-v2.1"
+    elif index_id == "msmarco-v2.1-segmented":
+        return "msmarco-passage-v2.1"
     elif index_id == "trec-tot-2024":
         return "trec-tot/2024"
-    elif index_id.startswith("longeval-sci/2024-11"):
-        return "longeval-sci-2024-11"
     elif index_id == "longeval-sci-2024-11":
-        return "longeval-sci-2024-11"
-    # elif index_id == "vaswani":
-    #     return "vaswani"
+        return "longeval-sci/2024-11"
+    elif index_id == "wows-owi-2025":
+        return "wows-owi/2025"
     else:
         raise ValueError(f"Unknown index ID: {index_id}")
 
@@ -58,26 +56,24 @@ def index_id(index: Index) -> str:
         return "cw12"
     elif index == "clueweb22/b":
         return "cw22"
-    elif index == "msmarco-document-v2.1":
-        return "msmarco-v2.1"
-    elif index == "msmarco-passage-v2.1":
-        return "msmarco-v2.1-segmented"
-    elif index == "msmarco-document-v2":
-        return "msmarco-document-v2"
-    elif index == "msmarco-passage-v2":
-        return "msmarco-passage-v2"
     elif index == "msmarco-document":
         return "msmarco-document"
     elif index == "msmarco-passage":
         return "msmarco-passage"
+    elif index == "msmarco-document-v2":
+        return "msmarco-document-v2"
+    elif index == "msmarco-passage-v2":
+        return "msmarco-passage-v2"
+    elif index == "msmarco-document-v2.1":
+        return "msmarco-v2.1"
+    elif index == "msmarco-passage-v2.1":
+        return "msmarco-v2.1-segmented"
     elif index == "trec-tot/2024":
         return "trec-tot-2024"
-    elif index.startswith("longeval-sci/2024-11"):
+    elif index == "longeval-sci/2024-11":
         return "longeval-sci-2024-11"
-    elif index == "longeval-sci-2024-11":
-        return "longeval-sci-2024-11"
-    # elif index == "vaswani":
-    #     return "vaswani"
+    elif index == "wows-owi/2025":
+        return "wows-owi-2025"
     else:
         raise ValueError(f"Unknown index: {index}")
 
@@ -103,12 +99,10 @@ def index_prefix(index: Index) -> str:
         return "msmarco-1-passage"
     elif index == "trec-tot/2024":
         return "trec-tot-2024-document"
-    elif index.startswith("longeval-sci/2024-11"):
+    elif index == "longeval-sci/2024-11":
         return "longeval-sci-2024-11"
-    elif index == "longeval-sci-2024-11":
-        return "longeval-sci-2024-11"
-    # elif index == "vaswani":
-    #     return "vaswani"
+    elif index == "wows-owi/2025":
+        return "wows-owi-2025"
     else:
         raise ValueError(f"Unknown index: {index}")
 
