@@ -35,10 +35,6 @@ class Request(DataClassJsonMixin):
     extended_meta: bool
     search_method: SearchMethod
 
-    def to_dict(self, encode_json=False) -> Dict[str, Json]:
-        # Don't serialize apikey, which is sent via Authorization header
-        return {k: v for k, v in super().to_dict(encode_json=encode_json).items() if k != "apikey"}
-
 
 @dataclass(frozen=True)
 class PhraseRequest(Request, DataClassJsonMixin):

@@ -33,8 +33,6 @@ def request_page(
         "Accept": "application/json",
         "Content-Type": "text/plain",
     }
-    if hasattr(request, "apikey"):
-        headers["Authorization"] = f"Bearer {getattr(request, 'apikey')}"
     request_json = request.to_json()
 
     headers = headers if non_default_headers is None else non_default_headers
