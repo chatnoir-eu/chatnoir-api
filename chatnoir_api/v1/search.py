@@ -12,6 +12,7 @@ from chatnoir_api.model.result import (
     Results,
 )
 from chatnoir_api.defaults import (
+    DEFAULT_API_KEY,
     DEFAULT_START,
     DEFAULT_SIZE,
     DEFAULT_INDEX,
@@ -39,7 +40,6 @@ from chatnoir_api.v1.requests import request_page
 @overload
 def search(
     query: str,
-    api_key: str,
     index: Union[Index, Set[Index]] = ...,
     minimal: Literal[False] = ...,
     explain: Literal[False] = ...,
@@ -47,6 +47,7 @@ def search(
     page_size: int = ...,
     retries: int = ...,
     backoff_seconds: float = ...,
+    api_key: str = ...,
     search_method: SearchMethod = ...,
 ) -> Results[Meta, Result]: ...
 
@@ -54,7 +55,6 @@ def search(
 @overload
 def search(
     query: str,
-    api_key: str,
     index: Union[Index, Set[Index]] = ...,
     minimal: Literal[False] = ...,
     explain: Literal[False] = ...,
@@ -62,6 +62,7 @@ def search(
     page_size: int = ...,
     retries: int = ...,
     backoff_seconds: float = ...,
+    api_key: str = ...,
     search_method: SearchMethod = ...,
 ) -> Results[ExtendedMeta, Result]: ...
 
@@ -69,7 +70,6 @@ def search(
 @overload
 def search(
     query: str,
-    api_key: str,
     index: Union[Index, Set[Index]] = ...,
     minimal: Literal[False] = ...,
     explain: Literal[True] = ...,
@@ -77,6 +77,7 @@ def search(
     page_size: int = ...,
     retries: int = ...,
     backoff_seconds: float = ...,
+    api_key: str = ...,
     search_method: SearchMethod = ...,
 ) -> Results[Meta, ExplainedResult]: ...
 
@@ -84,7 +85,6 @@ def search(
 @overload
 def search(
     query: str,
-    api_key: str,
     index: Union[Index, Set[Index]] = ...,
     minimal: Literal[False] = ...,
     explain: Literal[True] = ...,
@@ -92,6 +92,7 @@ def search(
     page_size: int = ...,
     retries: int = ...,
     backoff_seconds: float = ...,
+    api_key: str = ...,
     search_method: SearchMethod = ...,
 ) -> Results[ExtendedMeta, ExplainedResult]: ...
 
@@ -99,7 +100,6 @@ def search(
 @overload
 def search(
     query: str,
-    api_key: str,
     index: Union[Index, Set[Index]] = ...,
     minimal: Literal[True] = ...,
     explain: Literal[False] = ...,
@@ -107,6 +107,7 @@ def search(
     page_size: int = ...,
     retries: int = ...,
     backoff_seconds: float = ...,
+    api_key: str = ...,
     search_method: SearchMethod = ...,
 ) -> Results[Meta, MinimalResult]: ...
 
@@ -114,7 +115,6 @@ def search(
 @overload
 def search(
     query: str,
-    api_key: str,
     index: Union[Index, Set[Index]] = ...,
     minimal: Literal[True] = ...,
     explain: Literal[False] = ...,
@@ -122,6 +122,7 @@ def search(
     page_size: int = ...,
     retries: int = ...,
     backoff_seconds: float = ...,
+    api_key: str = ...,
     search_method: SearchMethod = ...,
 ) -> Results[ExtendedMeta, MinimalResult]: ...
 
@@ -129,7 +130,6 @@ def search(
 @overload
 def search(
     query: str,
-    api_key: str,
     index: Union[Index, Set[Index]] = ...,
     minimal: Literal[True] = ...,
     explain: Literal[True] = ...,
@@ -137,6 +137,7 @@ def search(
     page_size: int = ...,
     retries: int = ...,
     backoff_seconds: float = ...,
+    api_key: str = ...,
     search_method: SearchMethod = ...,
 ) -> Results[Meta, ExplainedMinimalResult]: ...
 
@@ -144,7 +145,6 @@ def search(
 @overload
 def search(
     query: str,
-    api_key: str,
     index: Union[Index, Set[Index]] = ...,
     minimal: Literal[True] = ...,
     explain: Literal[True] = ...,
@@ -152,6 +152,7 @@ def search(
     page_size: int = ...,
     retries: int = ...,
     backoff_seconds: float = ...,
+    api_key: str = ...,
     search_method: SearchMethod = ...,
 ) -> Results[ExtendedMeta, ExplainedMinimalResult]: ...
 
@@ -159,7 +160,6 @@ def search(
 @overload
 def search(
     query: str,
-    api_key: str,
     index: Union[Index, Set[Index]] = ...,
     minimal: bool = ...,
     explain: bool = ...,
@@ -167,6 +167,7 @@ def search(
     page_size: int = ...,
     retries: int = ...,
     backoff_seconds: float = ...,
+    api_key: str = ...,
     search_method: SearchMethod = ...,
 ) -> Results[
     Union[Meta, ExtendedMeta],
@@ -181,7 +182,6 @@ def search(
 
 def search(
     query: str,
-    api_key: str,
     index: Union[Index, Set[Index]] = DEFAULT_INDEX,
     minimal: bool = DEFAULT_MINIMAL,
     explain: bool = DEFAULT_EXPLAIN,
@@ -189,6 +189,7 @@ def search(
     page_size: int = DEFAULT_SIZE,
     retries: int = DEFAULT_RETRIES,
     backoff_seconds: float = DEFAULT_BACKOFF_SECONDS,
+    api_key: str = DEFAULT_API_KEY,
     search_method: SearchMethod = DEFAULT_SEARCH_METHOD,
 ) -> Results[
     Union[Meta, ExtendedMeta],
@@ -231,7 +232,6 @@ def search(
 @overload
 def search_page(
     query: str,
-    api_key: str,
     index: Union[Index, Set[Index]] = ...,
     minimal: Literal[False] = ...,
     explain: Literal[False] = ...,
@@ -240,6 +240,7 @@ def search_page(
     size: int = ...,
     retries: int = ...,
     backoff_seconds: float = ...,
+    api_key: str = ...,
     search_method: SearchMethod = ...,
 ) -> Results[Meta, Result]: ...
 
@@ -247,7 +248,6 @@ def search_page(
 @overload
 def search_page(
     query: str,
-    api_key: str,
     index: Union[Index, Set[Index]] = ...,
     minimal: Literal[False] = ...,
     explain: Literal[False] = ...,
@@ -256,6 +256,7 @@ def search_page(
     size: int = ...,
     retries: int = ...,
     backoff_seconds: float = ...,
+    api_key: str = ...,
     search_method: SearchMethod = ...,
 ) -> Results[ExtendedMeta, Result]: ...
 
@@ -263,7 +264,6 @@ def search_page(
 @overload
 def search_page(
     query: str,
-    api_key: str,
     index: Union[Index, Set[Index]] = ...,
     minimal: Literal[False] = ...,
     explain: Literal[True] = ...,
@@ -272,6 +272,7 @@ def search_page(
     size: int = ...,
     retries: int = ...,
     backoff_seconds: float = ...,
+    api_key: str = ...,
     search_method: SearchMethod = ...,
 ) -> Results[Meta, ExplainedResult]: ...
 
@@ -279,7 +280,6 @@ def search_page(
 @overload
 def search_page(
     query: str,
-    api_key: str,
     index: Union[Index, Set[Index]] = ...,
     minimal: Literal[False] = ...,
     explain: Literal[True] = ...,
@@ -288,6 +288,7 @@ def search_page(
     size: int = ...,
     retries: int = ...,
     backoff_seconds: float = ...,
+    api_key: str = ...,
     search_method: SearchMethod = ...,
 ) -> Results[ExtendedMeta, ExplainedResult]: ...
 
@@ -295,7 +296,6 @@ def search_page(
 @overload
 def search_page(
     query: str,
-    api_key: str,
     index: Union[Index, Set[Index]] = ...,
     minimal: Literal[True] = ...,
     explain: Literal[False] = ...,
@@ -304,6 +304,7 @@ def search_page(
     size: int = ...,
     retries: int = ...,
     backoff_seconds: float = ...,
+    api_key: str = ...,
     search_method: SearchMethod = ...,
 ) -> Results[Meta, MinimalResult]: ...
 
@@ -311,7 +312,6 @@ def search_page(
 @overload
 def search_page(
     query: str,
-    api_key: str,
     index: Union[Index, Set[Index]] = ...,
     minimal: Literal[True] = ...,
     explain: Literal[False] = ...,
@@ -320,6 +320,7 @@ def search_page(
     size: int = ...,
     retries: int = ...,
     backoff_seconds: float = ...,
+    api_key: str = ...,
     search_method: SearchMethod = ...,
 ) -> Results[ExtendedMeta, MinimalResult]: ...
 
@@ -327,7 +328,6 @@ def search_page(
 @overload
 def search_page(
     query: str,
-    api_key: str,
     index: Union[Index, Set[Index]] = ...,
     minimal: Literal[True] = ...,
     explain: Literal[True] = ...,
@@ -336,6 +336,7 @@ def search_page(
     size: int = ...,
     retries: int = ...,
     backoff_seconds: float = ...,
+    api_key: str = ...,
     search_method: SearchMethod = ...,
 ) -> Results[Meta, ExplainedMinimalResult]: ...
 
@@ -343,7 +344,6 @@ def search_page(
 @overload
 def search_page(
     query: str,
-    api_key: str,
     index: Union[Index, Set[Index]] = ...,
     minimal: Literal[True] = ...,
     explain: Literal[True] = ...,
@@ -352,6 +352,7 @@ def search_page(
     size: int = ...,
     retries: int = ...,
     backoff_seconds: float = ...,
+    api_key: str = ...,
     search_method: SearchMethod = ...,
 ) -> Results[ExtendedMeta, ExplainedMinimalResult]: ...
 
@@ -359,7 +360,6 @@ def search_page(
 @overload
 def search_page(
     query: str,
-    api_key: str,
     index: Union[Index, Set[Index]] = ...,
     minimal: bool = ...,
     explain: bool = ...,
@@ -368,6 +368,7 @@ def search_page(
     size: int = ...,
     retries: int = ...,
     backoff_seconds: float = ...,
+    api_key: str = ...,
     search_method: SearchMethod = ...,
 ) -> Results[
     Union[Meta, ExtendedMeta],
@@ -382,7 +383,6 @@ def search_page(
 
 def search_page(
     query: str,
-    api_key: str,
     index: Union[Index, Set[Index]] = DEFAULT_INDEX,
     minimal: bool = DEFAULT_MINIMAL,
     explain: bool = DEFAULT_EXPLAIN,
@@ -391,6 +391,7 @@ def search_page(
     size: int = DEFAULT_SIZE,
     retries: int = DEFAULT_RETRIES,
     backoff_seconds: float = DEFAULT_BACKOFF_SECONDS,
+    api_key: str = DEFAULT_API_KEY,
     search_method: SearchMethod = DEFAULT_SEARCH_METHOD
 ) -> Results[
     Union[Meta, ExtendedMeta],

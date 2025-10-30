@@ -13,4 +13,6 @@ DEFAULT_EXTENDED_META: bool = False
 DEFAULT_RETRIES: int = 5
 DEFAULT_BACKOFF_SECONDS: int = 1
 DEFAULT_TIMEOUT: int = 60
+# Note: This public API key has a small request budget. If you want to use ChatNoir more extensively, please request an API key at https://www.chatnoir.eu/apikey/
+DEFAULT_API_KEY = "LTmnNLQeQvBlNjwWeuNxz1vdya3HpSzN"
 DEFAULT_SEARCH_METHOD: SearchMethod = "default"
