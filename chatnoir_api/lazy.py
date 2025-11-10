@@ -49,11 +49,11 @@ class LazyResultPage(
         return self._maybe_response
 
     @property
-    def meta(self) -> _MetaType:
+    def meta(self) -> _MetaType:  # type: ignore[override]
         return self._response.meta
 
     @property
-    def results(self) -> Sequence[_ResultType]:
+    def results(self) -> Sequence[_ResultType]:  # type: ignore[override]
         return self._response.results
 
 
@@ -146,11 +146,11 @@ class LazyResultSequence(
         self._pages = LazyResultPageList(self._page_size, total_results, load_page)
 
     @property
-    def meta(self) -> _MetaType:
+    def meta(self) -> _MetaType:  # type: ignore[override]
         return self._pages[0].meta
 
     @property
-    def results(self) -> Sequence[_ResultType]:
+    def results(self) -> Sequence[_ResultType]:  # type: ignore[override]
         return self
 
     @overload
