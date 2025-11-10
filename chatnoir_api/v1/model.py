@@ -1,8 +1,9 @@
 from datetime import datetime
-from typing import Optional, Sequence, AbstractSet, Annotated
+from typing import Optional, Sequence, AbstractSet
 from uuid import UUID
 
 from pydantic import BaseModel, Field, PlainSerializer, PlainValidator
+from typing_extensions import Annotated
 
 from chatnoir_api.model import (
     Index,
