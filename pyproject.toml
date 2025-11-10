@@ -22,7 +22,7 @@ classifiers = [
 ]
 dependencies = [
     "requests~=2.32",
-    "dataclasses-json>=0.5,<0.7",
+    "pydantic~=2.12",
     "typing-extensions~=4.12",
     "importlib-metadata~=8.5",
     "websocket-client~=1.8",

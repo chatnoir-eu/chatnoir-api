@@ -10,7 +10,6 @@ from typing import (
     Union,
     Any,
     Iterator,
-    final
 )
 from uuid import UUID
 
@@ -71,31 +70,13 @@ _ResultType = TypeVar("_ResultType", bound=MinimalResult, covariant=True)
 
 
 class Results(Sequence[_ResultType], Generic[_MetaType, _ResultType], ABC):
-    @property
-    @abstractmethod
-    def meta(self) -> _MetaType:
-        pass
-
-    @property
-    @abstractmethod
-    def results(self) -> Sequence[_ResultType]:
-        pass
+    meta: _MetaType
+    results: Sequence[_ResultType]
 
 
 class ResultsMixin(
     Results[_MetaType, _ResultType], Generic[_MetaType, _ResultType], ABC
 ):
-    _meta: _MetaType
-    _results: Sequence[_ResultType]
-
-    @property
-    def meta(self) -> _MetaType:
-        return self._meta
-
-    @property
-    def results(self) -> Sequence[_ResultType]:
-        return self._results
-
     @overload
     def __getitem__(self, i: int) -> _ResultType:
         pass
@@ -104,33 +85,26 @@ class ResultsMixin(
     def __getitem__(self, i: slice) -> Sequence[_ResultType]:
         pass
 
-    @final
     def __getitem__(
         self,
         i: Union[int, slice],
     ) -> Union[_ResultType, Sequence[_ResultType]]:
         return self.results[i]
 
-    @final
     def index(self, value: Any, start: int = 0, stop: int = -1) -> int:
         return self.results.index(value, start, stop)
 
-    @final
     def count(self, value: Any) -> int:
         return self.results.count(value)
 
-    @final
     def __contains__(self, x: object) -> bool:
         return x in self.results
 
-    @final
     def __iter__(self) -> Iterator[_ResultType]:
         return iter(self.results)
 
-    @final
     def __reversed__(self) -> Iterator[_ResultType]:
         return reversed(self.results)
 
-    @final
     def __len__(self) -> int:
         return len(self.results)

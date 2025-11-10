@@ -1,11 +1,17 @@
-from dataclasses import dataclass, field
 from datetime import datetime
-from typing import Optional, Sequence, Set
+from typing import Optional, Sequence, AbstractSet, Annotated
 from uuid import UUID
 
-from dataclasses_json import config, DataClassJsonMixin
+from pydantic import BaseModel, Field, PlainSerializer, PlainValidator
 
-from chatnoir_api.model import Index, Slop, decode_uuid, index_id, parse_index, SearchMethod
+from chatnoir_api.model import (
+    Index,
+    Slop,
+    index_id,
+    parse_index,
+    SearchMethod,
+    decode_uuid,
+)
 from chatnoir_api.model.highlight import HighlightedText
 from chatnoir_api.model.result import (
     Meta,
@@ -14,123 +20,130 @@ from chatnoir_api.model.result import (
     ExplainedMinimalResult,
     Explanation,
     ExplainedResult,
+    Results,
     ResultsMixin,
 )
 
 
-@dataclass(frozen=True)
-class Request(DataClassJsonMixin):
+class Request(BaseModel, frozen=True):
     apikey: str
     query: str
-    index: Set[Index] = field(
-        metadata=config(encoder=lambda indices: {index_id(index) for index in indices})
-    )
-    start: Optional[int] = field(metadata=config(field_name="from"))
-    size: Optional[int]
+    index: Annotated[
+        AbstractSet[Index],
+        PlainSerializer(lambda indices: {index_id(index) for index in indices}),
+    ]
+    start: Annotated[
+        Optional[int],
+        Field(serialization_alias="from"),
+    ]
+    size: Optional[int] = None
     explain: bool
     minimal: bool
     search_method: SearchMethod
 
 
-@dataclass(frozen=True)
-class PhraseRequest(Request, DataClassJsonMixin):
+class PhraseRequest(Request, BaseModel, frozen=True):
     slop: Optional[Slop]
 
 
-@dataclass(frozen=True)
-class MinimalResultResponse(MinimalResult, DataClassJsonMixin):
+class MinimalResultResponse(MinimalResult, BaseModel, frozen=True):
     score: float
-    uuid: UUID = field(metadata=config(decoder=decode_uuid))
-    target_uri: Optional[str]
-    snippet: HighlightedText = field(metadata=config(decoder=HighlightedText))
-    index: Index = field(metadata=config(decoder=parse_index))
-    title: HighlightedText = field(
-        metadata=config(
-            encoder=str,
-            decoder=HighlightedText,
-        )
-    )
+    uuid: Annotated[UUID, PlainValidator(decode_uuid)]
+    target_uri: Optional[str] = None
+    snippet: Annotated[HighlightedText, PlainValidator(HighlightedText)]
+    index: Annotated[Index, PlainValidator(parse_index)]
+    title: Annotated[HighlightedText, PlainValidator(HighlightedText)]
 
 
-@dataclass(frozen=True)
-class ExplanationResponse(Explanation, DataClassJsonMixin):
+class ExplanationResponse(Explanation, BaseModel, frozen=True):
     value: float
     description: str
-    details: Sequence["Explanation"]
+    details: Sequence["ExplanationResponse"]  # type: ignore[override]
 
 
-@dataclass(frozen=True)
 class ExplainedMinimalResultResponse(
-    MinimalResultResponse, ExplainedMinimalResult, DataClassJsonMixin
+    MinimalResultResponse, ExplainedMinimalResult, BaseModel, frozen=True
 ):
-    explanation: ExplanationResponse
+    explanation: ExplanationResponse  # type: ignore[override]
 
 
-def _decode_datetime(value: Optional[str]) -> Optional[datetime]:
-    if value is None:
-        return None
-    return datetime.fromisoformat(value)
-
-
-@dataclass(frozen=True)
-class ResultResponse(MinimalResultResponse, Result, DataClassJsonMixin):
-    index: Index = field(metadata=config(decoder=parse_index))
+class ResultResponse(MinimalResultResponse, Result, BaseModel, frozen=True):
+    index: Annotated[
+        Index,
+        PlainValidator(parse_index),
+    ]
     trec_id: Optional[str]
     target_hostname: Optional[str]
     page_rank: Optional[float]
     spam_rank: Optional[float]
-    title: HighlightedText = field(metadata=config(decoder=HighlightedText))
+    title: Annotated[
+        HighlightedText,
+        PlainValidator(HighlightedText),
+    ]
     warc_id: Optional[str]
     cache_uri: str
-    crawl_date: Optional[datetime] = field(metadata=config(decoder=_decode_datetime))
+    crawl_date: Optional[datetime]
     content_type: Optional[str]
-    language: str = field(metadata=config(field_name="lang"))
+    language: Annotated[
+        str,
+        Field(validation_alias="lang"),
+    ]
 
 
-@dataclass(frozen=True)
 class ExplainedResultResponse(
-    ResultResponse, ExplainedMinimalResultResponse, ExplainedResult, DataClassJsonMixin
+    ResultResponse,
+    ExplainedMinimalResultResponse,
+    ExplainedResult,
+    BaseModel,
+    frozen=True,
 ):
-    explanation: ExplanationResponse
+    explanation: ExplanationResponse  # type: ignore[override]
 
 
-@dataclass(frozen=True)
-class MetaResponse(Meta, DataClassJsonMixin):
-    indices: Set[Index] = field(
-        metadata=config(decoder=lambda ids: {parse_index(id) for id in ids})
-    )
+class MetaResponse(Meta, BaseModel, frozen=True):
+    indices: Annotated[
+        AbstractSet[Index], PlainValidator(lambda ids: {parse_index(id) for id in ids})
+    ]
     query_time: int
     total_results: int
     search_method: SearchMethod
 
 
-@dataclass(frozen=True)
-class MinimalSearchResponse(
-    DataClassJsonMixin, ResultsMixin[MetaResponse, MinimalResultResponse]
+class MinimalSearchResponse(  # type: ignore
+    ResultsMixin[MetaResponse, MinimalResultResponse],
+    BaseModel,
+    Results[MetaResponse, MinimalResultResponse],
+    frozen=True,
 ):
-    _meta: MetaResponse = field(metadata=config(field_name="meta"))
-    _results: Sequence[MinimalResultResponse] = field(metadata=config(field_name="results"))
+    meta: MetaResponse
+    results: Sequence[MinimalResultResponse]
 
 
-@dataclass(frozen=True)
-class ExplainedMinimalSearchResponse(
-    DataClassJsonMixin, ResultsMixin[MetaResponse, MinimalResultResponse]
+class ExplainedMinimalSearchResponse(  # type: ignore
+    ResultsMixin[MetaResponse, MinimalResultResponse],
+    BaseModel,
+    Results[MetaResponse, MinimalResultResponse],
+    frozen=True,
 ):
-    _meta: MetaResponse = field(metadata=config(field_name="meta"))
-    _results: Sequence[ExplainedMinimalResultResponse] = field(metadata=config(field_name="results"))
+    meta: MetaResponse
+    results: Sequence[ExplainedMinimalResultResponse]  # type: ignore[override]
 
 
-@dataclass(frozen=True)
-class SearchResponse(
-    DataClassJsonMixin, ResultsMixin[MetaResponse, MinimalResultResponse]
+class SearchResponse(  # type: ignore
+    ResultsMixin[MetaResponse, MinimalResultResponse],
+    BaseModel,
+    Results[MetaResponse, MinimalResultResponse],
+    frozen=True,
 ):
-    _meta: MetaResponse = field(metadata=config(field_name="meta"))
-    _results: Sequence[ResultResponse] = field(metadata=config(field_name="results"))
+    meta: MetaResponse
+    results: Sequence[ResultResponse]  # type: ignore[override]
 
 
-@dataclass(frozen=True)
-class ExplainedSearchResponse(
-    DataClassJsonMixin, ResultsMixin[MetaResponse, MinimalResultResponse]
+class ExplainedSearchResponse(  # type: ignore
+    ResultsMixin[MetaResponse, MinimalResultResponse],
+    BaseModel,
+    Results[MetaResponse, MinimalResultResponse],
+    frozen=True,
 ):
-    _meta: MetaResponse = field(metadata=config(field_name="meta"))
-    _results: Sequence[ExplainedResultResponse] = field(metadata=config(field_name="results"))
+    meta: MetaResponse
+    results: Sequence[ExplainedResultResponse]  # type: ignore[override]

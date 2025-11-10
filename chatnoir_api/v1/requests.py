@@ -3,7 +3,7 @@ from time import sleep
 from typing import Optional, TypeVar, Type
 from urllib.parse import urljoin
 
-from dataclasses_json import DataClassJsonMixin
+from pydantic import BaseModel
 from requests import Response as HttpResponse, post
 
 from chatnoir_api.constants import BASE_URL
@@ -14,12 +14,11 @@ from chatnoir_api.defaults import (
     DEFAULT_TIMEOUT,
 )
 
-_JsonRequest = TypeVar("_JsonRequest", bound=DataClassJsonMixin)
-_JsonResponse = TypeVar("_JsonResponse", bound=DataClassJsonMixin)
+_JsonResponse = TypeVar("_JsonResponse", bound=BaseModel)
 
 
 def request_page(
-    request: _JsonRequest,
+    request: BaseModel,
     response_type: Type[_JsonResponse],
     endpoint: str,
     timeout: int = DEFAULT_TIMEOUT,
@@ -33,7 +32,7 @@ def request_page(
         "Accept": "application/json",
         "Content-Type": "text/plain",
     }
-    request_json = request.to_json()
+    request_json = request.model_dump_json()
 
     headers = headers if non_default_headers is None else non_default_headers
     url = urljoin(BASE_URL, f"api/v1/{endpoint}")
@@ -104,6 +103,6 @@ def request_page(
         )
 
     response_json = raw_response.text
-    response = response_type.from_json(response_json, infer_missing=True)
+    response = response_type.model_validate_json(response_json)
 
     return response
