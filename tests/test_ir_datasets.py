@@ -1,11 +1,10 @@
 import unittest
-from chatnoir_api.irds import ChatNoirDocs
+from chatnoir_api.irds import ChatNoirDocsStore
 
 
 class TestIrDatasets(unittest.TestCase):
     def test_owi_2025(self):
-        docs = ChatNoirDocs("wows-owi/2025")
-        docs_store = docs.docs_store()
+        docs_store = ChatNoirDocsStore("wows-owi/2025")
         self.assertIsNotNone(docs_store)
 
         actual_doc = docs_store.get("7ad51188193e0e9453857aae906da17a929c2c1d339f056e0e8c37a92f7d4d42")
